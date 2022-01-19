@@ -6,14 +6,14 @@ import view.HomeView;
  * @author cassiano
  */
 public class Main {
-    
-    public static void main(String[] args) {
-        
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new HomeView();
-            }
-        });
-    }
+//    
+//    public static void main(String[] args) {
+//        
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            @Override
+//            public void run() {
+//                new HomeView();
+//            }
+//        });
+//    }
 }
