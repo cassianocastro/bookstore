@@ -5,7 +5,7 @@ import java.awt.event.*;
 import java.io.IOException;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
-import model.ConfigDataBase;
+import model.DBConfig;
 import model.dao.ConfigDAO;
 import model.factories.ConfigFactory;
 import org.json.JSONObject;
@@ -35,7 +35,7 @@ public class ConfigView extends JFrame
         {
             JSONObject json = new ConfigDAO().read();
             setFields(json);
-        } catch (IOException e)
+        } catch (IOException | ClassNotFoundException e)
         {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
@@ -75,7 +75,7 @@ public class ConfigView extends JFrame
         this.buttonSave.addActionListener((ActionEvent event) ->
         {
             JSONObject json       = getJSON();
-            ConfigDataBase config = new ConfigFactory().buildFrom(json);
+            DBConfig config = new ConfigFactory().buildFrom(json);
             try
             {
                 new ConfigDAO().write(config);

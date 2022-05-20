@@ -5,7 +5,7 @@ import java.awt.event.*;
 import java.io.IOException;
 import java.sql.*;
 import javax.swing.*;
-import model.ConfigDataBase;
+import model.DBConfig;
 import model.dao.ConfigDAO;
 import model.dao.ConnectionSingleton;
 import model.factories.ConfigFactory;
@@ -76,13 +76,13 @@ public class HomeView extends JFrame
             try
             {
                 JSONObject json = new ConfigDAO().read();
-                ConfigDataBase config = new ConfigFactory().buildFrom(json);
+                DBConfig config = new ConfigFactory().buildFrom(json);
                 ConnectionSingleton.setConfig(config);
                 ConnectionSingleton.getInstance();
 
                 setButtonsEnabled(true);
                 view.labelResponse.setText("Conexão estabelecida.");
-            } catch(IOException e)
+            } catch(IOException | ClassNotFoundException e)
             {
                 JOptionPane.showMessageDialog(
                     view,
