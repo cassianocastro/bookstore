@@ -6,6 +6,7 @@ import java.util.List;
 import java.sql.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import model.dao.ConnectionSingleton;
 import model.dao.ObrasDAO;
 import org.json.JSONObject;
 
@@ -45,7 +46,8 @@ public class ObrasView extends JFrame
             {
                 model.removeRow(0);
             }
-            List<JSONObject> list = new ObrasDAO().read(authorID);
+            Connection connection = ConnectionSingleton.getInstance();
+            List<JSONObject> list = new ObrasDAO(connection).read(authorID);
 
             for ( JSONObject json : list )
             {

@@ -7,6 +7,7 @@ import javax.swing.table.DefaultTableModel;
 import java.sql.*;
 import java.util.List;
 import model.dao.AuthorDAO;
+import model.dao.ConnectionSingleton;
 import org.json.JSONObject;
 
 /**
@@ -46,7 +47,9 @@ public class AutTableView extends JFrame
             {
                 model.removeRow(0);
             }
-            List<JSONObject> list = new AuthorDAO().read();
+            Connection connection = ConnectionSingleton.getInstance();
+            List<JSONObject> list = new AuthorDAO(connection).read();
+            
             for ( JSONObject json : list )
             {
                 model.addRow(

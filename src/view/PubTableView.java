@@ -6,6 +6,7 @@ import java.sql.*;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import model.dao.ConnectionSingleton;
 import org.json.JSONObject;
 import model.dao.PublishingCiaDAO;
 
@@ -47,7 +48,8 @@ public class PubTableView extends JFrame
                 model.removeRow(0);
             }
 
-            List<JSONObject> list = new PublishingCiaDAO().getNamesAndIDs();
+            Connection connection = ConnectionSingleton.getInstance();
+            List<JSONObject> list = new PublishingCiaDAO(connection).getNamesAndIDs();
 
             for ( JSONObject json : list )
             {

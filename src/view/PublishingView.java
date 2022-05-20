@@ -2,6 +2,7 @@ package view;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.List;
@@ -12,6 +13,7 @@ import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
 import model.factories.PublishingCiaFactory;
 import model.PublishingCia;
+import model.dao.ConnectionSingleton;
 import model.dao.PublishingCiaDAO;
 import org.json.JSONObject;
 
@@ -208,7 +210,8 @@ public class PublishingView extends JFrame
 
                     try
                     {
-                        new PublishingCiaDAO().deleteBy(id);
+                        Connection connection = ConnectionSingleton.getInstance();
+                        new PublishingCiaDAO(connection).delete(id);
                         loadTable();
                     } catch(SQLException e)
                     {
@@ -226,10 +229,11 @@ public class PublishingView extends JFrame
 
             try
             {
+                Connection connection = ConnectionSingleton.getInstance();
                 if ( labelWildCard.equals("Atualizar") )
-                    new PublishingCiaDAO().update(publishingCia);
+                    new PublishingCiaDAO(connection).update(publishingCia);
                 else
-                    new PublishingCiaDAO().create(publishingCia);
+                    new PublishingCiaDAO(connection).insert(publishingCia);
                 loadTable();
             } catch (SQLException e)
             {
@@ -252,7 +256,8 @@ public class PublishingView extends JFrame
                 model.removeRow(0);
             }
 
-            List<PublishingCia> list = new PublishingCiaDAO().read();
+            Connection connection = ConnectionSingleton.getInstance();
+            List<PublishingCia> list = new PublishingCiaDAO(connection).read();
 
             for ( PublishingCia publishingCia : list )
             {

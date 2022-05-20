@@ -2,12 +2,14 @@ package view;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import model.dao.AuthorDAO;
+import model.dao.ConnectionSingleton;
 import org.json.JSONObject;
 
 /**
@@ -162,7 +164,8 @@ public class AuthorView extends JFrame
                     int id = (int) table1.getValueAt(row, 0);
                     try
                     {
-                        new AuthorDAO().deleteBy(id);
+                        Connection connection = ConnectionSingleton.getInstance();
+                        new AuthorDAO(connection).delete(id);
                         loadTable();
                     } catch(SQLException e)
                     {
@@ -179,10 +182,12 @@ public class AuthorView extends JFrame
 
             try
             {
+                Connection connection = ConnectionSingleton.getInstance();
+
                 if ( label.equals("Atualizar") )
-                    new AuthorDAO().update(json);
+                    new AuthorDAO(connection).update(json);
                 else
-                    new AuthorDAO().create(json);
+                    new AuthorDAO(connection).create(json);
                 loadTable();
             } catch (SQLException e)
             {
@@ -205,7 +210,8 @@ public class AuthorView extends JFrame
             {
                 model.removeRow(0);
             }
-            List<JSONObject> array = new AuthorDAO().read();
+            Connection connection = ConnectionSingleton.getInstance();
+            List<JSONObject> array = new AuthorDAO(connection).read();
 
             for ( JSONObject json : array )
             {
