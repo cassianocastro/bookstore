@@ -6,19 +6,24 @@ import java.io.Serializable;
  *
  *
  */
-final public class ConfigDataBase implements Serializable
+final public class DBConfig implements Serializable
 {
 
-    private final String host, port, dbName, dataBase, userName, password;
+    private final int port;
+    private final String host;
+    private final String driver;
+    private final String database;
+    private final String user;
+    private final String password;
 
-    public ConfigDataBase(String host, String port, String dbName,
-            String dataBase, String userName, String password)
+    public DBConfig(String host, int port, String driver,
+            String database, String user, String password)
     {
         this.host     = host;
         this.port     = port;
-        this.dbName   = dbName;
-        this.dataBase = dataBase;
-        this.userName = userName;
+        this.driver   = driver;
+        this.database = database;
+        this.user     = user;
         this.password = password;
     }
 
@@ -27,24 +32,24 @@ final public class ConfigDataBase implements Serializable
         return this.host;
     }
 
-    public String getPort()
+    public int getPort()
     {
         return this.port;
     }
 
-    public String getDBname()
+    public String getDriver()
     {
-        return this.dbName;
+        return this.driver;
     }
 
-    public String getDataBase()
+    public String getDatabase()
     {
-        return this.dataBase;
+        return this.database;
     }
 
     public String getUser()
     {
-        return this.userName;
+        return this.user;
     }
 
     public String getPassword()
@@ -52,11 +57,11 @@ final public class ConfigDataBase implements Serializable
         return this.password;
     }
 
-    public String getURL()
+    public String getDSN()
     {
-        return "jdbc:"  + this.dbName
+        return "jdbc:"  + this.driver
                 + "://" + this.host
                 + ":"   + this.port
-                + "/"   + this.dataBase;
+                + "/"   + this.database;
     }
 }
