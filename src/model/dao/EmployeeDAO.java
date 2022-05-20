@@ -10,7 +10,7 @@ import model.Sex;
  *
  *
  */
-public class EmployeeDAO implements IDAO
+public class EmployeeDAO
 {
 
     private final Connection connection;
@@ -53,7 +53,6 @@ public class EmployeeDAO implements IDAO
         }
     }
 
-    @Override
     public List read() throws SQLException
     {
         List<EmployeePerson> list = new LinkedList<>();
@@ -141,7 +140,6 @@ public class EmployeeDAO implements IDAO
         }
     }
 
-    @Override
     public void deleteBy(int ID) throws SQLException
     {
         String SQL = "DELETE FROM funcionario WHERE funcionarioID = ?";

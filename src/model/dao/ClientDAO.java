@@ -8,7 +8,7 @@ import org.json.JSONObject;
  *
  *
  */
-public class ClientDAO implements IDAO
+public class ClientDAO
 {
 
     private final Connection connection;
@@ -34,7 +34,6 @@ public class ClientDAO implements IDAO
         }
     }
 
-    @Override
     public List read() throws SQLException
     {
         List<JSONObject> list = new LinkedList<>();
@@ -75,7 +74,6 @@ public class ClientDAO implements IDAO
         }
     }
 
-    @Override
     public void deleteBy(int ID) throws SQLException
     {
         String SQL = "DELETE FROM cliente WHERE clienteID = ?";

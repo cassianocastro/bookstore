@@ -1,8 +1,8 @@
 package model.dao;
 
 import java.io.*;
-import model.ConfigDataBase;
-import org.json.*;
+import model.DBConfig;
+import org.json.JSONObject;
 
 /**
  *
@@ -18,41 +18,31 @@ public class ConfigDAO
         this.pathName = "src/lib/config.txt";
     }
 
-    public void write(ConfigDataBase config) throws IOException
+    public void write(DBConfig config) throws IOException
     {
         try (ObjectOutputStream output
-            = new ObjectOutputStream(
-                new FileOutputStream(this.pathName)))
+            = new ObjectOutputStream(new FileOutputStream(this.pathName)))
         {
-
             output.writeObject(config);
-        } catch (IOException e)
-        {
-            throw new IOException(e);
         }
     }
 
-    public JSONObject read() throws IOException
+    public JSONObject read() throws IOException, ClassNotFoundException
     {
         try (ObjectInputStream input
-            = new ObjectInputStream(
-                new FileInputStream(this.pathName)))
+            = new ObjectInputStream(new FileInputStream(this.pathName)))
         {
-
-            ConfigDataBase config = (ConfigDataBase) input.readObject();
-
+            DBConfig config = (DBConfig) input.readObject();
             JSONObject json = new JSONObject();
+
             json.put("host", config.getHost());
             json.put("port", config.getPort());
-            json.put("dbName", config.getDBname());
-            json.put("database", config.getDataBase());
+            json.put("dbName", config.getDriver());
+            json.put("database", config.getDatabase());
             json.put("user", config.getUser());
             json.put("pass", config.getPassword());
 
             return json;
-        } catch (IOException | ClassNotFoundException e)
-        {
-            throw new IOException(e);
         }
     }
 }

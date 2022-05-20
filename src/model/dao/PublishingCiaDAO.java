@@ -11,7 +11,7 @@ import org.json.JSONObject;
  *
  *
  */
-public class PublishingCiaDAO implements IDAO
+public class PublishingCiaDAO
 {
 
     private final Connection connection;
@@ -44,7 +44,6 @@ public class PublishingCiaDAO implements IDAO
         }
     }
 
-    @Override
     public List read() throws SQLException
     {
         List<PublishingCia> list = new LinkedList<>();
@@ -107,7 +106,6 @@ public class PublishingCiaDAO implements IDAO
         }
     }
 
-    @Override
     public void deleteBy(int ID) throws SQLException
     {
         String SQL = "DELETE FROM editora WHERE editorID = ?";

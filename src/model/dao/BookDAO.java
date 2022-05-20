@@ -9,7 +9,7 @@ import model.Book;
  *
  *
  */
-public class BookDAO implements IDAO
+public class BookDAO
 {
 
     private final Connection connection;
@@ -107,7 +107,6 @@ public class BookDAO implements IDAO
         return null;
     }
 
-    @Override
     public List read() throws SQLException
     {
         String SQL = "SELECT * FROM livro";
@@ -139,7 +138,6 @@ public class BookDAO implements IDAO
         return list;
     }
 
-    @Override
     public void deleteBy(int ID) throws SQLException
     {
         String SQL = "DELETE FROM livro WHERE bookID = ?";

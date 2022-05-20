@@ -1,6 +1,6 @@
 package model.dao;
 
-import model.ConfigDataBase;
+import model.DBConfig;
 import java.sql.*;
 
 /**
@@ -11,11 +11,11 @@ public class ConnectionSingleton
 {
 
     private static Connection instance;
-    private static ConfigDataBase configDataBase;
+    private static DBConfig configDataBase;
 
     private ConnectionSingleton() {}
 
-    static public void setConfig(ConfigDataBase config)
+    static public void setConfig(DBConfig config)
     {
         configDataBase = config;
     }
@@ -25,7 +25,7 @@ public class ConnectionSingleton
         if ( instance == null && configDataBase != null )
         {
             instance = DriverManager.getConnection(
-                configDataBase.getURL(),
+                configDataBase.getDSN(),
                 configDataBase.getUser(),
                 configDataBase.getPassword()
             );
