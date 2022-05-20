@@ -3,36 +3,39 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Command;
-
+package controller.command;
 
 import java.util.*;
 import org.json.JSONObject;
 
 /**
  *
- * @author cassiano
+ *
  */
-public class Invoker {
-    
-    private Map<String, Command> commands;
-    
-    public Invoker(){
+public class Invoker
+{
+
+    private final Map<String, Command> commands;
+
+    public Invoker()
+    {
         this.commands = new HashMap<>();
     }
-    
-    public void put(String cmd, Command command){
+
+    public void put(String cmd, Command command)
+    {
         this.commands.put(cmd, command);
     }
-    
-    public void invoke(String cmd, JSONObject json){
+
+    public void invoke(String cmd, JSONObject json)
+    {
         this.commands.get(cmd).execute(json);
     }
-    
-    public List getList(){
+
+    public List getList()
+    {
         ReadBookCommand c = (ReadBookCommand) this.commands.get("ReadCommand");
         c.execute(null);
         return c.getList();
     }
-
 }

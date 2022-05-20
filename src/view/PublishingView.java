@@ -1,6 +1,6 @@
 package view;
 
-import factories.PublishingCiaFactory;
+import model.factories.PublishingCiaFactory;
 import java.awt.event.*;
 import java.sql.SQLException;
 import java.util.List;
@@ -11,32 +11,38 @@ import model.dao.PublishingCiaDAO;
 import org.json.JSONObject;
 
 /**
- * @author cassiano
+ *
+ *
  */
-public class PublishingView extends JFrame {
-    
-    public PublishingView() {
+public class PublishingView extends JFrame
+{
+
+    public PublishingView()
+    {
         super("Editoras");
+
         initComponents();
         initListeners();
         loadTable();
         setPanelState(false);
-        
+
         super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         super.setLocationRelativeTo(null);
         super.setVisible(true);
     }
-    
-    public void setButtonsCRUD(boolean isEnabled){
+
+    public void setButtonsCRUD(boolean isEnabled)
+    {
         this.buttonNew .setEnabled(isEnabled);
         this.buttonEdit.setEnabled(isEnabled);
         this.buttonDel .setEnabled(isEnabled);
     }
-    
-    public void setPanelState(boolean isEnabled){
+
+    public void setPanelState(boolean isEnabled)
+    {
         this.fieldPublishingID.setEnabled(isEnabled);
         this.fieldName        .setEnabled(isEnabled);
-        
+
         this.fieldUF          .setEnabled(isEnabled);
         this.fieldCity        .setEnabled(isEnabled);
         this.fieldDistrict    .setEnabled(isEnabled);
@@ -44,13 +50,13 @@ public class PublishingView extends JFrame {
         this.fieldStreet      .setEnabled(isEnabled);
         this.fieldNumber      .setEnabled(isEnabled);
         this.fieldCompl       .setEnabled(isEnabled);
-        
+
         this.buttonSave       .setEnabled(isEnabled);
         this.buttonCancel     .setEnabled(isEnabled);
     }
-    
-    public void setTextFields(String[] args){
-        
+
+    public void setTextFields(String[] args)
+    {
         this.fieldPublishingID.setText(args[0]);
         this.fieldName        .setText(args[1]);
         this.fieldUF          .setText(args[2]);
@@ -61,10 +67,11 @@ public class PublishingView extends JFrame {
         this.fieldNumber      .setText(args[7]);
         this.fieldCompl       .setText(args[8]);
     }
-    
-    public String[] getTextFields(){
+
+    public String[] getTextFields()
+    {
         String[] args = new String[9];
-        
+
         args[0] = this.fieldPublishingID.getText();
         args[1] = this.fieldName        .getText();
         args[2] = this.fieldUF          .getText();
@@ -74,51 +81,64 @@ public class PublishingView extends JFrame {
         args[6] = this.fieldStreet      .getText();
         args[7] = this.fieldNumber      .getText();
         args[8] = this.fieldCompl       .getText();
-        
+
         return args;
     }
-    
-    public void clearFields(){
+
+    public void clearFields()
+    {
         String[] args = new String[9];
-        for (String arg : args) {
+
+        for ( String arg : args )
+        {
             arg = "";
         }
         setTextFields(args);
     }
-    
-    public boolean hasSelectedRow(){
+
+    public boolean hasSelectedRow()
+    {
         int row = this.table.getSelectedRow();
-        return (row != -1);
+
+        return row != -1;
     }
-    
-    public void editFields(){
+
+    public void editFields()
+    {
         String[] args = new String[9];
-        for (int i = 0; i < args.length; i++) {
+
+        for ( int i = 0; i < args.length; i++ )
+        {
             args[i] = table.getValueAt(this.table.getSelectedRow(), i).toString();
         }
-        
+
         setTextFields(args);
     }
-    
-    public boolean foo(){
+
+    public boolean foo()
+    {
         String[] args = getTextFields();
+
         if (args[0].isEmpty())
             args[0] = "0";
-        
-        
-        for (String arg : args) {
-            if ( arg.isEmpty() )
-                return false;
+
+        for ( String arg : args )
+        {
+            if ( arg.isEmpty() ) return false;
         }
         this.getJSON();
+
         return true;
     }
-    
-    public JSONObject getJSON(){
+
+    public JSONObject getJSON()
+    {
         JSONObject json = new JSONObject();
         String id = this.fieldPublishingID.getText();
+
         if (id.isEmpty())
             id = "0";
+
         json.put("companyID",     id);
         json.put("companyName",   this.fieldName  .getText());
         json.put("addressCity",   this.fieldCity  .getText());
@@ -128,18 +148,19 @@ public class PublishingView extends JFrame {
         json.put("addressCompl",  this.fieldCompl .getText());
         json.put("addressCEP",    this.fieldCEP   .getText());
         json.put("addressUF",     this.fieldUF    .getText());
-        
+
         return json;
     }
-    
-    private void initListeners(){
+
+    private void initListeners()
+    {
         this.buttonClose.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
             }
         });
-        
+
         this.buttonNew.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -148,8 +169,8 @@ public class PublishingView extends JFrame {
                 setButtonsCRUD(false);
             }
         });
-        
-        this.buttonEdit.addActionListener(new ActionListener() {   
+
+        this.buttonEdit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
                 if (hasSelectedRow()){
@@ -160,8 +181,8 @@ public class PublishingView extends JFrame {
                 }
             }
         });
-        
-        this.buttonCancel.addActionListener(new ActionListener() {     
+
+        this.buttonCancel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
                 clearFields();
@@ -169,12 +190,12 @@ public class PublishingView extends JFrame {
                 setButtonsCRUD(true);
             }
         });
-        
+
         this.buttonDel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
                 int row = table.getSelectedRow();
-                
+
                 if (row != -1){
                     int confirm = JOptionPane.showConfirmDialog(
                         null,
@@ -194,8 +215,8 @@ public class PublishingView extends JFrame {
                 }
             }
         });
-        
-        this.buttonSave.addActionListener(new ActionListener() {   
+
+        this.buttonSave.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
                 String labelWildCard = buttonSave.getText();
@@ -216,19 +237,25 @@ public class PublishingView extends JFrame {
             }
         });
     }
-    
-    public void loadTable(){
-        try {
+
+    public void loadTable()
+    {
+        try
+        {
             DefaultTableModel model = (DefaultTableModel) table.getModel();
-            
-            while (table.getRowCount() > 0) {
+
+            while ( table.getRowCount() > 0 )
+            {
                 model.removeRow(0);
             }
 
             List<PublishingCia> list = new PublishingCiaDAO().read();
-            for (PublishingCia publishingCia : list) {
+
+            for ( PublishingCia publishingCia : list )
+            {
                 model.addRow(
-                    new Object[]{
+                    new Object[]
+                    {
                         publishingCia.getCompanyID(),
                         publishingCia.getName(),
                         publishingCia.getAddress().getUf(),
@@ -241,11 +268,12 @@ public class PublishingView extends JFrame {
                     }
                 );
             }
-        } catch (SQLException e) {
+        } catch (SQLException e)
+        {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -684,7 +712,6 @@ public class PublishingView extends JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonCancel;
     private javax.swing.JButton buttonClose;

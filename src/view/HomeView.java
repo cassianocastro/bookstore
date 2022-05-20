@@ -7,53 +7,57 @@ import javax.swing.*;
 import model.ConfigDataBase;
 import model.dao.ConfigDAO;
 import model.dao.ConnectionSingleton;
-import factories.ConfigFactory;
+import model.factories.ConfigFactory;
 import org.json.JSONObject;
 import java.sql.*;
 
 /**
- * @author cassiano
+ *
+ *
  */
-public class HomeView extends JFrame {
-    
-    public HomeView() {
+public class HomeView extends JFrame
+{
+
+    public HomeView()
+    {
         super("Livraria Leia Mais");
-        
+
         initComponents();
         initListeners();
-        
+
         setButtonsEnabled(false);
-        
+
         super.setLocationRelativeTo(null);
         super.setVisible(true);
     }
-    
-    public void setButtonsEnabled(boolean isEnabled){
+
+    public void setButtonsEnabled(boolean isEnabled)
+    {
         this.buttonBooks     .setEnabled(isEnabled);
         this.buttonPublishing.setEnabled(isEnabled);
         this.buttonAuthors   .setEnabled(isEnabled);
         this.buttonClient    .setEnabled(isEnabled);
         this.buttonEmployee  .setEnabled(isEnabled);
     }
-    
-    private void initListeners(){
-        
+
+    private void initListeners()
+    {
         HomeView view = this;
-        
+
         this.buttonBooks.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new BookView();
             }
         });
-        
+
         this.buttonPublishing.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new PublishingView();
             }
         });
-        
+
         this.buttonAuthors.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -64,14 +68,14 @@ public class HomeView extends JFrame {
         this.buttonClient.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                
+
             }
         });
-        
+
         this.buttonEmployee.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                
+
             }
         });
         */
@@ -81,7 +85,7 @@ public class HomeView extends JFrame {
                 new ConfigView();
             }
         });
-        
+
         this.buttonConnect.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
@@ -90,12 +94,12 @@ public class HomeView extends JFrame {
                     ConfigDataBase config = new ConfigFactory().buildFrom(json);
                     ConnectionSingleton.setConfig(config);
                     ConnectionSingleton.getInstance();
-                        
+
                     setButtonsEnabled(true);
                     view.labelResponse.setText("Conexão estabelecida.");
                 }catch(IOException e){
                     JOptionPane.showMessageDialog(
-                        view, 
+                        view,
                         "Não foi possível conectar-se. Verifique as configurações."
                     );
                 }catch(SQLException e){
@@ -104,15 +108,18 @@ public class HomeView extends JFrame {
                 }
             }
         });
-        
-        addWindowListener( new WindowAdapter() {
+
+        addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent event){
-                try {
-                    if (ConnectionSingleton.getInstance() != null)
+                try
+                {
+                    if ( ConnectionSingleton.getInstance() != null )
+                    {
                         ConnectionSingleton.getInstance().close();
-                    
-                } catch (SQLException e) {
+                    }
+                } catch (SQLException e)
+                {
                     JOptionPane.showMessageDialog(view, e.getMessage());
                 }
                 System.exit(0);
@@ -371,7 +378,6 @@ public class HomeView extends JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonAuthors;
     private javax.swing.JButton buttonBooks;

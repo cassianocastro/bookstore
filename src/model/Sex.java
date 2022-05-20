@@ -1,19 +1,23 @@
 package model;
 
 /**
- * @author cassiano
+ *
+ *
  */
-public enum Sex {
-    MASCULINO("M"),
-    FEMININO("F");
-    
-    private String descricao;
-    
-    private Sex(String descricao){
+public enum Sex
+{
+
+    MASCULINO("M"), FEMININO("F");
+
+    private final String descricao;
+
+    private Sex(String descricao)
+    {
         this.descricao = descricao;
     }
-    
-    public String getDescricao(){
+
+    public String getDescricao()
+    {
         return this.descricao;
     }
 }

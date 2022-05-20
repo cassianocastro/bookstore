@@ -3,9 +3,11 @@ package model;
 import java.math.BigDecimal;
 
 /**
- * @author cassiano
+ *
+ *
  */
-public class Book extends Product{
+public class Book extends Product
+{
 
     private int bookID;
     private int publishingID;
@@ -18,8 +20,8 @@ public class Book extends Product{
     private String finishing;
 
     public Book(int bookID, int publishingID, int authorID, int codeBar, int releaseYear, int numberPages,
-            String title, String gender, String finishing, BigDecimal sellValue, BigDecimal buyValue) {
-        
+            String title, String gender, String finishing, BigDecimal sellValue, BigDecimal buyValue)
+    {
         super(sellValue, buyValue);
         this.bookID       = bookID;
         this.publishingID = publishingID;
@@ -32,76 +34,93 @@ public class Book extends Product{
         this.finishing    = finishing;
     }
 
-    public int getBookID() {
+    public int getBookID()
+    {
         return bookID;
     }
 
-    public void setBookID(int bookID) {
+    public void setBookID(int bookID)
+    {
         this.bookID = bookID;
     }
 
-    public int getPublishingID() {
+    public int getPublishingID()
+    {
         return publishingID;
     }
 
-    public void setPublishingID(int publishingID) {
+    public void setPublishingID(int publishingID)
+    {
         this.publishingID = publishingID;
     }
-    
-    public int getAuthorID() {
+
+    public int getAuthorID()
+    {
         return authorID;
     }
 
-    public void setAuthorID(int authorID) {
+    public void setAuthorID(int authorID)
+    {
         this.authorID = authorID;
     }
 
-    public int getCodeBar() {
+    public int getCodeBar()
+    {
         return codeBar;
     }
 
-    public void setCodeBar(int codeBar) {
+    public void setCodeBar(int codeBar)
+    {
         this.codeBar = codeBar;
     }
 
-    public int getReleaseYear() {
+    public int getReleaseYear()
+    {
         return releaseYear;
     }
 
-    public void setReleaseYear(int releaseYear) {
+    public void setReleaseYear(int releaseYear)
+    {
         this.releaseYear = releaseYear;
     }
 
-    public int getNumberPages() {
+    public int getNumberPages()
+    {
         return numberPages;
     }
 
-    public void setNumberPages(int numberPages) {
+    public void setNumberPages(int numberPages)
+    {
         this.numberPages = numberPages;
     }
 
-    public String getTitle() {
+    public String getTitle()
+    {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(String title)
+    {
         this.title = title;
     }
 
-    public String getGender() {
+    public String getGender()
+    {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(String gender)
+    {
         this.gender = gender;
     }
 
-    public String getFinishing() {
+    public String getFinishing()
+    {
         return finishing;
     }
 
-    public void setFinishing(String finishing) {
+    public void setFinishing(String finishing)
+    {
         this.finishing = finishing;
     }
-
 }

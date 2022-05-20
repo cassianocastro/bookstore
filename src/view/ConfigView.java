@@ -1,6 +1,6 @@
 package view;
 
-import factories.ConfigFactory;
+import model.factories.ConfigFactory;
 import java.awt.event.*;
 import java.io.IOException;
 import javax.swing.*;
@@ -9,19 +9,82 @@ import model.dao.ConfigDAO;
 import org.json.JSONObject;
 
 /**
- * @author cassiano
+ *
+ *
  */
-public class ConfigView extends JFrame {
-    
-    public ConfigView() {
+public class ConfigView extends JFrame
+{
+
+    public ConfigView()
+    {
         super("Configurações");
         initComponents();
         initListeners();
-        
+
         loadFields();
 
         super.setLocationRelativeTo(null);
         super.setVisible(true);
+    }
+
+    private void loadFields()
+    {
+        try
+        {
+            JSONObject json = new ConfigDAO().read();
+            setFields(json);
+        } catch (IOException e)
+        {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }
+
+    public void setFields(JSONObject json)
+    {
+        this.fieldHost    .setText(json.getString("host"));
+        this.fieldPort    .setText(json.getString("port"));
+        this.fieldDatabase.setText(json.getString("database"));
+        this.fieldUser    .setText(json.getString("user"));
+        this.fieldPassword.setText(json.getString("pass"));
+        this.fieldDBName  .setText(json.getString("dbName"));
+    }
+
+    public JSONObject getJSON()
+    {
+        JSONObject json = new JSONObject();
+
+        json.put("host",    this.fieldHost.getText());
+        json.put("port",    this.fieldPort.getText());
+        json.put("database",this.fieldDatabase.getText());
+        json.put("user",    this.fieldUser.getText());
+        json.put("pass",    String.valueOf( this.fieldPassword.getPassword() ));
+        json.put("dbName",  this.fieldDBName.getText());
+
+        return json;
+    }
+
+    private void initListeners()
+    {
+        this.buttonCancel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });
+
+        this.buttonSave.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                JSONObject json       = getJSON();
+                ConfigDataBase config = new ConfigFactory().buildFrom(json);
+                try {
+                    new ConfigDAO().write(config);
+                    labelResponse.setText("Configurações salvas.");
+                } catch (IOException e) {
+                    JOptionPane.showMessageDialog(null, e.getMessage());
+                }
+            }
+        });
     }
 
     /**
@@ -249,59 +312,6 @@ public class ConfigView extends JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
-    private void loadFields(){
-        try {
-            JSONObject json = new ConfigDAO().read();
-            setFields(json);
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
-        }
-    }
-    
-    public void setFields(JSONObject json){
-        this.fieldHost    .setText(json.getString("host"));
-        this.fieldPort    .setText(json.getString("port"));
-        this.fieldDatabase.setText(json.getString("database"));
-        this.fieldUser    .setText(json.getString("user"));
-        this.fieldPassword.setText(json.getString("pass"));
-        this.fieldDBName  .setText(json.getString("dbName"));
-    }
-    
-    public JSONObject getJSON(){
-        JSONObject json = new JSONObject();
-        json.put("host",    this.fieldHost.getText());
-        json.put("port",    this.fieldPort.getText());
-        json.put("database",this.fieldDatabase.getText());
-        json.put("user",    this.fieldUser.getText());
-        json.put("pass",    String.valueOf( this.fieldPassword.getPassword() ));
-        json.put("dbName",  this.fieldDBName.getText());
-        return json;
-    }
-    
-    private void initListeners(){
-        this.buttonCancel.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
-        
-        this.buttonSave.addActionListener(new ActionListener() { 
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                JSONObject json       = getJSON();
-                ConfigDataBase config = new ConfigFactory().buildFrom(json);
-                try {
-                    new ConfigDAO().write(config);
-                    labelResponse.setText("Configurações salvas.");
-                } catch (IOException e) {
-                    JOptionPane.showMessageDialog(null, e.getMessage());
-                }
-            }
-        });
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonCancel;
     private javax.swing.JButton buttonSave;

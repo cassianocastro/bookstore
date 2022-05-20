@@ -8,66 +8,79 @@ import javax.swing.table.DefaultTableModel;
 import org.json.JSONObject;
 import java.sql.*;
 import model.dao.PublishingCiaDAO;
+
 /**
  *
- * @author cassiano
+ *
  */
-public class PubTableView extends JFrame {
+public class PubTableView extends JFrame
+{
 
     private int id;
 
-    public PubTableView(BookView parent) {
+    public PubTableView(BookView parent)
+    {
         super("Editoras cadastradas");
-        
+
         initComponents();
-        
         loadTable();
-        
+
         this.buttonOkay.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int row = table.getSelectedRow();
-                if (row != -1){
+
+                if ( row != -1 )
+                {
                     id = (int) table.getValueAt(row, 0);
                     parent.getFieldPublishing().setText(String.valueOf(id));
                 }
                 dispose();
             }
         });
-        
+
         this.buttonCancel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
             }
         });
-        
+
         super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         super.setResizable(false);
         super.setLocationRelativeTo(null);
     }
-    
-    public int getID(){
+
+    public int getID()
+    {
         return this.id;
     }
-    
-    public void loadTable(){
-        try {
+
+    public void loadTable()
+    {
+        try
+        {
             DefaultTableModel model = (DefaultTableModel) this.table.getModel();
 
-            while (this.table.getRowCount() > 0) {
+            while ( this.table.getRowCount() > 0 )
+            {
                 model.removeRow(0);
             }
+
             List<JSONObject> list = new PublishingCiaDAO().getNamesAndIDs();
-            for (JSONObject json : list) {
+
+            for ( JSONObject json : list )
+            {
                 model.addRow(
-                    new Object[]{
+                    new Object[]
+                    {
                         json.getInt("publishingID"),
                         json.getString("publishingName")
                     }
                 );
             }
-        } catch (SQLException e) {
+        } catch (SQLException e)
+        {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }
@@ -241,8 +254,6 @@ public class PubTableView extends JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonCancel;
     private javax.swing.JButton buttonOkay;

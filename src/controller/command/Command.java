@@ -3,15 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Command;
+package controller.command;
 
 import org.json.JSONObject;
 
 /**
  *
- * @author cassiano
+ * 
  */
-public interface Command {
-    
+public interface Command
+{
     public void execute(JSONObject json);
 }

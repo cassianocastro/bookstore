@@ -6,63 +6,76 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.sql.*;
 import java.util.List;
-
 import model.dao.AuthorDAO;
 import org.json.JSONObject;
 
 /**
- * @author cassiano
+ *
+ *
  */
-public class AutTableView extends JFrame {
-    
+public class AutTableView extends JFrame
+{
+
     private int id;
 
-    public AutTableView(BookView parent) {
+    public AutTableView(BookView parent)
+    {
         super("Autores Cadastrados");
-        
+
         initComponents();
-        
-        loadTable();
-        
-        this.buttonOkay.addActionListener(new ActionListener() {
+        this.loadTable();
+
+        this.buttonOkay.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e)
+            {
                 int row = table.getSelectedRow();
-                if (row != -1){
+
+                if ( row != -1 )
+                {
                     id = (int) table.getValueAt(row, 0);
                     parent.getFieldAuthor().setText(String.valueOf(id));
                 }
                 dispose();
             }
         });
-        
-        this.buttonCancel.addActionListener(new ActionListener() {
+
+        this.buttonCancel.addActionListener(new ActionListener()
+        {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e)
+            {
                 dispose();
             }
         });
-        
+
         super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         super.setResizable(false);
         super.setLocationRelativeTo(null);
     }
-    
-    public int getID(){
+
+    public int getID()
+    {
         return this.id;
     }
-    
-    public void loadTable(){
-        try {
+
+    private void loadTable()
+    {
+        try
+        {
             DefaultTableModel model = (DefaultTableModel) this.table.getModel();
 
-            while (this.table.getRowCount() > 0) {
+            while ( this.table.getRowCount() > 0 )
+            {
                 model.removeRow(0);
             }
             List<JSONObject> list = new AuthorDAO().read();
-            for (JSONObject json : list) {
+            for ( JSONObject json : list )
+            {
                 model.addRow(
-                    new Object[]{
+                    new Object[]
+                    {
                         json.getInt("authorID"),
                         json.getString("firstName")
                         + " "
@@ -70,7 +83,8 @@ public class AutTableView extends JFrame {
                     }
                 );
             }
-        } catch (SQLException e) {
+        } catch (SQLException e)
+        {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }
@@ -244,7 +258,6 @@ public class AutTableView extends JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonCancel;
     private javax.swing.JButton buttonOkay;

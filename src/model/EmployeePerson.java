@@ -3,21 +3,24 @@ package model;
 import java.util.Date;
 
 /**
- * @author cassiano
+ *
+ *
  */
-public class EmployeePerson extends Person{
-    
-    private int id;
-    private int matricula;
-    private String cpf;
-    private String depto;
-    private String cargo;
-    private Date date;
-    private Sex sex;
-    private Address address;
+public class EmployeePerson extends Person
+{
+
+    private final int id;
+    private final int matricula;
+    private final String cpf;
+    private final String depto;
+    private final String cargo;
+    private final Date date;
+    private final Sex sex;
+    private final Address address;
 
     public EmployeePerson(int id, String firstName, String lastName, Address address,
-            String cpf, int matricula, String depto, String cargo, Date date, Sex sex) {
+            String cpf, int matricula, String depto, String cargo, Date date, Sex sex)
+    {
         super(firstName, lastName);
         this.id        = id;
         this.matricula = matricula;
@@ -28,36 +31,44 @@ public class EmployeePerson extends Person{
         this.cpf       = cpf;
         this.address   = address;
     }
-    
-    public int getId() {
+
+    public int getId()
+    {
         return id;
     }
 
-    public int getMatricula() {
+    public int getMatricula()
+    {
         return matricula;
     }
 
-    public String getDepto() {
+    public String getDepto()
+    {
         return depto;
     }
 
-    public String getCargo() {
+    public String getCargo()
+    {
         return cargo;
     }
 
-    public Date getDate() {
+    public Date getDate()
+    {
         return date;
     }
 
-    public Sex getSex() {
+    public Sex getSex()
+    {
         return sex;
     }
 
-    public Address getAddress() {
+    public Address getAddress()
+    {
         return this.address;
     }
 
-    public String getCPF() {
+    public String getCPF()
+    {
         return this.cpf;
     }
 }

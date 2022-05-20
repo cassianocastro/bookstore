@@ -1,26 +1,29 @@
 package view;
 
-import controll.BookController;
+import controller.BookController;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import model.Book;
-import factories.JSONFactory;
+import model.factories.JSONFactory;
 import org.json.JSONObject;
 
 /**
- * @author cassiano
+ *
+ *
  */
-public class BookView extends JFrame{
+public class BookView extends JFrame
+{
 
     private BookController bookControll;
     private JSONFactory jsonFactory;
     private PubTableView pubTable;
     private AutTableView autTable;
-    
-    public BookView() {
+
+    public BookView()
+    {
         super("Livros");
         initComponents();
 
@@ -28,145 +31,162 @@ public class BookView extends JFrame{
         this.jsonFactory  = new JSONFactory();
         this.pubTable     = new PubTableView(this);
         this.autTable     = new AutTableView(this);
-        
+
         initListeners();
         setPanelState(false);
         loadTable(this.bookControll.getList());
-        
+
         super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         super.setLocationRelativeTo(null);
         super.setVisible(true);
     }
-    
-    public void setButtonsCRUD(boolean isEnabled){
+
+    public void setButtonsCRUD(boolean isEnabled)
+    {
         this.buttonNew .setEnabled(isEnabled);
         this.buttonEdit.setEnabled(isEnabled);
         this.buttonDel .setEnabled(isEnabled);
     }
-    
-    public void setPanelState(boolean isEnabled){
+
+    public void setPanelState(boolean isEnabled)
+    {
         this.fieldBookID      .setEnabled(isEnabled);
         this.fieldPublishingID.setEnabled(isEnabled);
         this.fieldAuthorID    .setEnabled(isEnabled);
-        
+
         this.fieldTitle       .setEnabled(isEnabled);
         this.fieldGender      .setEnabled(isEnabled);
         this.fieldFinishing   .setEnabled(isEnabled);
         this.fieldNumberPages .setEnabled(isEnabled);
         this.fieldYear        .setEnabled(isEnabled);
-        
+
         this.fieldCodeBar     .setEnabled(isEnabled);
         this.fieldBuy         .setEnabled(isEnabled);
         this.fieldSell        .setEnabled(isEnabled);
-        
+
         this.buttonWildCard   .setEnabled(isEnabled);
         this.buttonCancel     .setEnabled(isEnabled);
-        
+
         this.buttonShowPublishing.setEnabled(isEnabled);
         this.buttonShowAuthor    .setEnabled(isEnabled);
-        
     }
-    
-    public void setTextFields(String[] args){
-        
+
+    public void setTextFields(String[] args)
+    {
         this.fieldBookID      .setText(args[0]);
         this.fieldPublishingID.setText(args[1]);
         this.fieldAuthorID    .setText(args[2]);
-        
+
         this.fieldTitle      .setText(args[3]);
         this.fieldGender     .setText(args[4]);
         this.fieldFinishing  .setText(args[5]);
         this.fieldNumberPages.setText(args[6]);
         this.fieldYear       .setText(args[7]);
-        
+
         this.fieldCodeBar    .setText(args[8]);
         this.fieldSell       .setText(args[9]);
         this.fieldBuy        .setText(args[10]);
     }
-    
-    public String[] getTextFields(){
+
+    public String[] getTextFields()
+    {
         String[] args = new String[11];
-        
+
         args[0] = this.fieldBookID      .getText();
         args[1] = this.fieldPublishingID.getText();
         args[2] = this.fieldAuthorID    .getText();
-        
+
         args[3] = this.fieldTitle       .getText();
         args[4] = this.fieldGender      .getText();
         args[5] = this.fieldFinishing   .getText();
         args[6] = this.fieldNumberPages .getText();
         args[7] = this.fieldYear        .getText();
-        
+
         args[8] = this.fieldCodeBar     .getText();
         args[9] = this.fieldSell        .getText();
         args[10] = this.fieldBuy        .getText();
-        
+
         return args;
     }
-    
-    public void templateMethod(boolean panelEnabled, boolean buttonsEnabled){
-        setPanelState (panelEnabled);
+
+    public void templateMethod(boolean panelEnabled, boolean buttonsEnabled)
+    {
+        setPanelState(panelEnabled);
         setButtonsCRUD(buttonsEnabled);
     }
-    
-    public boolean hasSelectedRow(){
+
+    public boolean hasSelectedRow()
+    {
         int row = this.table.getSelectedRow();
-        return (row != -1);
+
+        return row != -1;
             //return false;
         //return true;
     }
-    
-    public void editFields(){
+
+    public void editFields()
+    {
         String[] args = new String[11];
-        for (int i = 0; i < args.length; i++) {
+
+        for ( int i = 0; i < args.length; i++ )
+        {
             args[i] = table.getValueAt(this.table.getSelectedRow(), i).toString();
         }
         setTextFields(args);
     }
-    
-    public void clearFields(){
+
+    public void clearFields()
+    {
         String[] args = new String[11];
-        for (String arg : args) {
+
+        for ( String arg : args )
+        {
             arg = "";
         }
         setTextFields(args);
     }
-    
-    public boolean fieldsOkay(){
+
+    public boolean fieldsOkay()
+    {
         String[] args = getTextFields();
+
         if (args[0].isEmpty())
             args[0] = "0";
-        
+
         if (args[1].isEmpty())
             args[1] = "1";
-        
+
         if (args[2].isEmpty())
             args[2] = "1";
-        
-        for (String arg : args) {
-            if ( arg.isEmpty() )
-                return false;
+
+        for ( String arg : args )
+        {
+            if ( arg.isEmpty() ) return false;
         }
         this.jsonFactory.buildFrom(args);
+
         return true;
     }
-    
-    public JFormattedTextField getFieldPublishing(){
+
+    public JFormattedTextField getFieldPublishing()
+    {
         return this.fieldPublishingID;
     }
-    
-    public JFormattedTextField getFieldAuthor(){
+
+    public JFormattedTextField getFieldAuthor()
+    {
         return this.fieldAuthorID;
     }
-    
-    private void initListeners(){
+
+    private void initListeners()
+    {
         this.buttonClose.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
             }
         });
-        
+
         this.buttonNew.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -174,7 +194,7 @@ public class BookView extends JFrame{
                 templateMethod(true, false);
             }
         });
-        
+
         this.buttonEdit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
@@ -185,12 +205,12 @@ public class BookView extends JFrame{
                 }
             }
         });
-        
+
         this.buttonDel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int row = table.getSelectedRow();
-                
+
                 if (row != -1){
                     int confirm = JOptionPane.showConfirmDialog(
                         null,
@@ -209,8 +229,8 @@ public class BookView extends JFrame{
                 }
             }
         });
-        
-        this.buttonCancel.addActionListener(new ActionListener() {    
+
+        this.buttonCancel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
                 clearFields();
@@ -223,26 +243,26 @@ public class BookView extends JFrame{
             public void actionPerformed(ActionEvent event) {
                 if (fieldsOkay()){
                     JSONObject json = jsonFactory.getJSON();
-                
+
                     if (buttonWildCard.getText().equals("Atualizar"))
                         bookControll.invoke("EditCommand", json);
                     else
                         bookControll.invoke("NewCommand", json);
-                    
+
                     loadTable(bookControll.getList());
                     clearFields();
                     templateMethod(false, true);
                 }
             }
         });
-        
+
         this.buttonShowPublishing.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 pubTable.setVisible(true);
             }
         });
-        
+
         this.buttonShowAuthor.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -250,16 +270,21 @@ public class BookView extends JFrame{
             }
         });
     }
-    
-    public void loadTable(List<Book> list){
+
+    public void loadTable(List<Book> list)
+    {
         DefaultTableModel model = (DefaultTableModel) this.table.getModel();
-        
-        while (table.getRowCount() > 0) {
+
+        while (table.getRowCount() > 0)
+        {
             model.removeRow(0);
         }
-        for (Book book : list) {
+
+        for ( Book book : list )
+        {
             model.addRow(
-                new Object[]{
+                new Object[]
+                {
                     book.getBookID(),
                     book.getPublishingID(),
                     book.getAuthorID(),
@@ -273,7 +298,7 @@ public class BookView extends JFrame{
                     book.getBuyValue().toString()
                 }
             );
-        }    
+        }
     }
 
     /**
@@ -784,7 +809,6 @@ public class BookView extends JFrame{
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonCancel;
     private javax.swing.JButton buttonClose;
@@ -819,5 +843,4 @@ public class BookView extends JFrame{
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
-
 }

@@ -10,54 +10,63 @@ import model.dao.ObrasDAO;
 import org.json.JSONObject;
 
 /**
- * @author cassiano
+ *
+ *
  */
-public class ObrasView extends JFrame {
+public class ObrasView extends JFrame
+{
 
-    public ObrasView(String id) {
+    public ObrasView(String id)
+    {
         super("Obras");
-        
+
         initComponents();
-        
-        loadTable( id );
-        
+        loadTable(id);
+
         this.buttonOkay.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
             }
         });
-        
+
         super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         super.setResizable(false);
         super.setLocationRelativeTo(null);
         super.setVisible(true);
     }
-    
-    private void loadTable(String id) {
+
+    private void loadTable(String id)
+    {
         if (id.isEmpty())
             return;
-        
+
         int authorID = Integer.parseInt(id);
-        try {
+
+        try
+        {
             DefaultTableModel model = (DefaultTableModel) this.table.getModel();
 
-            while (this.table.getRowCount() > 0) {
+            while ( this.table.getRowCount() > 0 )
+            {
                 model.removeRow(0);
             }
             List<JSONObject> list = new ObrasDAO().read(authorID);
-            for (JSONObject json : list) {
+
+            for ( JSONObject json : list )
+            {
                 model.addRow(
-                    new Object[]{
+                    new Object[]
+                    {
                         json.getInt("authorID"),
-                        json.getString("authorFirstName") +
-                        " " +
+                        json.getString("authorFirstName") + " " +
                         json.getString("authorLastName"),
                         json.getString("bookTitle")
                     }
                 );
             }
-        } catch (SQLException e) {
+        } catch (SQLException e)
+        {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }
@@ -220,7 +229,6 @@ public class ObrasView extends JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonOkay;
     private javax.swing.JPanel jPanel1;
@@ -230,5 +238,4 @@ public class ObrasView extends JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
-
 }

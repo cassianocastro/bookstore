@@ -1,14 +1,22 @@
 package model;
 
 /**
- * @author cassiano
+ *
+ *
  */
-public class Address {
+public class Address
+{
 
-    private String uf, city, bairro, street, compl, cep;
-    private int number;
+    private final String uf;
+    private final String city;
+    private final String bairro;
+    private final String street;
+    private final String compl;
+    private final String cep;
+    private final int number;
 
-    public Address(String uf, String city, String bairro, String street, int number, String compl, String cep) {
+    public Address(String uf, String city, String bairro, String street, int number, String compl, String cep)
+    {
         this.uf     = uf;
         this.city   = city;
         this.bairro = bairro;
@@ -18,31 +26,38 @@ public class Address {
         this.cep    = cep;
     }
 
-    public String getUf() {
+    public String getUf()
+    {
         return uf;
     }
 
-    public String getCity() {
+    public String getCity()
+    {
         return city;
     }
 
-    public String getBairro() {
+    public String getBairro()
+    {
         return bairro;
     }
 
-    public String getStreet() {
+    public String getStreet()
+    {
         return street;
     }
 
-    public int getNumber() {
+    public int getNumber()
+    {
         return number;
     }
 
-    public String getCompl() {
+    public String getCompl()
+    {
         return compl;
     }
 
-    public String getCep() {
+    public String getCep()
+    {
         return cep;
     }
 }

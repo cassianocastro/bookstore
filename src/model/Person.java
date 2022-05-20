@@ -1,32 +1,38 @@
 package model;
 
 /**
- * @author cassiano
+ *
+ *
  */
-public abstract class Person {
+abstract public class Person
+{
 
     private String firstName;
     private String lastName;
 
-    public Person(String firstName, String lastName) {
+    public Person(String firstName, String lastName)
+    {
         this.firstName = firstName;
         this.lastName  = lastName;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getFirstName()
+    {
+        return this.firstName;
     }
 
-    public void setFirstName(String firstName) {
+    public void setFirstName(String firstName)
+    {
         this.firstName = firstName;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getLastName()
+    {
+        return this.lastName;
     }
 
-    public void setLastName(String lastName) {
+    public void setLastName(String lastName)
+    {
         this.lastName = lastName;
     }
-
 }

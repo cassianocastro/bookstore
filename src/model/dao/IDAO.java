@@ -1,12 +1,14 @@
-package interfaces;
+package model.dao;
 
 import java.sql.SQLException;
 import java.util.List;
 
 /**
- * @author cassiano
+ *
+ *
  */
-public interface IDAO {
+public interface IDAO
+{
 
     public List read() throws SQLException;
 

@@ -3,45 +3,56 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controll;
+package controller;
 
-import Command.*;
+import controller.command.EditBookCommand;
+import controller.command.NewBookCommand;
+import controller.command.Invoker;
+import controller.command.ReadBookCommand;
+import controller.command.DelBookCommand;
 import java.sql.SQLException;
 import java.util.List;
 import model.Book;
 import model.dao.*;
 import org.json.JSONObject;
+
 /**
  *
- * @author cassiano
+ *
  */
-public class BookController {
+public class BookController
+{
 
-    private Invoker invoker;
-    
-    public BookController() {
+    private final Invoker invoker;
+
+    public BookController()
+    {
         invoker = new Invoker();
-        foo();
+        this.foo();
     }
-    
-    public void foo(){
-        try {
+
+    private void foo()
+    {
+        try
+        {
             BookDAO bookDAO = new BookDAO();
-            invoker.put("NewCommand",  new NewBookCommand (bookDAO));
+            invoker.put("NewCommand", new NewBookCommand(bookDAO));
             invoker.put("EditCommand", new EditBookCommand(bookDAO));
-            invoker.put("DelCommand",  new DelBookCommand (bookDAO));
+            invoker.put("DelCommand", new DelBookCommand(bookDAO));
             invoker.put("ReadCommand", new ReadBookCommand(bookDAO));
-            
-        } catch (SQLException ex) {
+        } catch (SQLException ex)
+        {
             System.out.println(ex.getMessage());
         }
     }
-    
-    public void invoke(String cmd, JSONObject json){
+
+    public void invoke(String cmd, JSONObject json)
+    {
         invoker.invoke(cmd, json);
     }
-    
-    public List<Book> getList(){
+
+    public List<Book> getList()
+    {
         return invoker.getList();
     }
 }

@@ -1,42 +1,50 @@
 package model;
 
 /**
- * @author cassiano
+ *
+ *
  */
-public class PublishingCia {
-    
+public class PublishingCia
+{
+
     private int companyID;
     private String name;
     private Address address;
 
-    public PublishingCia(int companyID, String name, Address address) {
+    public PublishingCia(int companyID, String name, Address address)
+    {
         this.companyID = companyID;
         this.name      = name;
         this.address   = address;
     }
 
-    public int getCompanyID() {
+    public int getCompanyID()
+    {
         return companyID;
     }
 
-    public void setCompanyID(int companyID) {
+    public void setCompanyID(int companyID)
+    {
         this.companyID = companyID;
     }
 
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name)
+    {
         this.name = name;
     }
 
-    public Address getAddress() {
+    public Address getAddress()
+    {
         return address;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(Address address)
+    {
         this.address = address;
     }
-    
 }

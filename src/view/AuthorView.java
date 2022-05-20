@@ -9,105 +9,126 @@ import model.dao.AuthorDAO;
 import org.json.JSONObject;
 
 /**
- * @author cassiano
+ *
+ *
  */
-public class AuthorView extends JFrame {
-    
-    public AuthorView() {
+public class AuthorView extends JFrame
+{
+
+    public AuthorView()
+    {
         super("Autores");
-        initComponents();
-        initListeners();
-        loadTable();
-        setPanelState(false);
-        
+
+        this.initComponents();
+        this.initListeners();
+        this.loadTable();
+        this.setPanelState(false);
+
         super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         super.setLocationRelativeTo(null);
         super.setVisible(true);
     }
-    
-    public void setButtonsCRUD(boolean isEnabled){
+
+    public void setButtonsCRUD(boolean isEnabled)
+    {
         this.buttonNew .setEnabled(isEnabled);
         this.buttonEdit.setEnabled(isEnabled);
         this.buttonDel .setEnabled(isEnabled);
     }
-    
-    public void setPanelState(boolean isEnabled){
+
+    private void setPanelState(boolean isEnabled)
+    {
         this.fieldAuthorID .setEnabled(isEnabled);
         this.fieldFirstName.setEnabled(isEnabled);
         this.fieldLastName .setEnabled(isEnabled);
-        
+
         this.buttonWildCard.setEnabled(isEnabled);
         this.buttonCancel  .setEnabled(isEnabled);
         this.buttonShow    .setEnabled(isEnabled);
     }
-    
-    public void setTextFields(String[] args){
-        
+
+    public void setTextFields(String[] args)
+    {
         this.fieldAuthorID .setText(args[0]);
         this.fieldFirstName.setText(args[1]);
         this.fieldLastName .setText(args[2]);
     }
-    
-    public void clearFields(){
+
+    public void clearFields()
+    {
         setTextFields( new String[] {"", "", ""} );
     }
-    
-    public boolean hasSelectedRow(){
+
+    public boolean hasSelectedRow()
+    {
         int row = this.table.getSelectedRow();
-        return (row != -1);
+
+        return row != -1;
     }
-    
-    public void editFields(){
+
+    public void editFields()
+    {
         String[] args = new String[3];
-        for (int i = 0; i < args.length; i++) {
+
+        for ( int i = 0; i < args.length; i++ )
+        {
             args[i] = table.getValueAt(table.getSelectedRow(), i).toString();
         }
         setTextFields(args);
     }
-    
-    public JSONObject getJSON(){
+
+    public JSONObject getJSON()
+    {
         JSONObject json = new JSONObject();
         String id = this.fieldAuthorID .getText();
+
         if (id.isEmpty())
             id = "0";
         json.put("authorID",  id);
         json.put("firstName", this.fieldFirstName.getText());
         json.put("lastName",  this.fieldLastName .getText());
-        
+
         return json;
     }
-    
-    public String getTextFromFieldID(){
+
+    public String getTextFromFieldID()
+    {
         return this.fieldAuthorID.getText();
     }
-    
-    public JTable getTable() {
+
+    public JTable getTable()
+    {
         return table;
     }
-    
-    private void initListeners(){
+
+    private void initListeners()
+    {
         AuthorView authorView = this;
-        
+
         this.buttonClose.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e)
+            {
                 dispose();
             }
         });
-        
+
         this.buttonNew.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e)
+            {
                 buttonWildCard.setText("Cadastrar");
                 setPanelState(true);
                 setButtonsCRUD(false);
             }
         });
-        
+
         this.buttonEdit.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent event) {
-                if (hasSelectedRow()){
+            public void actionPerformed(ActionEvent event)
+            {
+                if (hasSelectedRow())
+                {
                     editFields();
                     buttonWildCard.setText("Atualizar");
                     setPanelState(true);
@@ -115,62 +136,74 @@ public class AuthorView extends JFrame {
                 }
             }
         });
-        
+
         this.buttonShow.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e)
+            {
                 String id = getTextFromFieldID();
                 new ObrasView( id );
             }
         });
-        
+
         this.buttonCancel.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent event) {
+            public void actionPerformed(ActionEvent event)
+            {
                 clearFields();
                 setPanelState(false);
                 setButtonsCRUD(true);
             }
         });
-        
+
         this.buttonDel.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent event) {
+            public void actionPerformed(ActionEvent event)
+            {
                 JTable table = getTable();
                 int row      = table.getSelectedRow();
-                
-                if (row != -1){
+
+                if (row != -1)
+                {
                     int confirm = JOptionPane.showConfirmDialog(
                         authorView,
                         "Confirma a exclusão do cadastro? ",
                         "Confirmação",
                         JOptionPane.YES_NO_OPTION
                     );
-                    if (confirm == JOptionPane.YES_OPTION){
+                    if (confirm == JOptionPane.YES_OPTION)
+                    {
                         int id = (int) table.getValueAt(row, 0);
-                        try{
+
+                        try
+                        {
                             new AuthorDAO().deleteBy(id);
                             loadTable();
-                        }catch(SQLException e){
+                        } catch(SQLException e)
+                        {
                             JOptionPane.showMessageDialog(authorView, e.getMessage());
                         }
                     }
                 }
             }
         });
-        
+
         this.buttonWildCard.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent event) {
+            public void actionPerformed(ActionEvent event)
+            {
                 String label = buttonWildCard.getText();
                 JSONObject json = getJSON();
-                try {
+
+                try
+                {
                     if (label.equals("Atualizar"))
                         new AuthorDAO().update(json);
                     else
                         new AuthorDAO().create(json);
                     loadTable();
-                } catch (SQLException e) {
+                } catch (SQLException e)
+                {
                     JOptionPane.showMessageDialog(authorView, e.getMessage());
                 }
                 JOptionPane.showMessageDialog(authorView, "Registro Salvo.");
@@ -180,23 +213,30 @@ public class AuthorView extends JFrame {
             }
         });
     }
-    
-    public void loadTable(){
-        try {
+
+    private void loadTable()
+    {
+        try
+        {
             DefaultTableModel model = (DefaultTableModel) this.table.getModel();
 
-            while (this.table.getRowCount() > 0) {
+            while (this.table.getRowCount() > 0)
+            {
                 model.removeRow(0);
             }
             List<JSONObject> array = new AuthorDAO().read();
-            for (JSONObject json : array) {
-                model.addRow( new Object[]{
+
+            for ( JSONObject json : array )
+            {
+                model.addRow( new Object[]
+                {
                     json.getInt("authorID"),
                     json.getString("firstName"),
                     json.getString("lastName")
                 });
             }
-        } catch (SQLException e) {
+        } catch (SQLException e)
+        {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
@@ -549,7 +589,6 @@ public class AuthorView extends JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonCancel;
     private javax.swing.JButton buttonClose;
