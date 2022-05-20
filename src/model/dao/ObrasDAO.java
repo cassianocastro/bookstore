@@ -14,35 +14,37 @@ public class ObrasDAO
 
     private final Connection connection;
 
-    public ObrasDAO() throws SQLException
+    public ObrasDAO(Connection connection)
     {
-        this.connection = ConnectionSingleton.getInstance();
+        this.connection = connection;
     }
 
-    public List read(int authorID) throws SQLException
+    public List<JSONObject> read(int id) throws SQLException
     {
-        List<JSONObject> list = new LinkedList();
-        String SQL = "SELECT autor.autorID, autor.nome, autor.sobrenome, livro.titulo "
-            + "FROM autor, livro "
-            + "WHERE autor.autorID = livro.autorID "
-            + "AND autor.autorID = ?";
+        final String SQL = "SELECT autor.autorID, autor.nome, autor.sobrenome, livro.titulo "
+            + "FROM autor, livro WHERE autor.autorID = livro.autorID AND autor.autorID = ?";
 
-        try (PreparedStatement ps = this.connection.prepareStatement(SQL))
+        try (var ps = this.connection.prepareStatement(SQL))
         {
-            ps.setInt(1, authorID);
-            ResultSet rs = ps.executeQuery();
+            ps.setInt(1, id);
 
-            while ( rs.next() )
+            try (ResultSet rs = ps.executeQuery())
             {
-                JSONObject json = new JSONObject();
-                json.put("authorID", rs.getInt("autorID"));
-                json.put("authorFirstName", rs.getString("nome"));
-                json.put("authorLastName", rs.getString("sobrenome"));
-                json.put("bookTitle", rs.getString("titulo"));
+                List<JSONObject> list = new LinkedList();
 
-                list.add(json);
+                while ( rs.next() )
+                {
+                    JSONObject json = new JSONObject();
+
+                    json.put("authorID", rs.getInt("autorID"));
+                    json.put("authorFirstName", rs.getString("nome"));
+                    json.put("authorLastName", rs.getString("sobrenome"));
+                    json.put("bookTitle", rs.getString("titulo"));
+
+                    list.add(json);
+                }
+                return list;
             }
         }
-        return list;
     }
 }

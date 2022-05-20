@@ -37,10 +37,10 @@ public class ConfigDAO
 
             json.put("host", config.getHost());
             json.put("port", config.getPort());
-            json.put("dbName", config.getDriver());
+            json.put("driver", config.getDriver());
             json.put("database", config.getDatabase());
             json.put("user", config.getUser());
-            json.put("pass", config.getPassword());
+            json.put("password", config.getPassword());
 
             return json;
         }

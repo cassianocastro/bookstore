@@ -16,22 +16,18 @@ public class PublishingCiaDAO
 
     private final Connection connection;
 
-    public PublishingCiaDAO() throws SQLException
+    public PublishingCiaDAO(Connection connection)
     {
-        this.connection = ConnectionSingleton.getInstance();
+        this.connection = connection;
     }
 
-    public void create(PublishingCia cia) throws SQLException
+    public void insert(PublishingCia cia) throws SQLException
     {
-        String SQL = "INSERT INTO editora "
-            + "( nome, uf, cidade, bairro, rua, numero, complemento, cep ) "
-            + "VALUES "
-            + "( ?, ?, ?, ?, ?, ?, ?, ? )";
+        final String SQL = "INSERT INTO editora (nome, uf, cidade, bairro, rua, numero, complemento, cep) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try (PreparedStatement ps = this.connection.prepareStatement(SQL))
+        try (var ps = this.connection.prepareStatement(SQL))
         {
             ps.setString(1, cia.getName());
-
             ps.setString(2, cia.getAddress().getUf());
             ps.setString(3, cia.getAddress().getCity());
             ps.setString(4, cia.getAddress().getBairro());
@@ -40,59 +36,18 @@ public class PublishingCiaDAO
             ps.setString(7, cia.getAddress().getCompl());
             ps.setString(8, cia.getAddress().getCep());
 
-            ps.executeUpdate();
+            ps.execute();
         }
-    }
-
-    public List read() throws SQLException
-    {
-        List<PublishingCia> list = new LinkedList<>();
-        String SQL = "SELECT * FROM editora";
-
-        try (PreparedStatement statement = this.connection.prepareStatement(SQL);
-            ResultSet rs = statement.executeQuery())
-        {
-            while ( rs.next() )
-            {
-                int ciaID = rs.getInt("editorID");
-                String name = rs.getString("nome");
-
-                String uf = rs.getString("uf");
-                String city = rs.getString("cidade");
-                String bairro = rs.getString("bairro");
-                String street = rs.getString("rua");
-                int number = rs.getInt("numero");
-                String compl = rs.getString("complemento");
-                String cep = rs.getString("cep");
-
-                Address address = new Address(
-                    uf, city, bairro, street, number, compl, cep
-                );
-                list.add(new PublishingCia(
-                    ciaID, name, address
-                ));
-            }
-        }
-        return list;
     }
 
     public void update(PublishingCia cia) throws SQLException
     {
-        String SQL = "UPDATE editora SET "
-            + "nome = ?,"
-            + "uf = ?,"
-            + "cidade = ?,"
-            + "bairro = ?,"
-            + "rua = ?,"
-            + "numero = ?,"
-            + "complemento = ?,"
-            + "cep = ? "
-            + "WHERE editorID = ?";
+        final String SQL = "UPDATE editora SET nome = ?, uf = ?,"
+            + "cidade = ?, bairro = ?, rua = ?, numero = ?, complemento = ?, cep = ? WHERE editorID = ?";
 
-        try (PreparedStatement ps = this.connection.prepareStatement(SQL))
+        try (var ps = this.connection.prepareStatement(SQL))
         {
             ps.setString(1, cia.getName());
-
             ps.setString(2, cia.getAddress().getUf());
             ps.setString(3, cia.getAddress().getCity());
             ps.setString(4, cia.getAddress().getBairro());
@@ -100,39 +55,73 @@ public class PublishingCiaDAO
             ps.setInt(6, cia.getAddress().getNumber());
             ps.setString(7, cia.getAddress().getCompl());
             ps.setString(8, cia.getAddress().getCep());
-
             ps.setInt(9, cia.getCompanyID());
+
             ps.executeUpdate();
         }
     }
 
-    public void deleteBy(int ID) throws SQLException
+    public void delete(int id) throws SQLException
     {
-        String SQL = "DELETE FROM editora WHERE editorID = ?";
+        final String SQL = "DELETE FROM editora WHERE editorID = ?";
 
-        try (PreparedStatement statement = this.connection.prepareStatement(SQL))
+        try (var statement = this.connection.prepareStatement(SQL))
         {
-            statement.setInt(1, ID);
-            statement.executeUpdate();
+            statement.setInt(1, id);
+
+            statement.execute();
         }
     }
 
-    public List getNamesAndIDs() throws SQLException
+    public List<PublishingCia> read() throws SQLException
     {
-        List list  = new LinkedList();
-        String SQL = "select editorID, nome from editora";
+        final String SQL = "SELECT * FROM editora";
 
-        try (PreparedStatement statement = this.connection.prepareStatement(SQL);
-            ResultSet rs = statement.executeQuery())
+        try (var statement = this.connection.prepareStatement(SQL);
+            var rs = statement.executeQuery())
         {
+            List<PublishingCia> list = new LinkedList<>();
+
+            while ( rs.next() )
+            {
+                int ciaID   = rs.getInt("editorID");
+                String name = rs.getString("nome");
+
+                String uf     = rs.getString("uf");
+                String city   = rs.getString("cidade");
+                String bairro = rs.getString("bairro");
+                String street = rs.getString("rua");
+                int number    = rs.getInt("numero");
+                String compl  = rs.getString("complemento");
+                String cep    = rs.getString("cep");
+
+                Address address = new Address(uf, city, bairro, street, number, compl, cep);
+
+                list.add(new PublishingCia(ciaID, name, address));
+            }
+            return list;
+        }
+    }
+
+    public List<JSONObject> getNamesAndIDs() throws SQLException
+    {
+        final String SQL = "SELECT editorID, nome FROM editora";
+
+        try (var statement = this.connection.prepareStatement(SQL);
+            var rs = statement.executeQuery())
+        {
+            List<JSONObject> list = new LinkedList();
+
             while ( rs.next() )
             {
                 JSONObject json = new JSONObject();
+
                 json.put("publishingID", rs.getInt("editorID"));
                 json.put("publishingName", rs.getString("nome"));
+
                 list.add(json);
             }
+            return list;
         }
-        return list;
     }
 }
