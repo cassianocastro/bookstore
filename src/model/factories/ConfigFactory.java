@@ -1,6 +1,6 @@
 package model.factories;
 
-import model.ConfigDataBase;
+import model.DBConfig;
 import org.json.JSONObject;
 
 /**
@@ -10,15 +10,15 @@ import org.json.JSONObject;
 public class ConfigFactory
 {
 
-    public ConfigDataBase buildFrom(JSONObject json)
+    public DBConfig buildFrom(JSONObject json)
     {
+        int port        = json.getInt("port");
         String host     = json.getString("host");
-        String port     = json.getString("port");
         String dbName   = json.getString("dbName");
         String dataBase = json.getString("database");
         String user     = json.getString("user");
         String password = json.getString("pass");
 
-        return new ConfigDataBase(host, port, dbName, dataBase, user, password);
+        return new DBConfig(host, port, dbName, dataBase, user, password);
     }
 }
