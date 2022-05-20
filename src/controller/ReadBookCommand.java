@@ -3,37 +3,41 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controller.command;
+package controller;
 
+import java.sql.SQLException;
+import java.util.List;
+import javax.swing.JOptionPane;
 import model.Book;
 import model.dao.BookDAO;
-import model.factories.BookFactory;
 import org.json.JSONObject;
-import java.sql.*;
-import javax.swing.JOptionPane;
 
 /**
  *
  *
  */
-public class NewBookCommand implements Command
+public class ReadBookCommand implements Command
 {
 
     private final BookDAO bookDAO;
+    private List<Book> list;
 
-    public NewBookCommand(BookDAO bookDAO)
+    public ReadBookCommand(BookDAO bookDAO)
     {
         this.bookDAO = bookDAO;
+    }
+
+    public List<Book> getList()
+    {
+        return this.list;
     }
 
     @Override
     public void execute(JSONObject json)
     {
-        Book book = new BookFactory().buildFrom(json);
-
         try
         {
-            this.bookDAO.create(book);
+            this.list = this.bookDAO.read();
         } catch (SQLException e)
         {
             JOptionPane.showMessageDialog(null, e.getMessage());

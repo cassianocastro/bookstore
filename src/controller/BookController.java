@@ -5,11 +5,7 @@
  */
 package controller;
 
-import controller.command.EditBookCommand;
-import controller.command.NewBookCommand;
-import controller.command.Invoker;
-import controller.command.ReadBookCommand;
-import controller.command.DelBookCommand;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import model.Book;
@@ -27,7 +23,7 @@ public class BookController
 
     public BookController()
     {
-        invoker = new Invoker();
+        this.invoker = new Invoker();
         this.foo();
     }
 
@@ -35,24 +31,26 @@ public class BookController
     {
         try
         {
-            BookDAO bookDAO = new BookDAO();
+            Connection connection = ConnectionSingleton.getInstance();
+            BookDAO bookDAO = new BookDAO(connection);
+
             invoker.put("NewCommand", new NewBookCommand(bookDAO));
             invoker.put("EditCommand", new EditBookCommand(bookDAO));
             invoker.put("DelCommand", new DelBookCommand(bookDAO));
             invoker.put("ReadCommand", new ReadBookCommand(bookDAO));
-        } catch (SQLException ex)
+        } catch (SQLException e)
         {
-            System.out.println(ex.getMessage());
+            System.out.println(e.getMessage());
         }
     }
 
     public void invoke(String cmd, JSONObject json)
     {
-        invoker.invoke(cmd, json);
+        this.invoker.invoke(cmd, json);
     }
 
     public List<Book> getList()
     {
-        return invoker.getList();
+        return this.invoker.getList();
     }
 }

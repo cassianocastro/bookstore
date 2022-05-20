@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controller.command;
+package controller;
 
 import model.dao.BookDAO;
 import org.json.JSONObject;
@@ -31,7 +31,7 @@ public class DelBookCommand implements Command
 
         try
         {
-            this.bookDAO.deleteBy(id);
+            this.bookDAO.delete(id);
         } catch (SQLException e)
         {
             JOptionPane.showMessageDialog(null, e.getMessage());
