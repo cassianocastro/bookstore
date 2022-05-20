@@ -6,7 +6,7 @@ import java.util.Date;
  *
  *
  */
-public class EmployeePerson extends Person
+public class Employee extends Person
 {
 
     private final int id;
@@ -18,7 +18,7 @@ public class EmployeePerson extends Person
     private final Sex sex;
     private final Address address;
 
-    public EmployeePerson(int id, String firstName, String lastName, Address address,
+    public Employee(int id, String firstName, String lastName, Address address,
             String cpf, int matricula, String depto, String cargo, Date date, Sex sex)
     {
         super(firstName, lastName);
