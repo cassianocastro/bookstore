@@ -1,7 +1,7 @@
 package view;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.sql.*;
@@ -22,33 +22,9 @@ public class AutTableView extends JFrame
     {
         super("Autores Cadastrados");
 
-        initComponents();
+        this.initComponents();
+        this.initListeners(parent);
         this.loadTable();
-
-        this.buttonOkay.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                int row = table.getSelectedRow();
-
-                if ( row != -1 )
-                {
-                    id = (int) table.getValueAt(row, 0);
-                    parent.getFieldAuthor().setText(String.valueOf(id));
-                }
-                dispose();
-            }
-        });
-
-        this.buttonCancel.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                dispose();
-            }
-        });
 
         super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         super.setResizable(false);
@@ -89,6 +65,26 @@ public class AutTableView extends JFrame
         }
     }
 
+    private void initListeners(BookView parent)
+    {
+        this.buttonOkay.addActionListener((ActionEvent e) ->
+        {
+            int row = table.getSelectedRow();
+
+            if ( row != -1 )
+            {
+                id = (int) table.getValueAt(row, 0);
+                parent.getFieldAuthor().setText(String.valueOf(id));
+            }
+            dispose();
+        });
+
+        this.buttonCancel.addActionListener((ActionEvent e) ->
+        {
+            dispose();
+        });
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -96,176 +92,175 @@ public class AutTableView extends JFrame
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
-        jPanel3 = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        table = new javax.swing.JTable();
-        buttonCancel = new javax.swing.JButton();
-        buttonOkay = new javax.swing.JButton();
+        jPanel3 = new JPanel();
+        jPanel4 = new JPanel();
+        jPanel1 = new JPanel();
+        jPanel2 = new JPanel();
+        jScrollPane1 = new JScrollPane();
+        table = new JTable();
+        buttonCancel = new JButton();
+        buttonOkay = new JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel3.setBackground(new java.awt.Color(173, 30, 45));
+        jPanel3.setBackground(new Color(173, 30, 45));
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        GroupLayout jPanel3Layout = new GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel3Layout.setHorizontalGroup(jPanel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel3Layout.setVerticalGroup(jPanel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGap(0, 30, Short.MAX_VALUE)
         );
 
-        jPanel4.setBackground(new java.awt.Color(12, 18, 12));
+        jPanel4.setBackground(new Color(12, 18, 12));
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        GroupLayout jPanel4Layout = new GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel4Layout.setHorizontalGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel4Layout.setVerticalGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGap(0, 30, Short.MAX_VALUE)
         );
 
-        jPanel1.setBackground(new java.awt.Color(194, 1, 20));
+        jPanel1.setBackground(new Color(194, 1, 20));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel1Layout.setHorizontalGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGap(0, 100, Short.MAX_VALUE)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jPanel2.setBackground(new java.awt.Color(236, 235, 243));
+        jPanel2.setBackground(new Color(236, 235, 243));
 
-        table.setBackground(new java.awt.Color(236, 235, 243));
-        table.setForeground(new java.awt.Color(12, 18, 12));
-        table.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+        table.setBackground(new Color(236, 235, 243));
+        table.setForeground(new Color(12, 18, 12));
+        table.setModel(new DefaultTableModel(
+            new Object [][]
+            {
                 {null, null, null}
             },
-            new String [] {
+            new String []
+            {
                 "ID", "Autor", "Title 3"
             }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Object.class
+        )
+        {
+            Class[] types = new Class []
+            {
+                Integer.class, String.class, Object.class
             };
-            boolean[] canEdit = new boolean [] {
+            boolean[] canEdit = new boolean []
+            {
                 false, false, true
             };
 
-            public Class getColumnClass(int columnIndex) {
+            public Class getColumnClass(int columnIndex)
+            {
                 return types [columnIndex];
             }
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
+            public boolean isCellEditable(int rowIndex, int columnIndex)
+            {
                 return canEdit [columnIndex];
             }
         });
         table.setToolTipText("");
-        table.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         table.setFillsViewportHeight(true);
-        table.setGridColor(new java.awt.Color(12, 18, 12));
-        table.setSelectionBackground(new java.awt.Color(152, 58, 69));
-        table.setSelectionForeground(new java.awt.Color(236, 235, 243));
+        table.setGridColor(new Color(12, 18, 12));
+        table.setSelectionBackground(new Color(152, 58, 69));
+        table.setSelectionForeground(new Color(236, 235, 243));
         table.setShowGrid(true);
         jScrollPane1.setViewportView(table);
-        if (table.getColumnModel().getColumnCount() > 0) {
+        if (table.getColumnModel().getColumnCount() > 0)
+        {
             table.getColumnModel().getColumn(0).setPreferredWidth(150);
             table.getColumnModel().getColumn(1).setPreferredWidth(300);
         }
 
-        buttonCancel.setBackground(new java.awt.Color(236, 235, 243));
-        buttonCancel.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        buttonCancel.setForeground(new java.awt.Color(12, 18, 12));
+        buttonCancel.setBackground(new Color(236, 235, 243));
+        buttonCancel.setFont(new Font("Dialog", 1, 14)); // NOI18N
+        buttonCancel.setForeground(new Color(12, 18, 12));
         buttonCancel.setText("Cancelar");
-        buttonCancel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
+        buttonCancel.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2));
         buttonCancel.setContentAreaFilled(false);
-        buttonCancel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        buttonCancel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         buttonCancel.setFocusPainted(false);
 
-        buttonOkay.setBackground(new java.awt.Color(236, 235, 243));
-        buttonOkay.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        buttonOkay.setForeground(new java.awt.Color(12, 18, 12));
+        buttonOkay.setBackground(new Color(236, 235, 243));
+        buttonOkay.setFont(new Font("Dialog", 1, 14)); // NOI18N
+        buttonOkay.setForeground(new Color(12, 18, 12));
         buttonOkay.setText("Okay");
-        buttonOkay.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
+        buttonOkay.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2));
         buttonOkay.setContentAreaFilled(false);
-        buttonOkay.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        buttonOkay.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         buttonOkay.setFocusPainted(false);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        GroupLayout jPanel2Layout = new GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel2Layout.setHorizontalGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(0, 142, Short.MAX_VALUE)
-                        .addComponent(buttonOkay, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(buttonCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(buttonOkay, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(buttonCancel, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel2Layout.setVerticalGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(buttonOkay, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(buttonCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 312, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                    .addComponent(buttonOkay, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(buttonCancel, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 6, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanel4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton buttonCancel;
-    private javax.swing.JButton buttonOkay;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable table;
+    private JButton buttonCancel;
+    private JButton buttonOkay;
+    private JPanel jPanel1;
+    private JPanel jPanel2;
+    private JPanel jPanel3;
+    private JPanel jPanel4;
+    private JScrollPane jScrollPane1;
+    private JTable table;
     // End of variables declaration//GEN-END:variables
 }

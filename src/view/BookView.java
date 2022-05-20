@@ -1,11 +1,15 @@
 package view;
 
 import controller.BookController;
+import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.text.ParseException;
 import java.util.List;
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.text.MaskFormatter;
 import model.Book;
 import model.factories.JSONFactory;
 import org.json.JSONObject;
@@ -25,7 +29,7 @@ public class BookView extends JFrame
     public BookView()
     {
         super("Livros");
-        initComponents();
+        this.initComponents();
 
         this.bookControll = new BookController();
         this.jsonFactory  = new JSONFactory();
@@ -33,8 +37,8 @@ public class BookView extends JFrame
         this.autTable     = new AutTableView(this);
 
         initListeners();
-        setPanelState(false);
-        loadTable(this.bookControll.getList());
+        this.setPanelState(false);
+        this.loadTable(this.bookControll.getList());
 
         super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         super.setLocationRelativeTo(null);
@@ -180,94 +184,81 @@ public class BookView extends JFrame
 
     private void initListeners()
     {
-        this.buttonClose.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
+        this.buttonClose.addActionListener((ActionEvent e) ->
+        {
+            dispose();
         });
 
-        this.buttonNew.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                buttonWildCard.setText("Cadastrar");
+        this.buttonNew.addActionListener((ActionEvent e) ->
+        {
+            buttonWildCard.setText("Cadastrar");
+            templateMethod(true, false);
+        });
+
+        this.buttonEdit.addActionListener((ActionEvent event) ->
+        {
+            if ( hasSelectedRow() )
+            {
+                editFields();
+                buttonWildCard.setText("Atualizar");
                 templateMethod(true, false);
             }
         });
 
-        this.buttonEdit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                if (hasSelectedRow()){
-                    editFields();
-                    buttonWildCard.setText("Atualizar");
-                    templateMethod(true, false);
-                }
-            }
-        });
+        this.buttonDel.addActionListener((ActionEvent e) ->
+        {
+            int row = table.getSelectedRow();
 
-        this.buttonDel.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int row = table.getSelectedRow();
-
-                if (row != -1){
-                    int confirm = JOptionPane.showConfirmDialog(
-                        null,
+            if (row != -1)
+            {
+                int confirm = JOptionPane.showConfirmDialog(
+                    null,
                         "Confirma a exclusão do cadastro? ",
                         "Confirmação",
                         JOptionPane.YES_NO_OPTION
-                    );
-                    if (confirm == JOptionPane.YES_OPTION){
-                        int id = (int) table.getValueAt(row, 0);
-                        bookControll.invoke(
-                            "DelCommand",
-                            new JSONObject().put("bookID", id)
-                        );
-                        loadTable(bookControll.getList());
-                    }
+                );
+
+                if (confirm == JOptionPane.YES_OPTION)
+                {
+                    int id = (int) table.getValueAt(row, 0);
+
+                    bookControll.invoke("DelCommand", new JSONObject().put("bookID", id));
+                    loadTable(bookControll.getList());
                 }
             }
         });
 
-        this.buttonCancel.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
+        this.buttonCancel.addActionListener((ActionEvent event) ->
+        {
+            clearFields();
+            templateMethod(false, true);
+        });
+
+        this.buttonWildCard.addActionListener((ActionEvent event) ->
+        {
+            if ( fieldsOkay() )
+            {
+                JSONObject json = jsonFactory.getJSON();
+
+                if ( buttonWildCard.getText().equals("Atualizar") )
+                    bookControll.invoke("EditCommand", json);
+                else
+                    bookControll.invoke("NewCommand", json);
+
+                loadTable(bookControll.getList());
                 clearFields();
                 templateMethod(false, true);
             }
         });
 
-        this.buttonWildCard.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                if (fieldsOkay()){
-                    JSONObject json = jsonFactory.getJSON();
-
-                    if (buttonWildCard.getText().equals("Atualizar"))
-                        bookControll.invoke("EditCommand", json);
-                    else
-                        bookControll.invoke("NewCommand", json);
-
-                    loadTable(bookControll.getList());
-                    clearFields();
-                    templateMethod(false, true);
-                }
-            }
+        this.buttonShowPublishing.addActionListener((ActionEvent e) ->
+        {
+            pubTable.setVisible(true);
         });
 
-        this.buttonShowPublishing.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                pubTable.setVisible(true);
-            }
-        });
-
-        this.buttonShowAuthor.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                autTable.setVisible(true);
-            }
+        this.buttonShowAuthor.addActionListener((ActionEvent e) ->
+        {
+            autTable.setVisible(true);
         });
     }
 
@@ -308,81 +299,90 @@ public class BookView extends JFrame
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
-        jPanel1 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        table = new javax.swing.JTable();
-        jPanel5 = new javax.swing.JPanel();
-        buttonNew = new javax.swing.JButton();
-        buttonEdit = new javax.swing.JButton();
-        buttonDel = new javax.swing.JButton();
-        jPanel6 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jPanel7 = new javax.swing.JPanel();
-        jPanel8 = new javax.swing.JPanel();
-        buttonClose = new javax.swing.JButton();
-        jPanel9 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
-        fieldTitle = new javax.swing.JFormattedTextField();
-        fieldGender = new javax.swing.JFormattedTextField();
-        fieldNumberPages = new javax.swing.JFormattedTextField();
-        fieldFinishing = new javax.swing.JFormattedTextField();
-        jPanel3 = new javax.swing.JPanel();
-        fieldYear = new javax.swing.JFormattedTextField();
-        fieldCodeBar = new javax.swing.JFormattedTextField();
-        fieldSell = new javax.swing.JFormattedTextField();
-        fieldBuy = new javax.swing.JFormattedTextField();
-        jPanel4 = new javax.swing.JPanel();
-        fieldBookID = new javax.swing.JFormattedTextField();
-        fieldPublishingID = new javax.swing.JFormattedTextField();
-        fieldAuthorID = new javax.swing.JFormattedTextField();
-        buttonShowAuthor = new javax.swing.JButton();
-        buttonShowPublishing = new javax.swing.JButton();
-        buttonWildCard = new javax.swing.JButton();
-        buttonCancel = new javax.swing.JButton();
+        jPanel1 = new JPanel();
+        jScrollPane1 = new JScrollPane();
+        table = new JTable();
+        jPanel5 = new JPanel();
+        buttonNew = new JButton();
+        buttonEdit = new JButton();
+        buttonDel = new JButton();
+        jPanel6 = new JPanel();
+        jLabel1 = new JLabel();
+        jLabel2 = new JLabel();
+        jPanel7 = new JPanel();
+        jPanel8 = new JPanel();
+        buttonClose = new JButton();
+        jPanel9 = new JPanel();
+        jPanel2 = new JPanel();
+        fieldTitle = new JFormattedTextField();
+        fieldGender = new JFormattedTextField();
+        fieldNumberPages = new JFormattedTextField();
+        fieldFinishing = new JFormattedTextField();
+        jPanel3 = new JPanel();
+        fieldYear = new JFormattedTextField();
+        fieldCodeBar = new JFormattedTextField();
+        fieldSell = new JFormattedTextField();
+        fieldBuy = new JFormattedTextField();
+        jPanel4 = new JPanel();
+        fieldBookID = new JFormattedTextField();
+        fieldPublishingID = new JFormattedTextField();
+        fieldAuthorID = new JFormattedTextField();
+        buttonShowAuthor = new JButton();
+        buttonShowPublishing = new JButton();
+        buttonWildCard = new JButton();
+        buttonCancel = new JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(236, 235, 243));
+        jPanel1.setBackground(new Color(236, 235, 243));
 
-        jScrollPane1.setBackground(new java.awt.Color(236, 235, 243));
-        jScrollPane1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(12, 18, 12), 3));
+        jScrollPane1.setBackground(new Color(236, 235, 243));
+        jScrollPane1.setBorder(BorderFactory.createLineBorder(new Color(12, 18, 12), 3));
 
-        table.setBackground(new java.awt.Color(236, 235, 243));
-        table.setForeground(new java.awt.Color(12, 18, 12));
-        table.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+        table.setBackground(new Color(236, 235, 243));
+        table.setForeground(new Color(12, 18, 12));
+        table.setModel(new DefaultTableModel(
+            new Object [][]
+            {
                 {null, null, null, null, null, null, null, null, null, null, null}
             },
-            new String [] {
+            new String []
+            {
                 "ID Livro", "ID Editora", "ID Autor", "Título", "Gênero", "Acabamento", "Número de Páginas", "Ano de Lançamento", "Código de Barras", "Valor de Venda", "Valor de Compra"
             }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+        )
+        {
+            Class[] types = new Class []
+            {
+                Integer.class, Integer.class, Integer.class, String.class, String.class, String.class, Integer.class, Integer.class, Integer.class, String.class, String.class
             };
-            boolean[] canEdit = new boolean [] {
+            boolean[] canEdit = new boolean []
+            {
                 false, false, false, false, false, false, false, false, false, false, false
             };
 
-            public Class getColumnClass(int columnIndex) {
+            public Class getColumnClass(int columnIndex)
+            {
                 return types [columnIndex];
             }
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
+            public boolean isCellEditable(int rowIndex, int columnIndex)
+            {
                 return canEdit [columnIndex];
             }
         });
-        table.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         table.setFillsViewportHeight(true);
-        table.setGridColor(new java.awt.Color(12, 18, 12));
-        table.setSelectionBackground(new java.awt.Color(152, 58, 69));
-        table.setSelectionForeground(new java.awt.Color(236, 235, 243));
+        table.setGridColor(new Color(12, 18, 12));
+        table.setSelectionBackground(new Color(152, 58, 69));
+        table.setSelectionForeground(new Color(236, 235, 243));
         table.setShowGrid(true);
         jScrollPane1.setViewportView(table);
-        if (table.getColumnModel().getColumnCount() > 0) {
+        if (table.getColumnModel().getColumnCount() > 0)
+        {
             table.getColumnModel().getColumn(0).setPreferredWidth(100);
             table.getColumnModel().getColumn(1).setPreferredWidth(100);
             table.getColumnModel().getColumn(2).setPreferredWidth(100);
@@ -396,451 +396,433 @@ public class BookView extends JFrame
             table.getColumnModel().getColumn(10).setPreferredWidth(120);
         }
 
-        jPanel5.setBackground(new java.awt.Color(236, 235, 243));
+        jPanel5.setBackground(new Color(236, 235, 243));
 
-        buttonNew.setBackground(new java.awt.Color(236, 235, 243));
-        buttonNew.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        buttonNew.setForeground(new java.awt.Color(12, 18, 12));
+        buttonNew.setBackground(new Color(236, 235, 243));
+        buttonNew.setFont(new Font("Dialog", 1, 14)); // NOI18N
+        buttonNew.setForeground(new Color(12, 18, 12));
         buttonNew.setText("Novo");
-        buttonNew.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(194, 1, 20), 3));
+        buttonNew.setBorder(BorderFactory.createLineBorder(new Color(194, 1, 20), 3));
         buttonNew.setContentAreaFilled(false);
-        buttonNew.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        buttonNew.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         buttonNew.setFocusPainted(false);
 
-        buttonEdit.setBackground(new java.awt.Color(236, 235, 243));
-        buttonEdit.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        buttonEdit.setForeground(new java.awt.Color(12, 18, 12));
+        buttonEdit.setBackground(new Color(236, 235, 243));
+        buttonEdit.setFont(new Font("Dialog", 1, 14)); // NOI18N
+        buttonEdit.setForeground(new Color(12, 18, 12));
         buttonEdit.setText("Editar");
-        buttonEdit.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(194, 1, 20), 3));
+        buttonEdit.setBorder(BorderFactory.createLineBorder(new Color(194, 1, 20), 3));
         buttonEdit.setContentAreaFilled(false);
-        buttonEdit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        buttonEdit.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         buttonEdit.setFocusPainted(false);
 
-        buttonDel.setBackground(new java.awt.Color(236, 235, 243));
-        buttonDel.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        buttonDel.setForeground(new java.awt.Color(12, 18, 12));
+        buttonDel.setBackground(new Color(236, 235, 243));
+        buttonDel.setFont(new Font("Dialog", 1, 14)); // NOI18N
+        buttonDel.setForeground(new Color(12, 18, 12));
         buttonDel.setText("Excluir");
-        buttonDel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(194, 1, 20), 3));
+        buttonDel.setBorder(BorderFactory.createLineBorder(new Color(194, 1, 20), 3));
         buttonDel.setContentAreaFilled(false);
-        buttonDel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        buttonDel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         buttonDel.setFocusPainted(false);
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        GroupLayout jPanel5Layout = new GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+        jPanel5Layout.setHorizontalGroup(jPanel5Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(buttonNew, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(buttonNew, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(buttonEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(buttonEdit, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(buttonDel, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(buttonDel, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0))
         );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel5Layout.setVerticalGroup(jPanel5Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(buttonDel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(buttonEdit, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(buttonNew, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel5Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addComponent(buttonDel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(buttonEdit, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(buttonNew, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
-        jPanel6.setBackground(new java.awt.Color(194, 1, 20));
+        jPanel6.setBackground(new Color(194, 1, 20));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/books.png"))); // NOI18N
+        jLabel1.setIcon(new ImageIcon(getClass().getResource("/resources/books.png"))); // NOI18N
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/books.png"))); // NOI18N
+        jLabel2.setIcon(new ImageIcon(getClass().getResource("/resources/books.png"))); // NOI18N
 
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        GroupLayout jPanel6Layout = new GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel6Layout.setHorizontalGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addGap(18, 18, 18)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
                     .addComponent(jLabel1))
                 .addContainerGap(18, Short.MAX_VALUE))
         );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+        jPanel6Layout.setVerticalGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addGap(20, 20, 20))
         );
 
-        jPanel7.setBackground(new java.awt.Color(173, 30, 45));
+        jPanel7.setBackground(new Color(173, 30, 45));
 
-        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        GroupLayout jPanel7Layout = new GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel7Layout.setHorizontalGroup(jPanel7Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel7Layout.setVerticalGroup(jPanel7Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGap(0, 30, Short.MAX_VALUE)
         );
 
-        jPanel8.setBackground(new java.awt.Color(12, 18, 12));
+        jPanel8.setBackground(new Color(12, 18, 12));
 
-        buttonClose.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        buttonClose.setForeground(new java.awt.Color(236, 235, 243));
+        buttonClose.setFont(new Font("Dialog", 1, 14)); // NOI18N
+        buttonClose.setForeground(new Color(236, 235, 243));
         buttonClose.setText("Fechar");
-        buttonClose.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(194, 1, 20), 3));
+        buttonClose.setBorder(BorderFactory.createLineBorder(new Color(194, 1, 20), 3));
         buttonClose.setContentAreaFilled(false);
-        buttonClose.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        buttonClose.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         buttonClose.setFocusPainted(false);
 
-        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        GroupLayout jPanel8Layout = new GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
-        jPanel8Layout.setHorizontalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+        jPanel8Layout.setHorizontalGroup(jPanel8Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(buttonClose, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(buttonClose, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE))
         );
-        jPanel8Layout.setVerticalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(buttonClose, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
+        jPanel8Layout.setVerticalGroup(jPanel8Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addComponent(buttonClose, GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
         );
 
-        jPanel9.setBackground(new java.awt.Color(236, 235, 243));
-        jPanel9.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(12, 18, 12), 3));
+        jPanel9.setBackground(new Color(236, 235, 243));
+        jPanel9.setBorder(BorderFactory.createLineBorder(new Color(12, 18, 12), 3));
 
-        jPanel2.setBackground(new java.awt.Color(236, 235, 243));
+        jPanel2.setBackground(new Color(236, 235, 243));
 
-        fieldTitle.setBackground(new java.awt.Color(236, 235, 243));
-        fieldTitle.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2), "Título", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(12, 18, 12))); // NOI18N
-        fieldTitle.setForeground(new java.awt.Color(12, 18, 12));
-        fieldTitle.setCaretColor(new java.awt.Color(194, 1, 20));
-        fieldTitle.setSelectedTextColor(new java.awt.Color(236, 235, 243));
-        fieldTitle.setSelectionColor(new java.awt.Color(152, 58, 69));
+        fieldTitle.setBackground(new Color(236, 235, 243));
+        fieldTitle.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2), "Título", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
+        fieldTitle.setForeground(new Color(12, 18, 12));
+        fieldTitle.setCaretColor(new Color(194, 1, 20));
+        fieldTitle.setSelectedTextColor(new Color(236, 235, 243));
+        fieldTitle.setSelectionColor(new Color(152, 58, 69));
 
-        fieldGender.setBackground(new java.awt.Color(236, 235, 243));
-        fieldGender.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2), "Gênero", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(12, 18, 12))); // NOI18N
-        fieldGender.setForeground(new java.awt.Color(12, 18, 12));
-        fieldGender.setCaretColor(new java.awt.Color(194, 1, 20));
-        fieldGender.setSelectedTextColor(new java.awt.Color(236, 235, 243));
-        fieldGender.setSelectionColor(new java.awt.Color(152, 58, 69));
+        fieldGender.setBackground(new Color(236, 235, 243));
+        fieldGender.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2), "Gênero", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
+        fieldGender.setForeground(new Color(12, 18, 12));
+        fieldGender.setCaretColor(new Color(194, 1, 20));
+        fieldGender.setSelectedTextColor(new Color(236, 235, 243));
+        fieldGender.setSelectionColor(new Color(152, 58, 69));
 
-        fieldNumberPages.setBackground(new java.awt.Color(236, 235, 243));
-        fieldNumberPages.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2), "Nº de Páginas", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(12, 18, 12))); // NOI18N
-        fieldNumberPages.setForeground(new java.awt.Color(12, 18, 12));
-        fieldNumberPages.setCaretColor(new java.awt.Color(194, 1, 20));
-        fieldNumberPages.setSelectedTextColor(new java.awt.Color(236, 235, 243));
-        fieldNumberPages.setSelectionColor(new java.awt.Color(152, 58, 69));
+        fieldNumberPages.setBackground(new Color(236, 235, 243));
+        fieldNumberPages.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2), "Nº de Páginas", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
+        fieldNumberPages.setForeground(new Color(12, 18, 12));
+        fieldNumberPages.setCaretColor(new Color(194, 1, 20));
+        fieldNumberPages.setSelectedTextColor(new Color(236, 235, 243));
+        fieldNumberPages.setSelectionColor(new Color(152, 58, 69));
 
-        fieldFinishing.setBackground(new java.awt.Color(236, 235, 243));
-        fieldFinishing.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2), "Acabamento", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(12, 18, 12))); // NOI18N
-        fieldFinishing.setForeground(new java.awt.Color(12, 18, 12));
-        fieldFinishing.setCaretColor(new java.awt.Color(194, 1, 20));
-        fieldFinishing.setSelectedTextColor(new java.awt.Color(236, 235, 243));
-        fieldFinishing.setSelectionColor(new java.awt.Color(152, 58, 69));
+        fieldFinishing.setBackground(new Color(236, 235, 243));
+        fieldFinishing.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2), "Acabamento", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
+        fieldFinishing.setForeground(new Color(12, 18, 12));
+        fieldFinishing.setCaretColor(new Color(194, 1, 20));
+        fieldFinishing.setSelectedTextColor(new Color(236, 235, 243));
+        fieldFinishing.setSelectionColor(new Color(152, 58, 69));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        GroupLayout jPanel2Layout = new GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel2Layout.setHorizontalGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(fieldGender, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addComponent(fieldGender, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
                     .addComponent(fieldNumberPages)
-                    .addComponent(fieldFinishing, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(fieldFinishing, GroupLayout.Alignment.TRAILING)
                     .addComponent(fieldTitle))
                 .addContainerGap())
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel2Layout.setVerticalGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(fieldTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(fieldGender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(fieldNumberPages, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(fieldFinishing, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(fieldTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(fieldGender, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(fieldNumberPages, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(fieldFinishing, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel3.setBackground(new java.awt.Color(236, 235, 243));
+        jPanel3.setBackground(new Color(236, 235, 243));
 
-        fieldYear.setBackground(new java.awt.Color(236, 235, 243));
-        fieldYear.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2), "Ano de Lançamento", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(12, 18, 12))); // NOI18N
-        fieldYear.setForeground(new java.awt.Color(12, 18, 12));
-        try {
-            fieldYear.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("####")));
-        } catch (java.text.ParseException ex) {
+        fieldYear.setBackground(new Color(236, 235, 243));
+        fieldYear.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2), "Ano de Lançamento", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
+        fieldYear.setForeground(new Color(12, 18, 12));
+        try
+        {
+            fieldYear.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("####")));
+        } catch (ParseException ex)
+        {
             ex.printStackTrace();
         }
-        fieldYear.setCaretColor(new java.awt.Color(194, 1, 20));
-        fieldYear.setSelectedTextColor(new java.awt.Color(236, 235, 243));
-        fieldYear.setSelectionColor(new java.awt.Color(152, 58, 69));
+        fieldYear.setCaretColor(new Color(194, 1, 20));
+        fieldYear.setSelectedTextColor(new Color(236, 235, 243));
+        fieldYear.setSelectionColor(new Color(152, 58, 69));
 
-        fieldCodeBar.setBackground(new java.awt.Color(236, 235, 243));
-        fieldCodeBar.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2), "Código de Barras", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(12, 18, 12))); // NOI18N
-        fieldCodeBar.setForeground(new java.awt.Color(12, 18, 12));
-        fieldCodeBar.setCaretColor(new java.awt.Color(194, 1, 20));
-        fieldCodeBar.setSelectedTextColor(new java.awt.Color(236, 235, 243));
-        fieldCodeBar.setSelectionColor(new java.awt.Color(152, 58, 69));
+        fieldCodeBar.setBackground(new Color(236, 235, 243));
+        fieldCodeBar.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2), "Código de Barras", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
+        fieldCodeBar.setForeground(new Color(12, 18, 12));
+        fieldCodeBar.setCaretColor(new Color(194, 1, 20));
+        fieldCodeBar.setSelectedTextColor(new Color(236, 235, 243));
+        fieldCodeBar.setSelectionColor(new Color(152, 58, 69));
 
-        fieldSell.setBackground(new java.awt.Color(236, 235, 243));
-        fieldSell.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2), "Valor de Venda", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(12, 18, 12))); // NOI18N
-        fieldSell.setForeground(new java.awt.Color(12, 18, 12));
-        fieldSell.setCaretColor(new java.awt.Color(194, 1, 20));
-        fieldSell.setSelectedTextColor(new java.awt.Color(236, 235, 243));
-        fieldSell.setSelectionColor(new java.awt.Color(152, 58, 69));
+        fieldSell.setBackground(new Color(236, 235, 243));
+        fieldSell.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2), "Valor de Venda", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
+        fieldSell.setForeground(new Color(12, 18, 12));
+        fieldSell.setCaretColor(new Color(194, 1, 20));
+        fieldSell.setSelectedTextColor(new Color(236, 235, 243));
+        fieldSell.setSelectionColor(new Color(152, 58, 69));
 
-        fieldBuy.setBackground(new java.awt.Color(236, 235, 243));
-        fieldBuy.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2), "Valor de Compra", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(12, 18, 12))); // NOI18N
-        fieldBuy.setForeground(new java.awt.Color(12, 18, 12));
-        fieldBuy.setCaretColor(new java.awt.Color(194, 1, 20));
-        fieldBuy.setSelectedTextColor(new java.awt.Color(236, 235, 243));
-        fieldBuy.setSelectionColor(new java.awt.Color(152, 58, 69));
+        fieldBuy.setBackground(new Color(236, 235, 243));
+        fieldBuy.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2), "Valor de Compra", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
+        fieldBuy.setForeground(new Color(12, 18, 12));
+        fieldBuy.setCaretColor(new Color(194, 1, 20));
+        fieldBuy.setSelectedTextColor(new Color(236, 235, 243));
+        fieldBuy.setSelectionColor(new Color(152, 58, 69));
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        GroupLayout jPanel3Layout = new GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel3Layout.setHorizontalGroup(jPanel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addComponent(fieldYear)
-                    .addComponent(fieldCodeBar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
+                    .addComponent(fieldCodeBar, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
                     .addComponent(fieldSell)
-                    .addComponent(fieldBuy, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(fieldBuy, GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel3Layout.setVerticalGroup(jPanel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(fieldYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(fieldCodeBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(fieldSell, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(fieldBuy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(fieldYear, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(fieldCodeBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(fieldSell, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(fieldBuy, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel4.setBackground(new java.awt.Color(236, 235, 243));
+        jPanel4.setBackground(new Color(236, 235, 243));
 
         fieldBookID.setEditable(false);
-        fieldBookID.setBackground(new java.awt.Color(236, 235, 243));
-        fieldBookID.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2), "ID do Livro", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(12, 18, 12))); // NOI18N
-        fieldBookID.setForeground(new java.awt.Color(12, 18, 12));
-        fieldBookID.setCaretColor(new java.awt.Color(194, 1, 20));
-        fieldBookID.setSelectedTextColor(new java.awt.Color(236, 235, 243));
-        fieldBookID.setSelectionColor(new java.awt.Color(152, 58, 69));
+        fieldBookID.setBackground(new Color(236, 235, 243));
+        fieldBookID.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2), "ID do Livro", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
+        fieldBookID.setForeground(new Color(12, 18, 12));
+        fieldBookID.setCaretColor(new Color(194, 1, 20));
+        fieldBookID.setSelectedTextColor(new Color(236, 235, 243));
+        fieldBookID.setSelectionColor(new Color(152, 58, 69));
 
         fieldPublishingID.setEditable(false);
-        fieldPublishingID.setBackground(new java.awt.Color(236, 235, 243));
-        fieldPublishingID.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2), "ID da Editora", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(12, 18, 12))); // NOI18N
-        fieldPublishingID.setForeground(new java.awt.Color(12, 18, 12));
-        fieldPublishingID.setCaretColor(new java.awt.Color(194, 1, 20));
-        fieldPublishingID.setSelectedTextColor(new java.awt.Color(236, 235, 243));
-        fieldPublishingID.setSelectionColor(new java.awt.Color(152, 58, 69));
+        fieldPublishingID.setBackground(new Color(236, 235, 243));
+        fieldPublishingID.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2), "ID da Editora", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
+        fieldPublishingID.setForeground(new Color(12, 18, 12));
+        fieldPublishingID.setCaretColor(new Color(194, 1, 20));
+        fieldPublishingID.setSelectedTextColor(new Color(236, 235, 243));
+        fieldPublishingID.setSelectionColor(new Color(152, 58, 69));
 
         fieldAuthorID.setEditable(false);
-        fieldAuthorID.setBackground(new java.awt.Color(236, 235, 243));
-        fieldAuthorID.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2), "ID do Autor", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(12, 18, 12))); // NOI18N
-        fieldAuthorID.setForeground(new java.awt.Color(12, 18, 12));
-        fieldAuthorID.setCaretColor(new java.awt.Color(194, 1, 20));
-        fieldAuthorID.setSelectedTextColor(new java.awt.Color(236, 235, 243));
-        fieldAuthorID.setSelectionColor(new java.awt.Color(152, 58, 69));
+        fieldAuthorID.setBackground(new Color(236, 235, 243));
+        fieldAuthorID.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2), "ID do Autor", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
+        fieldAuthorID.setForeground(new Color(12, 18, 12));
+        fieldAuthorID.setCaretColor(new Color(194, 1, 20));
+        fieldAuthorID.setSelectedTextColor(new Color(236, 235, 243));
+        fieldAuthorID.setSelectionColor(new Color(152, 58, 69));
 
-        buttonShowAuthor.setBackground(new java.awt.Color(236, 235, 243));
-        buttonShowAuthor.setForeground(new java.awt.Color(12, 18, 12));
+        buttonShowAuthor.setBackground(new Color(236, 235, 243));
+        buttonShowAuthor.setForeground(new Color(12, 18, 12));
         buttonShowAuthor.setText("Ver");
-        buttonShowAuthor.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
+        buttonShowAuthor.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2));
         buttonShowAuthor.setContentAreaFilled(false);
-        buttonShowAuthor.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        buttonShowAuthor.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         buttonShowAuthor.setFocusPainted(false);
 
-        buttonShowPublishing.setBackground(new java.awt.Color(236, 235, 243));
-        buttonShowPublishing.setForeground(new java.awt.Color(12, 18, 12));
+        buttonShowPublishing.setBackground(new Color(236, 235, 243));
+        buttonShowPublishing.setForeground(new Color(12, 18, 12));
         buttonShowPublishing.setText("Ver");
-        buttonShowPublishing.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
+        buttonShowPublishing.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2));
         buttonShowPublishing.setContentAreaFilled(false);
-        buttonShowPublishing.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        buttonShowPublishing.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         buttonShowPublishing.setFocusPainted(false);
 
-        buttonWildCard.setBackground(new java.awt.Color(236, 235, 243));
-        buttonWildCard.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        buttonWildCard.setForeground(new java.awt.Color(12, 18, 12));
+        buttonWildCard.setBackground(new Color(236, 235, 243));
+        buttonWildCard.setFont(new Font("Dialog", 1, 14)); // NOI18N
+        buttonWildCard.setForeground(new Color(12, 18, 12));
         buttonWildCard.setText("Salvar");
-        buttonWildCard.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(194, 1, 20), 3));
+        buttonWildCard.setBorder(BorderFactory.createLineBorder(new Color(194, 1, 20), 3));
         buttonWildCard.setContentAreaFilled(false);
-        buttonWildCard.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        buttonWildCard.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         buttonWildCard.setFocusPainted(false);
 
-        buttonCancel.setBackground(new java.awt.Color(236, 235, 243));
-        buttonCancel.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        buttonCancel.setForeground(new java.awt.Color(12, 18, 12));
+        buttonCancel.setBackground(new Color(236, 235, 243));
+        buttonCancel.setFont(new Font("Dialog", 1, 14)); // NOI18N
+        buttonCancel.setForeground(new Color(12, 18, 12));
         buttonCancel.setText("Cancelar");
-        buttonCancel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(194, 1, 20), 3));
+        buttonCancel.setBorder(BorderFactory.createLineBorder(new Color(194, 1, 20), 3));
         buttonCancel.setContentAreaFilled(false);
-        buttonCancel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        buttonCancel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         buttonCancel.setFocusPainted(false);
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        GroupLayout jPanel4Layout = new GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel4Layout.setHorizontalGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addComponent(fieldBookID)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(fieldPublishingID, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(fieldAuthorID, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(buttonWildCard, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(buttonCancel, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
-                            .addComponent(buttonShowAuthor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(buttonShowPublishing, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(fieldPublishingID, GroupLayout.Alignment.LEADING)
+                            .addComponent(fieldAuthorID, GroupLayout.Alignment.LEADING)
+                            .addComponent(buttonWildCard, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE))
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                            .addComponent(buttonCancel, GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                            .addComponent(buttonShowAuthor, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(buttonShowPublishing, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel4Layout.setVerticalGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(fieldBookID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(fieldAuthorID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(buttonShowAuthor, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(fieldPublishingID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(buttonShowPublishing, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(buttonCancel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(buttonWildCard, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(fieldBookID, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addComponent(fieldAuthorID, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(buttonShowAuthor, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addComponent(fieldPublishingID, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(buttonShowPublishing, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addComponent(buttonCancel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(buttonWildCard, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
-        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        GroupLayout jPanel9Layout = new GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
-        jPanel9Layout.setHorizontalGroup(
-            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel9Layout.setHorizontalGroup(jPanel9Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel9Layout.setVerticalGroup(
-            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel9Layout.setVerticalGroup(jPanel9Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel9Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel1Layout.setHorizontalGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel6, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel7, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel8, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jPanel5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jScrollPane1))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
-                                .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addComponent(jPanel9, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addContainerGap())))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel7, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel9, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 219, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel8, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+            .addComponent(jPanel6, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton buttonCancel;
-    private javax.swing.JButton buttonClose;
-    private javax.swing.JButton buttonDel;
-    private javax.swing.JButton buttonEdit;
-    private javax.swing.JButton buttonNew;
-    private javax.swing.JButton buttonShowAuthor;
-    private javax.swing.JButton buttonShowPublishing;
-    private javax.swing.JButton buttonWildCard;
-    private javax.swing.JFormattedTextField fieldAuthorID;
-    private javax.swing.JFormattedTextField fieldBookID;
-    private javax.swing.JFormattedTextField fieldBuy;
-    private javax.swing.JFormattedTextField fieldCodeBar;
-    private javax.swing.JFormattedTextField fieldFinishing;
-    private javax.swing.JFormattedTextField fieldGender;
-    private javax.swing.JFormattedTextField fieldNumberPages;
-    private javax.swing.JFormattedTextField fieldPublishingID;
-    private javax.swing.JFormattedTextField fieldSell;
-    private javax.swing.JFormattedTextField fieldTitle;
-    private javax.swing.JFormattedTextField fieldYear;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
-    private javax.swing.JPanel jPanel8;
-    private javax.swing.JPanel jPanel9;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable table;
+    private JButton buttonCancel;
+    private JButton buttonClose;
+    private JButton buttonDel;
+    private JButton buttonEdit;
+    private JButton buttonNew;
+    private JButton buttonShowAuthor;
+    private JButton buttonShowPublishing;
+    private JButton buttonWildCard;
+    private JFormattedTextField fieldAuthorID;
+    private JFormattedTextField fieldBookID;
+    private JFormattedTextField fieldBuy;
+    private JFormattedTextField fieldCodeBar;
+    private JFormattedTextField fieldFinishing;
+    private JFormattedTextField fieldGender;
+    private JFormattedTextField fieldNumberPages;
+    private JFormattedTextField fieldPublishingID;
+    private JFormattedTextField fieldSell;
+    private JFormattedTextField fieldTitle;
+    private JFormattedTextField fieldYear;
+    private JLabel jLabel1;
+    private JLabel jLabel2;
+    private JPanel jPanel1;
+    private JPanel jPanel2;
+    private JPanel jPanel3;
+    private JPanel jPanel4;
+    private JPanel jPanel5;
+    private JPanel jPanel6;
+    private JPanel jPanel7;
+    private JPanel jPanel8;
+    private JPanel jPanel9;
+    private JScrollPane jScrollPane1;
+    private JTable table;
     // End of variables declaration//GEN-END:variables
 }

@@ -1,11 +1,13 @@
 package view;
 
-import model.factories.ConfigFactory;
+import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import model.ConfigDataBase;
 import model.dao.ConfigDAO;
+import model.factories.ConfigFactory;
 import org.json.JSONObject;
 
 /**
@@ -18,10 +20,10 @@ public class ConfigView extends JFrame
     public ConfigView()
     {
         super("Configurações");
-        initComponents();
-        initListeners();
 
-        loadFields();
+        this.initComponents();
+        this.initListeners();
+        this.loadFields();
 
         super.setLocationRelativeTo(null);
         super.setVisible(true);
@@ -65,24 +67,22 @@ public class ConfigView extends JFrame
 
     private void initListeners()
     {
-        this.buttonCancel.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
+        this.buttonCancel.addActionListener((ActionEvent e) ->
+        {
+            dispose();
         });
 
-        this.buttonSave.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                JSONObject json       = getJSON();
-                ConfigDataBase config = new ConfigFactory().buildFrom(json);
-                try {
-                    new ConfigDAO().write(config);
-                    labelResponse.setText("Configurações salvas.");
-                } catch (IOException e) {
-                    JOptionPane.showMessageDialog(null, e.getMessage());
-                }
+        this.buttonSave.addActionListener((ActionEvent event) ->
+        {
+            JSONObject json       = getJSON();
+            ConfigDataBase config = new ConfigFactory().buildFrom(json);
+            try
+            {
+                new ConfigDAO().write(config);
+                labelResponse.setText("Configurações salvas.");
+            } catch (IOException e)
+            {
+                JOptionPane.showMessageDialog(null, e.getMessage());
             }
         });
     }
@@ -94,239 +94,230 @@ public class ConfigView extends JFrame
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
-        jPanel1 = new javax.swing.JPanel();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
-        labelResponse = new javax.swing.JLabel();
-        jPanel3 = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
-        fieldHost = new javax.swing.JTextField();
-        fieldPort = new javax.swing.JTextField();
-        fieldDatabase = new javax.swing.JTextField();
-        fieldUser = new javax.swing.JTextField();
-        fieldPassword = new javax.swing.JPasswordField();
-        fieldDBName = new javax.swing.JTextField();
-        buttonSave = new javax.swing.JButton();
-        buttonCancel = new javax.swing.JButton();
+        jPanel1 = new JPanel();
+        jLabel8 = new JLabel();
+        jLabel7 = new JLabel();
+        jPanel2 = new JPanel();
+        labelResponse = new JLabel();
+        jPanel3 = new JPanel();
+        jPanel4 = new JPanel();
+        fieldHost = new JTextField();
+        fieldPort = new JTextField();
+        fieldDatabase = new JTextField();
+        fieldUser = new JTextField();
+        fieldPassword = new JPasswordField();
+        fieldDBName = new JTextField();
+        buttonSave = new JButton();
+        buttonCancel = new JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Configurações de acesso ao banco de dados");
-        setBackground(new java.awt.Color(236, 235, 243));
+        setBackground(new Color(236, 235, 243));
         setResizable(false);
 
-        jPanel1.setBackground(new java.awt.Color(194, 1, 20));
+        jPanel1.setBackground(new Color(194, 1, 20));
 
-        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/iconfinder_6593863_and_config_configuration_files_folder_icon_64px.png"))); // NOI18N
+        jLabel8.setIcon(new ImageIcon(getClass().getResource("/resources/iconfinder_6593863_and_config_configuration_files_folder_icon_64px.png"))); // NOI18N
 
-        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/settings-gears.png"))); // NOI18N
+        jLabel7.setIcon(new ImageIcon(getClass().getResource("/resources/settings-gears.png"))); // NOI18N
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel1Layout.setHorizontalGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(14, 14, 14)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel7)
                     .addComponent(jLabel8))
                 .addContainerGap(14, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(30, 30, 30)
                 .addComponent(jLabel8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel7)
                 .addGap(30, 30, 30))
         );
 
-        jPanel2.setBackground(new java.awt.Color(12, 18, 12));
+        jPanel2.setBackground(new Color(12, 18, 12));
 
-        labelResponse.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
-        labelResponse.setForeground(new java.awt.Color(236, 235, 243));
-        labelResponse.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        labelResponse.setFont(new Font("Dialog", 1, 15)); // NOI18N
+        labelResponse.setForeground(new Color(236, 235, 243));
+        labelResponse.setHorizontalAlignment(SwingConstants.CENTER);
         labelResponse.setToolTipText("");
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        GroupLayout jPanel2Layout = new GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel2Layout.setHorizontalGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(43, 43, 43)
-                .addComponent(labelResponse, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(labelResponse, GroupLayout.PREFERRED_SIZE, 264, GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(43, Short.MAX_VALUE))
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+        jPanel2Layout.setVerticalGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(9, Short.MAX_VALUE)
-                .addComponent(labelResponse, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(labelResponse, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
-        jPanel3.setBackground(new java.awt.Color(173, 30, 45));
+        jPanel3.setBackground(new Color(173, 30, 45));
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        GroupLayout jPanel3Layout = new GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel3Layout.setHorizontalGroup(jPanel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel3Layout.setVerticalGroup(jPanel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGap(0, 30, Short.MAX_VALUE)
         );
 
-        jPanel4.setBackground(new java.awt.Color(236, 235, 243));
+        jPanel4.setBackground(new Color(236, 235, 243));
 
-        fieldHost.setBackground(new java.awt.Color(236, 235, 243));
-        fieldHost.setForeground(new java.awt.Color(12, 18, 12));
-        fieldHost.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(12, 18, 12), 2), "Servidor/IP", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(12, 18, 12))); // NOI18N
-        fieldHost.setCaretColor(new java.awt.Color(194, 1, 20));
-        fieldHost.setSelectedTextColor(new java.awt.Color(236, 235, 243));
-        fieldHost.setSelectionColor(new java.awt.Color(152, 58, 69));
+        fieldHost.setBackground(new Color(236, 235, 243));
+        fieldHost.setForeground(new Color(12, 18, 12));
+        fieldHost.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(12, 18, 12), 2), "Servidor/IP", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
+        fieldHost.setCaretColor(new Color(194, 1, 20));
+        fieldHost.setSelectedTextColor(new Color(236, 235, 243));
+        fieldHost.setSelectionColor(new Color(152, 58, 69));
 
-        fieldPort.setBackground(new java.awt.Color(236, 235, 243));
-        fieldPort.setForeground(new java.awt.Color(12, 18, 12));
-        fieldPort.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(12, 18, 12), 2), "Porta", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(12, 18, 12))); // NOI18N
-        fieldPort.setCaretColor(new java.awt.Color(194, 1, 20));
-        fieldPort.setSelectedTextColor(new java.awt.Color(236, 235, 243));
-        fieldPort.setSelectionColor(new java.awt.Color(152, 58, 69));
+        fieldPort.setBackground(new Color(236, 235, 243));
+        fieldPort.setForeground(new Color(12, 18, 12));
+        fieldPort.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(12, 18, 12), 2), "Porta", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
+        fieldPort.setCaretColor(new Color(194, 1, 20));
+        fieldPort.setSelectedTextColor(new Color(236, 235, 243));
+        fieldPort.setSelectionColor(new Color(152, 58, 69));
 
-        fieldDatabase.setBackground(new java.awt.Color(236, 235, 243));
-        fieldDatabase.setForeground(new java.awt.Color(12, 18, 12));
-        fieldDatabase.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(12, 18, 12), 2), "Base de Dados", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(12, 18, 12))); // NOI18N
-        fieldDatabase.setCaretColor(new java.awt.Color(194, 1, 20));
-        fieldDatabase.setSelectedTextColor(new java.awt.Color(236, 235, 243));
-        fieldDatabase.setSelectionColor(new java.awt.Color(152, 58, 69));
+        fieldDatabase.setBackground(new Color(236, 235, 243));
+        fieldDatabase.setForeground(new Color(12, 18, 12));
+        fieldDatabase.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(12, 18, 12), 2), "Base de Dados", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
+        fieldDatabase.setCaretColor(new Color(194, 1, 20));
+        fieldDatabase.setSelectedTextColor(new Color(236, 235, 243));
+        fieldDatabase.setSelectionColor(new Color(152, 58, 69));
 
-        fieldUser.setBackground(new java.awt.Color(236, 235, 243));
-        fieldUser.setForeground(new java.awt.Color(12, 18, 12));
-        fieldUser.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(12, 18, 12), 2), "Usuário", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(12, 18, 12))); // NOI18N
-        fieldUser.setCaretColor(new java.awt.Color(194, 1, 20));
-        fieldUser.setSelectedTextColor(new java.awt.Color(236, 235, 243));
-        fieldUser.setSelectionColor(new java.awt.Color(152, 58, 69));
+        fieldUser.setBackground(new Color(236, 235, 243));
+        fieldUser.setForeground(new Color(12, 18, 12));
+        fieldUser.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(12, 18, 12), 2), "Usuário", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
+        fieldUser.setCaretColor(new Color(194, 1, 20));
+        fieldUser.setSelectedTextColor(new Color(236, 235, 243));
+        fieldUser.setSelectionColor(new Color(152, 58, 69));
 
-        fieldPassword.setBackground(new java.awt.Color(236, 235, 243));
-        fieldPassword.setForeground(new java.awt.Color(12, 18, 12));
-        fieldPassword.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(12, 18, 12), 2), "Senha", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(12, 18, 12))); // NOI18N
-        fieldPassword.setCaretColor(new java.awt.Color(194, 1, 20));
-        fieldPassword.setSelectedTextColor(new java.awt.Color(236, 235, 243));
-        fieldPassword.setSelectionColor(new java.awt.Color(152, 58, 69));
+        fieldPassword.setBackground(new Color(236, 235, 243));
+        fieldPassword.setForeground(new Color(12, 18, 12));
+        fieldPassword.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(12, 18, 12), 2), "Senha", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
+        fieldPassword.setCaretColor(new Color(194, 1, 20));
+        fieldPassword.setSelectedTextColor(new Color(236, 235, 243));
+        fieldPassword.setSelectionColor(new Color(152, 58, 69));
 
         fieldDBName.setEditable(false);
-        fieldDBName.setBackground(new java.awt.Color(236, 235, 243));
-        fieldDBName.setForeground(new java.awt.Color(12, 18, 12));
+        fieldDBName.setBackground(new Color(236, 235, 243));
+        fieldDBName.setForeground(new Color(12, 18, 12));
         fieldDBName.setText("mysql");
-        fieldDBName.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(12, 18, 12), 2), "Banco", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(12, 18, 12))); // NOI18N
-        fieldDBName.setCaretColor(new java.awt.Color(194, 1, 20));
-        fieldDBName.setSelectedTextColor(new java.awt.Color(236, 235, 243));
-        fieldDBName.setSelectionColor(new java.awt.Color(152, 58, 69));
+        fieldDBName.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(12, 18, 12), 2), "Banco", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
+        fieldDBName.setCaretColor(new Color(194, 1, 20));
+        fieldDBName.setSelectedTextColor(new Color(236, 235, 243));
+        fieldDBName.setSelectionColor(new Color(152, 58, 69));
 
-        buttonSave.setBackground(new java.awt.Color(194, 1, 20));
-        buttonSave.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
-        buttonSave.setForeground(new java.awt.Color(12, 18, 12));
+        buttonSave.setBackground(new Color(194, 1, 20));
+        buttonSave.setFont(new Font("Dialog", 1, 15)); // NOI18N
+        buttonSave.setForeground(new Color(12, 18, 12));
         buttonSave.setText("Salvar");
-        buttonSave.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(194, 1, 20), 3));
+        buttonSave.setBorder(BorderFactory.createLineBorder(new Color(194, 1, 20), 3));
         buttonSave.setContentAreaFilled(false);
-        buttonSave.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        buttonSave.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         buttonSave.setFocusPainted(false);
         buttonSave.setVerifyInputWhenFocusTarget(false);
 
-        buttonCancel.setBackground(new java.awt.Color(194, 1, 20));
-        buttonCancel.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
-        buttonCancel.setForeground(new java.awt.Color(12, 18, 12));
+        buttonCancel.setBackground(new Color(194, 1, 20));
+        buttonCancel.setFont(new Font("Dialog", 1, 15)); // NOI18N
+        buttonCancel.setForeground(new Color(12, 18, 12));
         buttonCancel.setText("Cancelar");
-        buttonCancel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(194, 1, 20), 3));
+        buttonCancel.setBorder(BorderFactory.createLineBorder(new Color(194, 1, 20), 3));
         buttonCancel.setContentAreaFilled(false);
-        buttonCancel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        buttonCancel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         buttonCancel.setFocusPainted(false);
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        GroupLayout jPanel4Layout = new GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel4Layout.setHorizontalGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
-                        .addComponent(buttonSave, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(buttonCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(fieldDBName, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(fieldPassword, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(fieldUser, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(fieldDatabase, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(fieldPort, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(fieldHost, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE))
+                .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
+                        .addComponent(buttonSave, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(buttonCancel, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE))
+                    .addComponent(fieldDBName, GroupLayout.Alignment.LEADING)
+                    .addComponent(fieldPassword, GroupLayout.Alignment.LEADING)
+                    .addComponent(fieldUser, GroupLayout.Alignment.LEADING)
+                    .addComponent(fieldDatabase, GroupLayout.Alignment.LEADING)
+                    .addComponent(fieldPort, GroupLayout.Alignment.LEADING)
+                    .addComponent(fieldHost, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE))
                 .addContainerGap(40, Short.MAX_VALUE))
         );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel4Layout.setVerticalGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addComponent(fieldHost, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(fieldPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(fieldDatabase, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(fieldUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(fieldPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(fieldDBName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(buttonSave, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(buttonCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(fieldHost, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(fieldPort, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(fieldDatabase, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(fieldUser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(fieldPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(fieldDBName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                    .addComponent(buttonSave, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(buttonCancel, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE))
                 .addGap(12, 12, 12))
         );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(0, 0, 0)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+            .addComponent(jPanel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton buttonCancel;
-    private javax.swing.JButton buttonSave;
-    private javax.swing.JTextField fieldDBName;
-    private javax.swing.JTextField fieldDatabase;
-    private javax.swing.JTextField fieldHost;
-    private javax.swing.JPasswordField fieldPassword;
-    private javax.swing.JTextField fieldPort;
-    private javax.swing.JTextField fieldUser;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JLabel labelResponse;
+    private JButton buttonCancel;
+    private JButton buttonSave;
+    private JTextField fieldDBName;
+    private JTextField fieldDatabase;
+    private JTextField fieldHost;
+    private JPasswordField fieldPassword;
+    private JTextField fieldPort;
+    private JTextField fieldUser;
+    private JLabel jLabel7;
+    private JLabel jLabel8;
+    private JPanel jPanel1;
+    private JPanel jPanel2;
+    private JPanel jPanel3;
+    private JPanel jPanel4;
+    private JLabel labelResponse;
     // End of variables declaration//GEN-END:variables
 }
