@@ -3,6 +3,8 @@ package model.dao;
 import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
+import model.Author;
+import model.Name;
 import org.json.JSONObject;
 
 /**
@@ -19,7 +21,7 @@ public class ObrasDAO
         this.connection = connection;
     }
 
-    public List<JSONObject> read(int id) throws SQLException
+    public List<JSONObject> findBooksByAuthor(int id) throws SQLException
     {
         final String SQL = "SELECT autor.autorID, autor.nome, autor.sobrenome, livro.titulo "
             + "FROM autor, livro WHERE autor.autorID = livro.autorID AND autor.autorID = ?";
@@ -28,18 +30,21 @@ public class ObrasDAO
         {
             ps.setInt(1, id);
 
-            try (ResultSet rs = ps.executeQuery())
+            try (var rs = ps.executeQuery())
             {
                 List<JSONObject> list = new LinkedList();
 
-                while ( rs.next() )
+                if ( rs.next() )
                 {
-                    JSONObject json = new JSONObject();
+                    String first = rs.getString("nome");
+                    String last  = rs.getString("sobrenome");
+                    var books    = rs.getString("titulo");
 
-                    json.put("authorID", rs.getInt("autorID"));
-                    json.put("authorFirstName", rs.getString("nome"));
-                    json.put("authorLastName", rs.getString("sobrenome"));
-                    json.put("bookTitle", rs.getString("titulo"));
+                    Author author = new Author(id, new Name(first, last));
+
+                    JSONObject json = new JSONObject();
+                    json.put("author", author);
+                    json.put("books", books);
 
                     list.add(json);
                 }

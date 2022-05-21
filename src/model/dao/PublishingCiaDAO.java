@@ -28,13 +28,13 @@ public class PublishingCiaDAO
         try (var ps = this.connection.prepareStatement(SQL))
         {
             ps.setString(1, cia.getName());
-            ps.setString(2, cia.getAddress().getUf());
+            ps.setString(2, cia.getAddress().getUF());
             ps.setString(3, cia.getAddress().getCity());
-            ps.setString(4, cia.getAddress().getBairro());
+            ps.setString(4, cia.getAddress().getDistrict());
             ps.setString(5, cia.getAddress().getStreet());
             ps.setInt(6, cia.getAddress().getNumber());
-            ps.setString(7, cia.getAddress().getCompl());
-            ps.setString(8, cia.getAddress().getCep());
+            ps.setString(7, cia.getAddress().getComplement());
+            ps.setString(8, cia.getAddress().getCEP());
 
             ps.execute();
         }
@@ -48,14 +48,14 @@ public class PublishingCiaDAO
         try (var ps = this.connection.prepareStatement(SQL))
         {
             ps.setString(1, cia.getName());
-            ps.setString(2, cia.getAddress().getUf());
+            ps.setString(2, cia.getAddress().getUF());
             ps.setString(3, cia.getAddress().getCity());
-            ps.setString(4, cia.getAddress().getBairro());
+            ps.setString(4, cia.getAddress().getDistrict());
             ps.setString(5, cia.getAddress().getStreet());
             ps.setInt(6, cia.getAddress().getNumber());
-            ps.setString(7, cia.getAddress().getCompl());
-            ps.setString(8, cia.getAddress().getCep());
-            ps.setInt(9, cia.getCompanyID());
+            ps.setString(7, cia.getAddress().getComplement());
+            ps.setString(8, cia.getAddress().getCEP());
+            ps.setInt(9, cia.getID());
 
             ps.executeUpdate();
         }
@@ -73,7 +73,7 @@ public class PublishingCiaDAO
         }
     }
 
-    public List<PublishingCia> read() throws SQLException
+    public List<PublishingCia> getAll() throws SQLException
     {
         final String SQL = "SELECT * FROM editora";
 

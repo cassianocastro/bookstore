@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.*;
 import model.Employee;
 import model.Address;
+import model.Name;
 import model.Sex;
 
 /**
@@ -27,25 +28,25 @@ public class EmployeeDAO
 
         try (var ps = this.connection.prepareStatement(SQL))
         {
-            ps.setString(1, employee.getFirstName());
-            ps.setString(2, employee.getLastName());
+            ps.setString(1, employee.getName().getFirst());
+            ps.setString(2, employee.getName().getLast());
 
             ps.setInt(3, employee.getMatricula());
             ps.setString(4, employee.getDepto());
             ps.setString(5, employee.getCargo());
             ps.setString(6, employee.getCPF());
 
-            ps.setString(7, employee.getAddress().getUf());
+            ps.setString(7, employee.getAddress().getUF());
             ps.setString(8, employee.getAddress().getCity());
-            ps.setString(9, employee.getAddress().getBairro());
+            ps.setString(9, employee.getAddress().getDistrict());
 
             ps.setString(10, employee.getAddress().getStreet());
             ps.setInt(11, employee.getAddress().getNumber());
-            ps.setString(12, employee.getAddress().getCompl());
-            ps.setString(13, employee.getAddress().getCep());
+            ps.setString(12, employee.getAddress().getComplement());
+            ps.setString(13, employee.getAddress().getCEP());
 
-            ps.setString(14, employee.getSex().getDescricao());
-            ps.setDate(15, new java.sql.Date(employee.getDate().getTime()));
+            ps.setString(14, employee.getSex().getDescription());
+            ps.setDate(15, new java.sql.Date(employee.getDate().getTimeInMillis()));
 
             ps.execute();
         }
@@ -59,25 +60,25 @@ public class EmployeeDAO
 
         try (var ps = this.connection.prepareStatement(SQL))
         {
-            ps.setString(1, employee.getFirstName());
-            ps.setString(2, employee.getLastName());
+            ps.setString(1, employee.getName().getFirst());
+            ps.setString(2, employee.getName().getLast());
 
             ps.setInt(3, employee.getMatricula());
             ps.setString(4, employee.getDepto());
             ps.setString(5, employee.getCargo());
             ps.setString(6, employee.getCPF());
 
-            ps.setString(7, employee.getAddress().getUf());
+            ps.setString(7, employee.getAddress().getUF());
             ps.setString(8, employee.getAddress().getCity());
-            ps.setString(9, employee.getAddress().getBairro());
+            ps.setString(9, employee.getAddress().getDistrict());
             ps.setString(10, employee.getAddress().getStreet());
             ps.setInt(11, employee.getAddress().getNumber());
-            ps.setString(12, employee.getAddress().getCompl());
-            ps.setString(13, employee.getAddress().getCep());
+            ps.setString(12, employee.getAddress().getComplement());
+            ps.setString(13, employee.getAddress().getCEP());
 
-            ps.setString(14, employee.getSex().getDescricao());
-            ps.setDate(15, new java.sql.Date(employee.getDate().getTime()));
-            ps.setInt(16, employee.getId());
+            ps.setString(14, employee.getSex().getDescription());
+            ps.setDate(15, new java.sql.Date(employee.getDate().getTimeInMillis()));
+            ps.setInt(16, employee.getID());
 
             ps.executeUpdate();
         }
@@ -95,7 +96,7 @@ public class EmployeeDAO
         }
     }
 
-    public List read() throws SQLException
+    public List<Employee> getAll() throws SQLException
     {
         final String SQL = "SELECT * FROM funcionario";
 
@@ -111,7 +112,8 @@ public class EmployeeDAO
                 String lastName     = rs.getString("sobrenome");
                 Sex sex             = Sex.valueOf(rs.getString("sexo"));
                 String cpf          = rs.getString("cpf");
-                java.util.Date date = rs.getDate("dataNasc");
+                Calendar date       = Calendar.getInstance();
+                date.setTime(rs.getDate("dataNasc"));
 
                 int matricula = rs.getInt("matricula");
                 String depto  = rs.getString("depto");
@@ -125,9 +127,10 @@ public class EmployeeDAO
                 String compl  = rs.getString("complemento");
                 String cep    = rs.getString("cep");
 
+                Name name       = new Name(firstName, lastName);
                 Address address = new Address(uf, city, bairro, street, number, compl, cep);
 
-                list.add(new Employee(id, firstName, lastName, address, cpf, matricula, depto, cargo, date, sex));
+                list.add(new Employee(id, name, address, cpf, matricula, depto, cargo, date, sex));
             }
             return list;
         }
@@ -149,7 +152,8 @@ public class EmployeeDAO
                     String lastName     = rs.getString("sobrenome");
                     String cpf          = rs.getString("cpf");
                     Sex sex             = Sex.valueOf(rs.getString("sexo"));
-                    java.util.Date date = rs.getDate("dataNasc");
+                    Calendar date       = Calendar.getInstance();
+                    date.setTime(rs.getDate("dataNasc"));
 
                     int matricula = rs.getInt("matricula");
                     String depto  = rs.getString("depto");
@@ -163,9 +167,10 @@ public class EmployeeDAO
                     String compl  = rs.getString("complemento");
                     String cep    = rs.getString("cep");
 
+                    Name name       = new Name(firstName, lastName);
                     Address address = new Address(uf, city, bairro, street, number, compl, cep);
 
-                    return new Employee(id, firstName, lastName, address, cpf, matricula, depto, cargo, date, sex);
+                    return new Employee(id, name, address, cpf, matricula, depto, cargo, date, sex);
                 }
             }
         }

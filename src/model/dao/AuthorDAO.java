@@ -3,7 +3,8 @@ package model.dao;
 import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
-import org.json.*;
+import model.Author;
+import model.Name;
 
 /**
  *
@@ -19,63 +20,61 @@ public class AuthorDAO
         this.connection = connection;
     }
 
-    public void create(JSONObject json) throws SQLException
+    public void insert(Author author) throws SQLException
     {
         final String SQL = "INSERT INTO autor(nome, sobrenome) VALUES (?, ?)";
 
         try (var statement = this.connection.prepareStatement(SQL))
         {
-            statement.setString(1, json.getString("firstName"));
-            statement.setString(2, json.getString("lastName"));
+            statement.setString(1, author.getName().getFirst());
+            statement.setString(2, author.getName().getLast());
 
             statement.execute();
         }
     }
 
-    public void update(JSONObject json) throws SQLException
+    public void update(Author author) throws SQLException
     {
         final String SQL = "UPDATE autor SET nome = ?, sobrenome = ? WHERE autorID = ?";
 
         try (var statement = this.connection.prepareStatement(SQL))
         {
-            statement.setString(1, json.getString("firstName"));
-            statement.setString(2, json.getString("lastName"));
-            statement.setInt(3, json.getInt("authorID"));
+            statement.setString(1, author.getName().getFirst());
+            statement.setString(2, author.getName().getLast());
+            statement.setInt(3, author.getID());
 
             statement.executeUpdate();
         }
     }
 
-    public void delete(int ID) throws SQLException
+    public void delete(Author author) throws SQLException
     {
         final String SQL = "DELETE FROM autor WHERE autorID = ?";
 
         try (var statement = this.connection.prepareStatement(SQL))
         {
-            statement.setInt(1, ID);
+            statement.setInt(1, author.getID());
 
             statement.execute();
         }
     }
 
-    public List<JSONObject> read() throws SQLException
+    public List<Author> getAll() throws SQLException
     {
         final String SQL = "SELECT * FROM autor";
 
         try (var statement = this.connection.prepareStatement(SQL);
             var rs = statement.executeQuery())
         {
-            List<JSONObject> list = new LinkedList();
+            List<Author> list = new LinkedList();
 
             while ( rs.next() )
             {
-                JSONObject json = new JSONObject();
+                int id       = rs.getInt("autorID");
+                String first = rs.getString("nome");
+                String last  = rs.getString("sobrenome");
 
-                json.put("authorID", rs.getInt("autorID"));
-                json.put("firstName", rs.getString("nome"));
-                json.put("lastName", rs.getString("sobrenome"));
-
-                list.add(json);
+                list.add(new Author(id, new Name(first, last)));
             }
             return list;
         }

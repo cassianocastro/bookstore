@@ -3,6 +3,7 @@ package model.dao;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.*;
+import model.Author;
 import model.Book;
 
 /**
@@ -27,11 +28,11 @@ public class BookDAO
         try (var ps = this.connection.prepareStatement(SQL))
         {
             ps.setString(1, book.getTitle());
-            ps.setInt(2, book.getPublishingID());
-            ps.setInt(3, book.getAuthorID());
+            ps.setInt(2, book.getPublishing().getID());
+            ps.setInt(3, book.getAuthor().getID());
             ps.setString(4, book.getGender());
             ps.setString(5, book.getFinishing());
-            ps.setInt(6, book.getCodeBar());
+            ps.setInt(6, book.getCode());
             ps.setInt(7, book.getReleaseYear());
             ps.setInt(8, book.getNumberPages());
             ps.setString(9, book.getBuyValue().toString());
@@ -50,16 +51,16 @@ public class BookDAO
         try (var ps = this.connection.prepareStatement(SQL))
         {
             ps.setString(1, book.getTitle());
-            ps.setInt(2, book.getPublishingID());
-            ps.setInt(3, book.getAuthorID());
+            ps.setInt(2, book.getPublishing().getID());
+            ps.setInt(3, book.getAuthor().getID());
             ps.setString(4, book.getGender());
             ps.setString(5, book.getFinishing());
-            ps.setInt(6, book.getCodeBar());
+            ps.setInt(6, book.getCode());
             ps.setInt(7, book.getReleaseYear());
             ps.setInt(8, book.getNumberPages());
             ps.setString(9, book.getBuyValue().toString());
             ps.setString(10, book.getSellValue().toString());
-            ps.setInt(11, book.getBookID());
+            ps.setInt(11, book.getID());
 
             ps.executeUpdate();
         }
@@ -77,7 +78,7 @@ public class BookDAO
         }
     }
 
-    public List<Book> read() throws SQLException
+    public List<Book> getAll() throws SQLException
     {
         final String SQL = "SELECT * FROM livro";
 
@@ -88,20 +89,21 @@ public class BookDAO
 
             while ( rs.next() )
             {
-                int bookID = rs.getInt("bookID");
+                int id = rs.getInt("bookID");
                 int editorID = rs.getInt("editorID");
                 int authorID = rs.getInt("autorID");
-                int codeBar = rs.getInt("codigoBarras");
-                int releaseYear = rs.getInt("lancamento");
-                int numberPages = rs.getInt("numberPages");
+                int code     = rs.getInt("codigoBarras");
+                int year = rs.getInt("lancamento");
+                int pages = rs.getInt("numberPages");
                 String title = rs.getString("titulo");
                 String finishing = rs.getString("acabamento");
                 String gender = rs.getString("genero");
                 String buyValue = rs.getString("valorCompra");
                 String sellValue = rs.getString("valorVenda");
 
-                list.add(new Book(bookID, editorID, authorID, codeBar, releaseYear,
-                    numberPages, title, gender, finishing,
+                Author author = new Author(authorID);
+
+                list.add(new Book(id, editorID, author, code, year, pages, title, gender, finishing,
                     new BigDecimal(sellValue), new BigDecimal(buyValue)
                 ));
             }
@@ -123,18 +125,19 @@ public class BookDAO
                 {
                     int editorID = rs.getInt("editorID");
                     int authorID = rs.getInt("autorID");
-                    int codeBar = rs.getInt("codigoBarras");
-                    int releaseYear = rs.getInt("lancamento");
-                    int numberPages = rs.getInt("numberPages");
+                    int code = rs.getInt("codigoBarras");
+                    int year = rs.getInt("lancamento");
+                    int pages = rs.getInt("numberPages");
                     String title = rs.getString("titulo");
                     String finishing = rs.getString("acabamento");
                     String gender = rs.getString("gender");
                     String buyValue = rs.getString("valorCompra");
                     String sellValue = rs.getString("valorVenda");
 
+                    Author author = new Author(authorID);
+
                     return new Book(
-                        id, editorID, authorID, codeBar, releaseYear,
-                        numberPages, title, gender, finishing,
+                        id, editorID, author, code, year, pages, title, gender, finishing,
                         new BigDecimal(sellValue), new BigDecimal(buyValue)
                     );
                 }
