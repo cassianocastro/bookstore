@@ -16,10 +16,10 @@ import org.json.JSONObject;
  *
  *
  */
-public class HomeView extends JFrame
+public class IndexView extends JFrame
 {
 
-    public HomeView()
+    public IndexView()
     {
         super("Livraria Leia Mais");
 
@@ -42,7 +42,7 @@ public class HomeView extends JFrame
 
     private void initListeners()
     {
-        HomeView view = this;
+        IndexView view = this;
 
         this.buttonBooks.addActionListener((ActionEvent e) ->
         {

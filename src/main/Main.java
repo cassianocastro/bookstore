@@ -3,7 +3,7 @@ package main;
 import java.sql.Connection;
 import java.sql.SQLException;
 import model.dao.ConnectionSingleton;
-import view.HomeView;
+import view.IndexView;
 
 /**
  *
@@ -21,7 +21,7 @@ public class Main
         {
             try
             {
-                new HomeView();
+                new IndexView();
                 Connection connection = ConnectionSingleton.getInstance();
                 connection.close();
             } catch (SQLException e)

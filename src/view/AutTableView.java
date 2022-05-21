@@ -6,7 +6,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.sql.*;
 import java.util.List;
-import model.Author;
+import model.entities.Author;
 import model.dao.AuthorDAO;
 import model.dao.ConnectionSingleton;
 

@@ -12,7 +12,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
 import model.factories.PublishingCiaFactory;
-import model.PublishingCia;
+import model.entities.PublishingCia;
 import model.dao.ConnectionSingleton;
 import model.dao.PublishingCiaDAO;
 import org.json.JSONObject;

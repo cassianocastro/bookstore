@@ -8,11 +8,10 @@ import java.util.List;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
-import model.Author;
+import model.entities.Author;
 import model.Name;
 import model.dao.AuthorDAO;
 import model.dao.ConnectionSingleton;
-import org.json.JSONObject;
 
 /**
  *

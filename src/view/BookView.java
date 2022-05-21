@@ -10,7 +10,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
-import model.Book;
+import model.entities.Book;
 import org.json.JSONObject;
 
 /**
