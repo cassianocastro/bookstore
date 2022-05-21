@@ -4,35 +4,31 @@ package model;
  *
  *
  */
-abstract public class Person
+public class Name
 {
 
-    private String firstName;
-    private String lastName;
+    private final String first;
+    private final String last;
 
-    public Person(String firstName, String lastName)
+    public Name(String first, String last)
     {
-        this.firstName = firstName;
-        this.lastName  = lastName;
+        this.first = first;
+        this.last  = last;
     }
 
-    public String getFirstName()
+    public String getFirst()
     {
-        return this.firstName;
+        return this.first;
     }
 
-    public void setFirstName(String firstName)
+    public String getLast()
     {
-        this.firstName = firstName;
+        return this.last;
     }
 
-    public String getLastName()
+    @Override
+    public String toString()
     {
-        return this.lastName;
-    }
-
-    public void setLastName(String lastName)
-    {
-        this.lastName = lastName;
+        return this.first + " " + this.last;
     }
 }
