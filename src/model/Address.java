@@ -9,55 +9,55 @@ public class Address
 
     private final String uf;
     private final String city;
-    private final String bairro;
+    private final String district;
     private final String street;
-    private final String compl;
+    private final String complement;
     private final String cep;
     private final int number;
 
-    public Address(String uf, String city, String bairro, String street, int number, String compl, String cep)
+    public Address(String uf, String city, String district, String street, int number, String compl, String cep)
     {
-        this.uf     = uf;
-        this.city   = city;
-        this.bairro = bairro;
-        this.street = street;
-        this.number = number;
-        this.compl  = compl;
-        this.cep    = cep;
+        this.uf         = uf;
+        this.city       = city;
+        this.district   = district;
+        this.street     = street;
+        this.number     = number;
+        this.complement = compl;
+        this.cep        = cep;
     }
 
-    public String getUf()
+    public String getUF()
     {
-        return uf;
+        return this.uf;
     }
 
     public String getCity()
     {
-        return city;
+        return this.city;
     }
 
-    public String getBairro()
+    public String getDistrict()
     {
-        return bairro;
+        return this.district;
     }
 
     public String getStreet()
     {
-        return street;
+        return this.street;
     }
 
     public int getNumber()
     {
-        return number;
+        return this.number;
     }
 
-    public String getCompl()
+    public String getComplement()
     {
-        return compl;
+        return this.complement;
     }
 
-    public String getCep()
+    public String getCEP()
     {
-        return cep;
+        return this.cep;
     }
 }
