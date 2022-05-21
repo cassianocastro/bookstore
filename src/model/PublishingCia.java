@@ -7,44 +7,29 @@ package model;
 public class PublishingCia
 {
 
-    private int companyID;
-    private String name;
-    private Address address;
+    private final int id;
+    private final String name;
+    private final Address address;
 
-    public PublishingCia(int companyID, String name, Address address)
+    public PublishingCia(int id, String name, Address address)
     {
-        this.companyID = companyID;
-        this.name      = name;
-        this.address   = address;
+        this.id      = id;
+        this.name    = name;
+        this.address = address;
     }
 
-    public int getCompanyID()
+    public int getID()
     {
-        return companyID;
-    }
-
-    public void setCompanyID(int companyID)
-    {
-        this.companyID = companyID;
+        return this.id;
     }
 
     public String getName()
     {
-        return name;
-    }
-
-    public void setName(String name)
-    {
-        this.name = name;
+        return this.name;
     }
 
     public Address getAddress()
     {
-        return address;
-    }
-
-    public void setAddress(Address address)
-    {
-        this.address = address;
+        return this.address;
     }
 }

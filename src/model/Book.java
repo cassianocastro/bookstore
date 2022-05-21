@@ -9,118 +9,66 @@ import java.math.BigDecimal;
 public class Book extends Product
 {
 
-    private int bookID;
-    private int publishingID;
-    private int authorID;
-    private int codeBar;
-    private int releaseYear;
-    private int numberPages;
-    private String title;
-    private String gender;
-    private String finishing;
+    private final int id;
+    private final PublishingCia publishing;
+    private final Author author;
+    private final int year;
+    private final int pages;
+    private final String title;
+    private final String gender;
+    private final String finishing;
 
-    public Book(int bookID, int publishingID, int authorID, int codeBar, int releaseYear, int numberPages,
+    public Book(int id, PublishingCia publishing, Author author, int code, int year, int pages,
             String title, String gender, String finishing, BigDecimal sellValue, BigDecimal buyValue)
     {
-        super(sellValue, buyValue);
-        this.bookID       = bookID;
-        this.publishingID = publishingID;
-        this.authorID     = authorID;
-        this.codeBar      = codeBar;
-        this.releaseYear  = releaseYear;
-        this.numberPages  = numberPages;
-        this.title        = title;
-        this.gender       = gender;
-        this.finishing    = finishing;
+        super(code, sellValue, buyValue);
+        this.id         = id;
+        this.publishing = publishing;
+        this.author     = author;
+        this.year       = year;
+        this.pages      = pages;
+        this.title      = title;
+        this.gender     = gender;
+        this.finishing  = finishing;
     }
 
-    public int getBookID()
+    public int getID()
     {
-        return bookID;
+        return this.id;
     }
 
-    public void setBookID(int bookID)
+    public PublishingCia getPublishing()
     {
-        this.bookID = bookID;
+        return this.publishing;
     }
 
-    public int getPublishingID()
+    public Author getAuthor()
     {
-        return publishingID;
-    }
-
-    public void setPublishingID(int publishingID)
-    {
-        this.publishingID = publishingID;
-    }
-
-    public int getAuthorID()
-    {
-        return authorID;
-    }
-
-    public void setAuthorID(int authorID)
-    {
-        this.authorID = authorID;
-    }
-
-    public int getCodeBar()
-    {
-        return codeBar;
-    }
-
-    public void setCodeBar(int codeBar)
-    {
-        this.codeBar = codeBar;
+        return this.author;
     }
 
     public int getReleaseYear()
     {
-        return releaseYear;
-    }
-
-    public void setReleaseYear(int releaseYear)
-    {
-        this.releaseYear = releaseYear;
+        return this.year;
     }
 
     public int getNumberPages()
     {
-        return numberPages;
-    }
-
-    public void setNumberPages(int numberPages)
-    {
-        this.numberPages = numberPages;
+        return this.pages;
     }
 
     public String getTitle()
     {
-        return title;
-    }
-
-    public void setTitle(String title)
-    {
-        this.title = title;
+        return this.title;
     }
 
     public String getGender()
     {
-        return gender;
-    }
-
-    public void setGender(String gender)
-    {
-        this.gender = gender;
+        return this.gender;
     }
 
     public String getFinishing()
     {
-        return finishing;
-    }
-
-    public void setFinishing(String finishing)
-    {
-        this.finishing = finishing;
+        return this.finishing;
     }
 }
