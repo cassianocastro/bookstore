@@ -1,26 +1,20 @@
-package model;
+package model.entities;
 
 /**
  *
  *
  */
-public class PublishingCia
+public class PublishingCia extends Entity
 {
 
-    private final int id;
     private final String name;
     private final Address address;
 
     public PublishingCia(int id, String name, Address address)
     {
-        this.id      = id;
+        super(id);
         this.name    = name;
         this.address = address;
-    }
-
-    public int getID()
-    {
-        return this.id;
     }
 
     public String getName()

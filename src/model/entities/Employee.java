@@ -1,15 +1,16 @@
-package model;
+package model.entities;
 
 import java.util.Calendar;
+import model.Name;
+import model.Sex;
 
 /**
  *
  *
  */
-public class Employee
+public class Employee extends Entity
 {
 
-    private final int id;
     private final int matricula;
     private final Name name;
     private final String cpf;
@@ -22,7 +23,7 @@ public class Employee
     public Employee(int id, Name name, Address address, String cpf,
                     int matricula, String depto, String cargo, Calendar date, Sex sex)
     {
-        this.id        = id;
+        super(id);
         this.name      = name;
         this.matricula = matricula;
         this.depto     = depto;
@@ -31,11 +32,6 @@ public class Employee
         this.sex       = sex;
         this.cpf       = cpf;
         this.address   = address;
-    }
-
-    public int getID()
-    {
-        return this.id;
     }
 
     public Name getName()
