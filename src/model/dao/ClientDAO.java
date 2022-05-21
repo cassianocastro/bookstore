@@ -2,7 +2,7 @@ package model.dao;
 
 import java.sql.*;
 import java.util.*;
-import model.Client;
+import model.entities.Client;
 import model.Name;
 
 /**

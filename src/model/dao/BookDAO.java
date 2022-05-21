@@ -3,8 +3,8 @@ package model.dao;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.*;
-import model.Author;
-import model.Book;
+import model.entities.Author;
+import model.entities.Book;
 
 /**
  *

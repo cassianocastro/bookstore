@@ -2,8 +2,8 @@ package model.dao;
 
 import java.sql.*;
 import java.util.*;
-import model.Employee;
-import model.Address;
+import model.entities.Employee;
+import model.entities.Address;
 import model.Name;
 import model.Sex;
 

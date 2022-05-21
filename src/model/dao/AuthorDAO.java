@@ -3,7 +3,7 @@ package model.dao;
 import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
-import model.Author;
+import model.entities.Author;
 import model.Name;
 
 /**

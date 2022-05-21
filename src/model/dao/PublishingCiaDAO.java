@@ -3,8 +3,8 @@ package model.dao;
 import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
-import model.Address;
-import model.PublishingCia;
+import model.entities.Address;
+import model.entities.PublishingCia;
 import org.json.JSONObject;
 
 /**
