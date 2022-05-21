@@ -10,26 +10,26 @@ import java.sql.*;
 public class ConnectionSingleton
 {
 
-    private static Connection instance;
-    private static DBConfig configDataBase;
+    private static Connection connection;
+    private static DBConfig config;
 
     private ConnectionSingleton() {}
 
-    static public void setConfig(DBConfig config)
+    static public void setConfig(DBConfig dbc)
     {
-        configDataBase = config;
+        config = dbc;
     }
 
     static public Connection getInstance() throws SQLException
     {
-        if ( instance == null && configDataBase != null )
+        if ( connection == null && config != null )
         {
-            instance = DriverManager.getConnection(
-                configDataBase.getDSN(),
-                configDataBase.getUser(),
-                configDataBase.getPassword()
+            connection = DriverManager.getConnection(
+                config.getDSN(),
+                config.getUser(),
+                config.getPassword()
             );
         }
-        return instance;
+        return connection;
     }
 }
