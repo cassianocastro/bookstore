@@ -1,5 +1,6 @@
 package view;
 
+import controller.BookController;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
@@ -45,7 +46,7 @@ public class HomeView extends JFrame
 
         this.buttonBooks.addActionListener((ActionEvent e) ->
         {
-            new BookView();
+            new BookView(new BookController());
         });
 
         this.buttonPublishing.addActionListener((ActionEvent e) ->
@@ -86,7 +87,7 @@ public class HomeView extends JFrame
             {
                 JOptionPane.showMessageDialog(
                     view,
-                        "Não foi possível conectar-se. Verifique as configurações."
+                    "Não foi possível conectar-se. Verifique as configurações."
                 );
             } catch(SQLException e)
             {

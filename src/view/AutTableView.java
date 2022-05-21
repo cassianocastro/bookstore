@@ -6,9 +6,9 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.sql.*;
 import java.util.List;
+import model.Author;
 import model.dao.AuthorDAO;
 import model.dao.ConnectionSingleton;
-import org.json.JSONObject;
 
 /**
  *
@@ -30,6 +30,7 @@ public class AutTableView extends JFrame
         super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         super.setResizable(false);
         super.setLocationRelativeTo(null);
+        super.setVisible(true);
     }
 
     public int getID()
@@ -48,19 +49,11 @@ public class AutTableView extends JFrame
                 model.removeRow(0);
             }
             Connection connection = ConnectionSingleton.getInstance();
-            List<JSONObject> list = new AuthorDAO(connection).read();
-            
-            for ( JSONObject json : list )
+            List<Author> list = new AuthorDAO(connection).getAll();
+
+            for ( Author author : list )
             {
-                model.addRow(
-                    new Object[]
-                    {
-                        json.getInt("authorID"),
-                        json.getString("firstName")
-                        + " "
-                        + json.getString("lastName")
-                    }
-                );
+                model.addRow(new Object[] { author.getID(), author.getName().toString() });
             }
         } catch (SQLException e)
         {

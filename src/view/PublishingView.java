@@ -257,22 +257,22 @@ public class PublishingView extends JFrame
             }
 
             Connection connection = ConnectionSingleton.getInstance();
-            List<PublishingCia> list = new PublishingCiaDAO(connection).read();
+            List<PublishingCia> list = new PublishingCiaDAO(connection).getAll();
 
             for ( PublishingCia publishingCia : list )
             {
                 model.addRow(
                     new Object[]
                     {
-                        publishingCia.getCompanyID(),
+                        publishingCia.getID(),
                         publishingCia.getName(),
-                        publishingCia.getAddress().getUf(),
+                        publishingCia.getAddress().getUF(),
                         publishingCia.getAddress().getCity(),
-                        publishingCia.getAddress().getBairro(),
-                        publishingCia.getAddress().getCep(),
+                        publishingCia.getAddress().getDistrict(),
+                        publishingCia.getAddress().getCEP(),
                         publishingCia.getAddress().getStreet(),
                         publishingCia.getAddress().getNumber(),
-                        publishingCia.getAddress().getCompl()
+                        publishingCia.getAddress().getComplement()
                     }
                 );
             }

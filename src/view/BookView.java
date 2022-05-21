@@ -11,7 +11,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
 import model.Book;
-import model.factories.JSONFactory;
 import org.json.JSONObject;
 
 /**
@@ -21,165 +20,22 @@ import org.json.JSONObject;
 public class BookView extends JFrame
 {
 
-    private BookController bookControll;
-    private JSONFactory jsonFactory;
-    private PubTableView pubTable;
-    private AutTableView autTable;
+    private final BookController controller;
 
-    public BookView()
+    public BookView(BookController controller)
     {
         super("Livros");
+
+        this.controller = controller;
+
         this.initComponents();
-
-        this.bookControll = new BookController();
-        this.jsonFactory  = new JSONFactory();
-        this.pubTable     = new PubTableView(this);
-        this.autTable     = new AutTableView(this);
-
-        initListeners();
+        this.initListeners();
         this.setPanelState(false);
-        this.loadTable(this.bookControll.getList());
+        this.loadTable();
 
         super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         super.setLocationRelativeTo(null);
         super.setVisible(true);
-    }
-
-    public void setButtonsCRUD(boolean isEnabled)
-    {
-        this.buttonNew .setEnabled(isEnabled);
-        this.buttonEdit.setEnabled(isEnabled);
-        this.buttonDel .setEnabled(isEnabled);
-    }
-
-    public void setPanelState(boolean isEnabled)
-    {
-        this.fieldBookID      .setEnabled(isEnabled);
-        this.fieldPublishingID.setEnabled(isEnabled);
-        this.fieldAuthorID    .setEnabled(isEnabled);
-
-        this.fieldTitle       .setEnabled(isEnabled);
-        this.fieldGender      .setEnabled(isEnabled);
-        this.fieldFinishing   .setEnabled(isEnabled);
-        this.fieldNumberPages .setEnabled(isEnabled);
-        this.fieldYear        .setEnabled(isEnabled);
-
-        this.fieldCodeBar     .setEnabled(isEnabled);
-        this.fieldBuy         .setEnabled(isEnabled);
-        this.fieldSell        .setEnabled(isEnabled);
-
-        this.buttonWildCard   .setEnabled(isEnabled);
-        this.buttonCancel     .setEnabled(isEnabled);
-
-        this.buttonShowPublishing.setEnabled(isEnabled);
-        this.buttonShowAuthor    .setEnabled(isEnabled);
-    }
-
-    public void setTextFields(String[] args)
-    {
-        this.fieldBookID      .setText(args[0]);
-        this.fieldPublishingID.setText(args[1]);
-        this.fieldAuthorID    .setText(args[2]);
-
-        this.fieldTitle      .setText(args[3]);
-        this.fieldGender     .setText(args[4]);
-        this.fieldFinishing  .setText(args[5]);
-        this.fieldNumberPages.setText(args[6]);
-        this.fieldYear       .setText(args[7]);
-
-        this.fieldCodeBar    .setText(args[8]);
-        this.fieldSell       .setText(args[9]);
-        this.fieldBuy        .setText(args[10]);
-    }
-
-    public String[] getTextFields()
-    {
-        String[] args = new String[11];
-
-        args[0] = this.fieldBookID      .getText();
-        args[1] = this.fieldPublishingID.getText();
-        args[2] = this.fieldAuthorID    .getText();
-
-        args[3] = this.fieldTitle       .getText();
-        args[4] = this.fieldGender      .getText();
-        args[5] = this.fieldFinishing   .getText();
-        args[6] = this.fieldNumberPages .getText();
-        args[7] = this.fieldYear        .getText();
-
-        args[8] = this.fieldCodeBar     .getText();
-        args[9] = this.fieldSell        .getText();
-        args[10] = this.fieldBuy        .getText();
-
-        return args;
-    }
-
-    public void templateMethod(boolean panelEnabled, boolean buttonsEnabled)
-    {
-        setPanelState(panelEnabled);
-        setButtonsCRUD(buttonsEnabled);
-    }
-
-    public boolean hasSelectedRow()
-    {
-        int row = this.table.getSelectedRow();
-
-        return row != -1;
-            //return false;
-        //return true;
-    }
-
-    public void editFields()
-    {
-        String[] args = new String[11];
-
-        for ( int i = 0; i < args.length; i++ )
-        {
-            args[i] = table.getValueAt(this.table.getSelectedRow(), i).toString();
-        }
-        setTextFields(args);
-    }
-
-    public void clearFields()
-    {
-        String[] args = new String[11];
-
-        for ( String arg : args )
-        {
-            arg = "";
-        }
-        setTextFields(args);
-    }
-
-    public boolean fieldsOkay()
-    {
-        String[] args = getTextFields();
-
-        if (args[0].isEmpty())
-            args[0] = "0";
-
-        if (args[1].isEmpty())
-            args[1] = "1";
-
-        if (args[2].isEmpty())
-            args[2] = "1";
-
-        for ( String arg : args )
-        {
-            if ( arg.isEmpty() ) return false;
-        }
-        this.jsonFactory.buildFrom(args);
-
-        return true;
-    }
-
-    public JFormattedTextField getFieldPublishing()
-    {
-        return this.fieldPublishingID;
-    }
-
-    public JFormattedTextField getFieldAuthor()
-    {
-        return this.fieldAuthorID;
     }
 
     private void initListeners()
@@ -222,8 +78,8 @@ public class BookView extends JFrame
                 {
                     int id = (int) table.getValueAt(row, 0);
 
-                    bookControll.invoke("DelCommand", new JSONObject().put("bookID", id));
-                    loadTable(bookControll.getList());
+                    controller.invoke("DelCommand", new JSONObject().put("bookID", id));
+                    loadTable();
                 }
             }
         });
@@ -238,58 +94,226 @@ public class BookView extends JFrame
         {
             if ( fieldsOkay() )
             {
-                JSONObject json = jsonFactory.getJSON();
+                JSONObject json = new JSONObject();
 
                 if ( buttonWildCard.getText().equals("Atualizar") )
-                    bookControll.invoke("EditCommand", json);
+                    controller.invoke("EditCommand", json);
                 else
-                    bookControll.invoke("NewCommand", json);
+                    controller.invoke("NewCommand", json);
 
-                loadTable(bookControll.getList());
+                loadTable();
                 clearFields();
                 templateMethod(false, true);
             }
         });
 
+        BookView view = this;
         this.buttonShowPublishing.addActionListener((ActionEvent e) ->
         {
-            pubTable.setVisible(true);
+            new PubTableView(view);
         });
 
         this.buttonShowAuthor.addActionListener((ActionEvent e) ->
         {
-            autTable.setVisible(true);
+            new AutTableView(view);
         });
     }
 
-    public void loadTable(List<Book> list)
+    public void loadTable()
     {
         DefaultTableModel model = (DefaultTableModel) this.table.getModel();
+        this.clearTable(model);
 
-        while (table.getRowCount() > 0)
+        List<Book> list = this.controller.getList();
+        this.addRowsToTable(model, list);
+    }
+
+    private void clearTable(DefaultTableModel model)
+    {
+        while ( model.getRowCount() > 0 )
         {
             model.removeRow(0);
         }
+    }
 
+    private void addRowsToTable(DefaultTableModel model, List<Book> list)
+    {
         for ( Book book : list )
         {
             model.addRow(
                 new Object[]
                 {
-                    book.getBookID(),
-                    book.getPublishingID(),
-                    book.getAuthorID(),
+                    book.getID(),
+                    book.getPublishing().getID(),
+                    book.getAuthor().getID(),
                     book.getTitle(),
                     book.getGender(),
                     book.getFinishing(),
                     book.getNumberPages(),
                     book.getReleaseYear(),
-                    book.getCodeBar(),
+                    book.getCode(),
                     book.getSellValue().toString(),
                     book.getBuyValue().toString()
                 }
             );
         }
+    }
+
+    public void templateMethod(boolean panelState, boolean buttonsState)
+    {
+        setPanelState(panelState);
+        setButtonsCRUD(buttonsState);
+    }
+
+    public void setPanelState(boolean state)
+    {
+        this.fieldBookID      .setEnabled(state);
+        this.fieldPublishingID.setEnabled(state);
+        this.fieldAuthorID    .setEnabled(state);
+
+        this.fieldTitle       .setEnabled(state);
+        this.fieldGender      .setEnabled(state);
+        this.fieldFinishing   .setEnabled(state);
+        this.fieldNumberPages .setEnabled(state);
+        this.fieldYear        .setEnabled(state);
+
+        this.fieldCodeBar     .setEnabled(state);
+        this.fieldBuy         .setEnabled(state);
+        this.fieldSell        .setEnabled(state);
+
+        this.buttonWildCard   .setEnabled(state);
+        this.buttonCancel     .setEnabled(state);
+
+        this.buttonShowPublishing.setEnabled(state);
+        this.buttonShowAuthor    .setEnabled(state);
+    }
+
+    public void setButtonsCRUD(boolean state)
+    {
+        this.buttonNew .setEnabled(state);
+        this.buttonEdit.setEnabled(state);
+        this.buttonDel .setEnabled(state);
+    }
+
+    public boolean hasSelectedRow()
+    {
+        int row = this.table.getSelectedRow();
+
+        return row != -1;
+    }
+
+    public void editFields()
+    {
+        String[] args = new String[11];
+
+        for ( int i = 0; i < args.length; i++ )
+        {
+            args[i] = table.getValueAt(this.table.getSelectedRow(), i).toString();
+        }
+        setTextFields(args);
+    }
+
+    public void clearFields()
+    {
+        String[] args = new String[11];
+
+        for ( String arg : args )
+        {
+            arg = "";
+        }
+        setTextFields(args);
+    }
+
+    public void setTextFields(String[] args)
+    {
+        this.fieldBookID      .setText(args[0]);
+        this.fieldPublishingID.setText(args[1]);
+        this.fieldAuthorID    .setText(args[2]);
+
+        this.fieldTitle      .setText(args[3]);
+        this.fieldGender     .setText(args[4]);
+        this.fieldFinishing  .setText(args[5]);
+        this.fieldNumberPages.setText(args[6]);
+        this.fieldYear       .setText(args[7]);
+
+        this.fieldCodeBar    .setText(args[8]);
+        this.fieldSell       .setText(args[9]);
+        this.fieldBuy        .setText(args[10]);
+    }
+
+    public boolean fieldsOkay()
+    {
+        String[] args = getTextFields();
+
+        if (args[0].isEmpty())
+            args[0] = "0";
+
+        if (args[1].isEmpty())
+            args[1] = "1";
+
+        if (args[2].isEmpty())
+            args[2] = "1";
+
+        for ( String arg : args )
+        {
+            if ( arg.isEmpty() ) return false;
+        }
+        this.getJSON(args);
+
+        return true;
+    }
+
+    public String[] getTextFields()
+    {
+        String[] args = new String[11];
+
+        args[0] = this.fieldBookID      .getText();
+        args[1] = this.fieldPublishingID.getText();
+        args[2] = this.fieldAuthorID    .getText();
+
+        args[3] = this.fieldTitle       .getText();
+        args[4] = this.fieldGender      .getText();
+        args[5] = this.fieldFinishing   .getText();
+        args[6] = this.fieldNumberPages .getText();
+        args[7] = this.fieldYear        .getText();
+
+        args[8] = this.fieldCodeBar     .getText();
+        args[9] = this.fieldSell        .getText();
+        args[10] = this.fieldBuy        .getText();
+
+        return args;
+    }
+
+    public JSONObject getJSON(String[] args)
+    {
+        JSONObject json = new JSONObject();
+
+        json.put("ID",      args[0]);
+        json.put("publishing",args[1]);
+        json.put("author",    args[2]);
+
+        json.put("title",       args[3]);
+        json.put("gender",      args[4]);
+
+        json.put("finishing",   args[5]);
+        json.put("pages", args[6]);
+        json.put("year", args[7]);
+
+        json.put("code",        args[8]);
+        json.put("sellValue",   args[9]);
+        json.put("buyValue",    args[10]);
+
+        return json;
+    }
+
+    public JFormattedTextField getFieldPublishing()
+    {
+        return this.fieldPublishingID;
+    }
+
+    public JFormattedTextField getFieldAuthor()
+    {
+        return this.fieldAuthorID;
     }
 
     /**

@@ -33,8 +33,7 @@ public class ObrasView extends JFrame
 
     private void loadTable(String id)
     {
-        if (id.isEmpty())
-            return;
+        if ( id.isEmpty() ) return;
 
         int authorID = Integer.parseInt(id);
 
@@ -47,7 +46,7 @@ public class ObrasView extends JFrame
                 model.removeRow(0);
             }
             Connection connection = ConnectionSingleton.getInstance();
-            List<JSONObject> list = new ObrasDAO(connection).read(authorID);
+            List<JSONObject> list = new ObrasDAO(connection).findBooksByAuthor(authorID);
 
             for ( JSONObject json : list )
             {

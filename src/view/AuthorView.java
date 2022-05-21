@@ -8,6 +8,8 @@ import java.util.List;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
+import model.Author;
+import model.Name;
 import model.dao.AuthorDAO;
 import model.dao.ConnectionSingleton;
 import org.json.JSONObject;
@@ -81,18 +83,17 @@ public class AuthorView extends JFrame
         setTextFields(args);
     }
 
-    public JSONObject getJSON()
+    public Author getAuthor()
     {
-        JSONObject json = new JSONObject();
-        String id = this.fieldAuthorID .getText();
+        String id = this.fieldAuthorID.getText();
 
-        if (id.isEmpty())
-            id = "0";
-        json.put("authorID",  id);
-        json.put("firstName", this.fieldFirstName.getText());
-        json.put("lastName",  this.fieldLastName .getText());
+        if ( id.isEmpty() ) id = "0";
 
-        return json;
+        int authorID = Integer.parseInt(id);
+        String first = this.fieldFirstName.getText();
+        String last  = this.fieldLastName.getText();
+
+        return new Author(authorID, new Name(first, last));
     }
 
     public String getTextFromFieldID()
@@ -165,7 +166,7 @@ public class AuthorView extends JFrame
                     try
                     {
                         Connection connection = ConnectionSingleton.getInstance();
-                        new AuthorDAO(connection).delete(id);
+                        // new AuthorDAO(connection).delete(id);
                         loadTable();
                     } catch(SQLException e)
                     {
@@ -177,17 +178,17 @@ public class AuthorView extends JFrame
 
         this.buttonWildCard.addActionListener((ActionEvent event) ->
         {
-            String label = buttonWildCard.getText();
-            JSONObject json = getJSON();
+            String label  = buttonWildCard.getText();
+            Author author = getAuthor();
 
             try
             {
                 Connection connection = ConnectionSingleton.getInstance();
 
                 if ( label.equals("Atualizar") )
-                    new AuthorDAO(connection).update(json);
+                    new AuthorDAO(connection).update(author);
                 else
-                    new AuthorDAO(connection).create(json);
+                    new AuthorDAO(connection).insert(author);
                 loadTable();
             } catch (SQLException e)
             {
@@ -211,15 +212,15 @@ public class AuthorView extends JFrame
                 model.removeRow(0);
             }
             Connection connection = ConnectionSingleton.getInstance();
-            List<JSONObject> array = new AuthorDAO(connection).read();
+            List<Author> list = new AuthorDAO(connection).getAll();
 
-            for ( JSONObject json : array )
+            for ( Author author : list )
             {
                 model.addRow( new Object[]
                 {
-                    json.getInt("authorID"),
-                    json.getString("firstName"),
-                    json.getString("lastName")
+                    author.getID(),
+                    author.getName().getFirst(),
+                    author.getName().getLast()
                 });
             }
         } catch (SQLException e)
