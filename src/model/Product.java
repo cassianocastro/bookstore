@@ -9,31 +9,44 @@ import java.math.BigDecimal;
 abstract public class Product
 {
 
-    private BigDecimal sellValue, buyValue;
+    private int code;
+    private BigDecimal buyValue;
+    private BigDecimal sellValue;
 
-    public Product(BigDecimal sellValue, BigDecimal buyValue)
+    public Product(int code, BigDecimal sellValue, BigDecimal buyValue)
     {
+        this.code      = code;
         this.buyValue  = buyValue;
         this.sellValue = sellValue;
     }
 
-    public BigDecimal getSellValue()
+    public int getCode()
     {
-        return sellValue;
+        return this.code;
     }
 
-    public void setSellValue(BigDecimal sellValue)
+    public void setCode(int code)
     {
-        this.sellValue = sellValue;
+        this.code = code;
     }
 
     public BigDecimal getBuyValue()
     {
-        return buyValue;
+        return this.buyValue;
     }
 
     public void setBuyValue(BigDecimal buyValue)
     {
         this.buyValue = buyValue;
+    }
+
+    public BigDecimal getSellValue()
+    {
+        return this.sellValue;
+    }
+
+    public void setSellValue(BigDecimal sellValue)
+    {
+        this.sellValue = sellValue;
     }
 }
