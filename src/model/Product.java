@@ -1,20 +1,22 @@
 package model;
 
+import model.entities.Entity;
 import java.math.BigDecimal;
 
 /**
  *
  *
  */
-abstract public class Product
+abstract public class Product extends Entity
 {
 
     private int code;
     private BigDecimal buyValue;
     private BigDecimal sellValue;
 
-    public Product(int code, BigDecimal sellValue, BigDecimal buyValue)
+    public Product(int id, int code, BigDecimal sellValue, BigDecimal buyValue)
     {
+        super(id);
         this.code      = code;
         this.buyValue  = buyValue;
         this.sellValue = sellValue;
