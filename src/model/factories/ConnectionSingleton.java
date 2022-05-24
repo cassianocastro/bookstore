@@ -1,4 +1,4 @@
-package model.dao;
+package model.factories;
 
 import model.DBConfig;
 import java.sql.*;
