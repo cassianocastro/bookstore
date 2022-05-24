@@ -38,7 +38,7 @@ public class BookDAO
             ps.setString(9, book.getBuyValue().toString());
             ps.setString(10, book.getSellValue().toString());
 
-            ps.execute();
+            ps.executeUpdate();
         }
     }
 
@@ -66,15 +66,15 @@ public class BookDAO
         }
     }
 
-    public void delete(int id) throws SQLException
+    public void delete(Book book) throws SQLException
     {
         final String SQL = "DELETE FROM livro WHERE bookID = ?";
 
         try (var ps = this.connection.prepareStatement(SQL))
         {
-            ps.setInt(1, id);
+            ps.setInt(1, book.getID());
 
-            ps.execute();
+            ps.executeUpdate();
         }
     }
 
@@ -82,28 +82,28 @@ public class BookDAO
     {
         final String SQL = "SELECT * FROM livro";
 
-        try (var ps = this.connection.prepareStatement(SQL);
-            var rs = ps.executeQuery())
+        try (var ps = this.connection.createStatement();
+            var rs = ps.executeQuery(SQL))
         {
             List<Book> list = new LinkedList();
 
             while ( rs.next() )
             {
-                int id = rs.getInt("bookID");
-                int editorID = rs.getInt("editorID");
-                int authorID = rs.getInt("autorID");
-                int code     = rs.getInt("codigoBarras");
-                int year = rs.getInt("lancamento");
-                int pages = rs.getInt("numberPages");
-                String title = rs.getString("titulo");
+                int id           = rs.getInt("bookID");
+                int editorID     = rs.getInt("editorID");
+                int authorID     = rs.getInt("autorID");
+                int code         = rs.getInt("codigoBarras");
+                int year         = rs.getInt("lancamento");
+                int pages        = rs.getInt("numberPages");
+                String title     = rs.getString("titulo");
                 String finishing = rs.getString("acabamento");
-                String gender = rs.getString("genero");
-                String buyValue = rs.getString("valorCompra");
+                String gender    = rs.getString("genero");
+                String buyValue  = rs.getString("valorCompra");
                 String sellValue = rs.getString("valorVenda");
 
-                Author author = new Author(authorID);
+                // Author author = new Author(authorID);
 
-                list.add(new Book(id, editorID, author, code, year, pages, title, gender, finishing,
+                list.add(new Book(id, null, null, code, year, pages, title, gender, finishing,
                     new BigDecimal(sellValue), new BigDecimal(buyValue)
                 ));
             }
@@ -119,30 +119,29 @@ public class BookDAO
         {
             ps.setInt(1, id);
 
-            try (var rs = ps.executeQuery())
+            var rs = ps.executeQuery();
+
+            if ( ! rs.next() )
             {
-                if ( rs.next() )
-                {
-                    int editorID = rs.getInt("editorID");
-                    int authorID = rs.getInt("autorID");
-                    int code = rs.getInt("codigoBarras");
-                    int year = rs.getInt("lancamento");
-                    int pages = rs.getInt("numberPages");
-                    String title = rs.getString("titulo");
-                    String finishing = rs.getString("acabamento");
-                    String gender = rs.getString("gender");
-                    String buyValue = rs.getString("valorCompra");
-                    String sellValue = rs.getString("valorVenda");
-
-                    Author author = new Author(authorID);
-
-                    return new Book(
-                        id, editorID, author, code, year, pages, title, gender, finishing,
-                        new BigDecimal(sellValue), new BigDecimal(buyValue)
-                    );
-                }
+                throw new SQLException("Book not found!");
             }
+            int editorID     = rs.getInt("editorID");
+            int authorID     = rs.getInt("autorID");
+            int code         = rs.getInt("codigoBarras");
+            int year         = rs.getInt("lancamento");
+            int pages        = rs.getInt("numberPages");
+            String title     = rs.getString("titulo");
+            String finishing = rs.getString("acabamento");
+            String gender    = rs.getString("gender");
+            String buyValue  = rs.getString("valorCompra");
+            String sellValue = rs.getString("valorVenda");
+
+            // Author author = new Author(authorID);
+
+            return new Book(
+                id, null, null, code, year, pages, title, gender, finishing,
+                new BigDecimal(sellValue), new BigDecimal(buyValue)
+            );
         }
-        throw new SQLException("Book not found!");
     }
 }

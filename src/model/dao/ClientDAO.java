@@ -29,7 +29,7 @@ public class ClientDAO
             statement.setString(2, client.getName().getLast());
             statement.setString(3, client.getCPF());
 
-            statement.execute();
+            statement.executeUpdate();
         }
     }
 
@@ -56,16 +56,16 @@ public class ClientDAO
         {
             statement.setInt(1, client.getID());
 
-            statement.execute();
+            statement.executeUpdate();
         }
     }
 
     public List<Client> getAll() throws SQLException
     {
-        final String SQL = "SELECT * FROM cliente";
+        final String SQL = "SELECT clienteID, nome, sobrenome, cpf FROM cliente";
 
-        try (var statement = this.connection.prepareStatement(SQL);
-            var rs = statement.executeQuery())
+        try (var statement = this.connection.createStatement();
+            var rs = statement.executeQuery(SQL))
         {
             List<Client> list = new LinkedList<>();
 
@@ -84,24 +84,23 @@ public class ClientDAO
 
     public Client findByID(int id) throws SQLException
     {
-        final String SQL = "SELECT * FROM cliente WHERE clienteID = ?";
+        final String SQL = "SELECT nome, sobrenome, cpf FROM cliente WHERE clienteID = ?";
 
         try (var statement = this.connection.prepareStatement(SQL))
         {
             statement.setInt(1, id);
 
-            try ( var rs = statement.executeQuery() )
-            {
-                if ( rs.next() )
-                {
-                    String firstName = rs.getString("nome");
-                    String lastName  = rs.getString("sobrenome");
-                    String cpf       = rs.getString("cpf");
+            var rs = statement.executeQuery();
 
-                    return new Client(id, new Name(firstName, lastName), cpf);
-                }
+            if ( ! rs.next() )
+            {
+                throw new SQLException("Client not found!");
             }
+            String firstName = rs.getString("nome");
+            String lastName  = rs.getString("sobrenome");
+            String cpf       = rs.getString("cpf");
+
+            return new Client(id, new Name(firstName, lastName), cpf);
         }
-        throw new SQLException("Client not found!");
     }
 }

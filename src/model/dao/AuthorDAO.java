@@ -29,7 +29,7 @@ public class AuthorDAO
             statement.setString(1, author.getName().getFirst());
             statement.setString(2, author.getName().getLast());
 
-            statement.execute();
+            statement.executeUpdate();
         }
     }
 
@@ -55,16 +55,16 @@ public class AuthorDAO
         {
             statement.setInt(1, author.getID());
 
-            statement.execute();
+            statement.executeUpdate();
         }
     }
 
     public List<Author> getAll() throws SQLException
     {
-        final String SQL = "SELECT * FROM autor";
+        final String SQL = "SELECT autorID, nome, sobrenome FROM autor";
 
-        try (var statement = this.connection.prepareStatement(SQL);
-            var rs = statement.executeQuery())
+        try (var statement = this.connection.createStatement();
+            var rs = statement.executeQuery(SQL))
         {
             List<Author> list = new LinkedList();
 
