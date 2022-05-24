@@ -1,10 +1,5 @@
 package main;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import model.dao.ConnectionSingleton;
-import view.IndexView;
-
 /**
  *
  *
@@ -17,17 +12,6 @@ public class Main
      */
     public static void main(String[] args)
     {
-        java.awt.EventQueue.invokeLater(() ->
-        {
-            try
-            {
-                new IndexView();
-                Connection connection = ConnectionSingleton.getInstance();
-                connection.close();
-            } catch (SQLException e)
-            {
-                System.out.println(e.getMessage());
-            }
-        });
+        new App().start();
     }
 }
