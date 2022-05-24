@@ -1,14 +1,10 @@
 package view;
 
+import controller.ConfigController;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.IOException;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
-import model.DBConfig;
-import model.dao.ConfigDAO;
-import model.factories.ConfigFactory;
-import org.json.JSONObject;
 
 /**
  *
@@ -17,74 +13,56 @@ import org.json.JSONObject;
 public class ConfigView extends JFrame
 {
 
-    public ConfigView()
+    private final ConfigController controller;
+
+    public ConfigView(ConfigController controller)
     {
         super("Configurações");
 
+        this.controller = controller;
+
         this.initComponents();
         this.initListeners();
-        this.loadFields();
 
         super.setLocationRelativeTo(null);
         super.setVisible(true);
     }
 
-    private void loadFields()
-    {
-        try
-        {
-            JSONObject json = new ConfigDAO().read();
-            setFields(json);
-        } catch (IOException | ClassNotFoundException e)
-        {
-            JOptionPane.showMessageDialog(this, e.getMessage());
-        }
-    }
-
-    public void setFields(JSONObject json)
-    {
-        this.fieldHost    .setText(json.getString("host"));
-        this.fieldPort    .setText(json.getString("port"));
-        this.fieldDatabase.setText(json.getString("database"));
-        this.fieldUser    .setText(json.getString("user"));
-        this.fieldPassword.setText(json.getString("pass"));
-        this.fieldDBName  .setText(json.getString("dbName"));
-    }
-
-    public JSONObject getJSON()
-    {
-        JSONObject json = new JSONObject();
-
-        json.put("host",    this.fieldHost.getText());
-        json.put("port",    this.fieldPort.getText());
-        json.put("database",this.fieldDatabase.getText());
-        json.put("user",    this.fieldUser.getText());
-        json.put("pass",    String.valueOf( this.fieldPassword.getPassword() ));
-        json.put("dbName",  this.fieldDBName.getText());
-
-        return json;
-    }
-
     private void initListeners()
     {
-        this.buttonCancel.addActionListener((ActionEvent e) ->
+        this.cancelButton.addActionListener((ActionEvent e) ->
         {
-            dispose();
+            super.dispose();
         });
 
-        this.buttonSave.addActionListener((ActionEvent event) ->
+        this.saveButton.addActionListener((ActionEvent event) ->
         {
-            JSONObject json       = getJSON();
-            DBConfig config = new ConfigFactory().buildFrom(json);
-            try
-            {
-                new ConfigDAO().write(config);
-                labelResponse.setText("Configurações salvas.");
-            } catch (IOException e)
-            {
-                JOptionPane.showMessageDialog(null, e.getMessage());
-            }
+            this.controller.saveConfiguration();
         });
+    }
+
+    public String[] getConfig()
+    {
+        String[] args = new String[6];
+
+        args[0] = this.portField    .getText();
+        args[1] = this.hostField    .getText();
+        args[2] = this.driverField  .getText();
+        args[3] = this.databaseField.getText();
+        args[4] = this.userField    .getText();
+        args[5] = String.valueOf(this.passwordField.getPassword());
+
+        return args;
+    }
+
+    public void setConfig(String[] args)
+    {
+        this.hostField    .setText(args[0]);
+        this.portField    .setText(args[1]);
+        this.databaseField.setText(args[2]);
+        this.userField    .setText(args[3]);
+        this.passwordField.setText(args[4]);
+        this.driverField  .setText(args[5]);
     }
 
     /**
@@ -104,14 +82,14 @@ public class ConfigView extends JFrame
         labelResponse = new JLabel();
         jPanel3 = new JPanel();
         jPanel4 = new JPanel();
-        fieldHost = new JTextField();
-        fieldPort = new JTextField();
-        fieldDatabase = new JTextField();
-        fieldUser = new JTextField();
-        fieldPassword = new JPasswordField();
-        fieldDBName = new JTextField();
-        buttonSave = new JButton();
-        buttonCancel = new JButton();
+        hostField = new JTextField();
+        portField = new JTextField();
+        databaseField = new JTextField();
+        userField = new JTextField();
+        passwordField = new JPasswordField();
+        driverField = new JTextField();
+        saveButton = new JButton();
+        cancelButton = new JButton();
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Configurações de acesso ao banco de dados");
@@ -120,19 +98,19 @@ public class ConfigView extends JFrame
 
         jPanel1.setBackground(new Color(194, 1, 20));
 
-        jLabel8.setIcon(new ImageIcon(getClass().getResource("/resources/iconfinder_6593863_and_config_configuration_files_folder_icon_64px.png"))); // NOI18N
+        jLabel8.setIcon(new ImageIcon(getClass().getResource("/lib/img/iconfinder_6593863_and_config_configuration_files_folder_icon_64px.png"))); // NOI18N
 
-        jLabel7.setIcon(new ImageIcon(getClass().getResource("/resources/settings-gears.png"))); // NOI18N
+        jLabel7.setIcon(new ImageIcon(getClass().getResource("/lib/img/settings-gears.png"))); // NOI18N
 
         GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(14, 14, 14)
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel7)
                     .addComponent(jLabel8))
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -178,68 +156,68 @@ public class ConfigView extends JFrame
 
         jPanel4.setBackground(new Color(236, 235, 243));
 
-        fieldHost.setBackground(new Color(236, 235, 243));
-        fieldHost.setForeground(new Color(12, 18, 12));
-        fieldHost.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(12, 18, 12), 2), "Servidor/IP", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
-        fieldHost.setCaretColor(new Color(194, 1, 20));
-        fieldHost.setSelectedTextColor(new Color(236, 235, 243));
-        fieldHost.setSelectionColor(new Color(152, 58, 69));
+        hostField.setBackground(new Color(236, 235, 243));
+        hostField.setForeground(new Color(12, 18, 12));
+        hostField.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(12, 18, 12), 2), "Servidor/IP", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
+        hostField.setCaretColor(new Color(194, 1, 20));
+        hostField.setSelectedTextColor(new Color(236, 235, 243));
+        hostField.setSelectionColor(new Color(152, 58, 69));
 
-        fieldPort.setBackground(new Color(236, 235, 243));
-        fieldPort.setForeground(new Color(12, 18, 12));
-        fieldPort.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(12, 18, 12), 2), "Porta", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
-        fieldPort.setCaretColor(new Color(194, 1, 20));
-        fieldPort.setSelectedTextColor(new Color(236, 235, 243));
-        fieldPort.setSelectionColor(new Color(152, 58, 69));
+        portField.setBackground(new Color(236, 235, 243));
+        portField.setForeground(new Color(12, 18, 12));
+        portField.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(12, 18, 12), 2), "Porta", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
+        portField.setCaretColor(new Color(194, 1, 20));
+        portField.setSelectedTextColor(new Color(236, 235, 243));
+        portField.setSelectionColor(new Color(152, 58, 69));
 
-        fieldDatabase.setBackground(new Color(236, 235, 243));
-        fieldDatabase.setForeground(new Color(12, 18, 12));
-        fieldDatabase.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(12, 18, 12), 2), "Base de Dados", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
-        fieldDatabase.setCaretColor(new Color(194, 1, 20));
-        fieldDatabase.setSelectedTextColor(new Color(236, 235, 243));
-        fieldDatabase.setSelectionColor(new Color(152, 58, 69));
+        databaseField.setBackground(new Color(236, 235, 243));
+        databaseField.setForeground(new Color(12, 18, 12));
+        databaseField.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(12, 18, 12), 2), "Base de Dados", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
+        databaseField.setCaretColor(new Color(194, 1, 20));
+        databaseField.setSelectedTextColor(new Color(236, 235, 243));
+        databaseField.setSelectionColor(new Color(152, 58, 69));
 
-        fieldUser.setBackground(new Color(236, 235, 243));
-        fieldUser.setForeground(new Color(12, 18, 12));
-        fieldUser.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(12, 18, 12), 2), "Usuário", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
-        fieldUser.setCaretColor(new Color(194, 1, 20));
-        fieldUser.setSelectedTextColor(new Color(236, 235, 243));
-        fieldUser.setSelectionColor(new Color(152, 58, 69));
+        userField.setBackground(new Color(236, 235, 243));
+        userField.setForeground(new Color(12, 18, 12));
+        userField.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(12, 18, 12), 2), "Usuário", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
+        userField.setCaretColor(new Color(194, 1, 20));
+        userField.setSelectedTextColor(new Color(236, 235, 243));
+        userField.setSelectionColor(new Color(152, 58, 69));
 
-        fieldPassword.setBackground(new Color(236, 235, 243));
-        fieldPassword.setForeground(new Color(12, 18, 12));
-        fieldPassword.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(12, 18, 12), 2), "Senha", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
-        fieldPassword.setCaretColor(new Color(194, 1, 20));
-        fieldPassword.setSelectedTextColor(new Color(236, 235, 243));
-        fieldPassword.setSelectionColor(new Color(152, 58, 69));
+        passwordField.setBackground(new Color(236, 235, 243));
+        passwordField.setForeground(new Color(12, 18, 12));
+        passwordField.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(12, 18, 12), 2), "Senha", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
+        passwordField.setCaretColor(new Color(194, 1, 20));
+        passwordField.setSelectedTextColor(new Color(236, 235, 243));
+        passwordField.setSelectionColor(new Color(152, 58, 69));
 
-        fieldDBName.setEditable(false);
-        fieldDBName.setBackground(new Color(236, 235, 243));
-        fieldDBName.setForeground(new Color(12, 18, 12));
-        fieldDBName.setText("mysql");
-        fieldDBName.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(12, 18, 12), 2), "Banco", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
-        fieldDBName.setCaretColor(new Color(194, 1, 20));
-        fieldDBName.setSelectedTextColor(new Color(236, 235, 243));
-        fieldDBName.setSelectionColor(new Color(152, 58, 69));
+        driverField.setEditable(false);
+        driverField.setBackground(new Color(236, 235, 243));
+        driverField.setForeground(new Color(12, 18, 12));
+        driverField.setText("mysql");
+        driverField.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(12, 18, 12), 2), "Banco", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
+        driverField.setCaretColor(new Color(194, 1, 20));
+        driverField.setSelectedTextColor(new Color(236, 235, 243));
+        driverField.setSelectionColor(new Color(152, 58, 69));
 
-        buttonSave.setBackground(new Color(194, 1, 20));
-        buttonSave.setFont(new Font("Dialog", 1, 15)); // NOI18N
-        buttonSave.setForeground(new Color(12, 18, 12));
-        buttonSave.setText("Salvar");
-        buttonSave.setBorder(BorderFactory.createLineBorder(new Color(194, 1, 20), 3));
-        buttonSave.setContentAreaFilled(false);
-        buttonSave.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        buttonSave.setFocusPainted(false);
-        buttonSave.setVerifyInputWhenFocusTarget(false);
+        saveButton.setBackground(new Color(194, 1, 20));
+        saveButton.setFont(new Font("Dialog", 1, 15)); // NOI18N
+        saveButton.setForeground(new Color(12, 18, 12));
+        saveButton.setText("Salvar");
+        saveButton.setBorder(BorderFactory.createLineBorder(new Color(194, 1, 20), 3));
+        saveButton.setContentAreaFilled(false);
+        saveButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        saveButton.setFocusPainted(false);
+        saveButton.setVerifyInputWhenFocusTarget(false);
 
-        buttonCancel.setBackground(new Color(194, 1, 20));
-        buttonCancel.setFont(new Font("Dialog", 1, 15)); // NOI18N
-        buttonCancel.setForeground(new Color(12, 18, 12));
-        buttonCancel.setText("Cancelar");
-        buttonCancel.setBorder(BorderFactory.createLineBorder(new Color(194, 1, 20), 3));
-        buttonCancel.setContentAreaFilled(false);
-        buttonCancel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        buttonCancel.setFocusPainted(false);
+        cancelButton.setBackground(new Color(194, 1, 20));
+        cancelButton.setFont(new Font("Dialog", 1, 15)); // NOI18N
+        cancelButton.setForeground(new Color(12, 18, 12));
+        cancelButton.setText("Cancelar");
+        cancelButton.setBorder(BorderFactory.createLineBorder(new Color(194, 1, 20), 3));
+        cancelButton.setContentAreaFilled(false);
+        cancelButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        cancelButton.setFocusPainted(false);
 
         GroupLayout jPanel4Layout = new GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -248,35 +226,35 @@ public class ConfigView extends JFrame
                 .addGap(40, 40, 40)
                 .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
                     .addGroup(GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
-                        .addComponent(buttonSave, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(saveButton, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(buttonCancel, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE))
-                    .addComponent(fieldDBName, GroupLayout.Alignment.LEADING)
-                    .addComponent(fieldPassword, GroupLayout.Alignment.LEADING)
-                    .addComponent(fieldUser, GroupLayout.Alignment.LEADING)
-                    .addComponent(fieldDatabase, GroupLayout.Alignment.LEADING)
-                    .addComponent(fieldPort, GroupLayout.Alignment.LEADING)
-                    .addComponent(fieldHost, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE))
+                        .addComponent(cancelButton, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE))
+                    .addComponent(driverField, GroupLayout.Alignment.LEADING)
+                    .addComponent(passwordField, GroupLayout.Alignment.LEADING)
+                    .addComponent(userField, GroupLayout.Alignment.LEADING)
+                    .addComponent(databaseField, GroupLayout.Alignment.LEADING)
+                    .addComponent(portField, GroupLayout.Alignment.LEADING)
+                    .addComponent(hostField, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE))
                 .addContainerGap(40, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addComponent(fieldHost, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(hostField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(fieldPort, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(portField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(fieldDatabase, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(databaseField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(fieldUser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(userField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(fieldPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(passwordField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(fieldDBName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(driverField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(buttonSave, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(buttonCancel, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE))
+                    .addComponent(saveButton, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cancelButton, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE))
                 .addGap(12, 12, 12))
         );
 
@@ -304,14 +282,10 @@ public class ConfigView extends JFrame
         pack();
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private JButton buttonCancel;
-    private JButton buttonSave;
-    private JTextField fieldDBName;
-    private JTextField fieldDatabase;
-    private JTextField fieldHost;
-    private JPasswordField fieldPassword;
-    private JTextField fieldPort;
-    private JTextField fieldUser;
+    private JButton cancelButton;
+    private JTextField databaseField;
+    private JTextField driverField;
+    private JTextField hostField;
     private JLabel jLabel7;
     private JLabel jLabel8;
     private JPanel jPanel1;
@@ -319,5 +293,9 @@ public class ConfigView extends JFrame
     private JPanel jPanel3;
     private JPanel jPanel4;
     private JLabel labelResponse;
+    private JPasswordField passwordField;
+    private JTextField portField;
+    private JButton saveButton;
+    private JTextField userField;
     // End of variables declaration//GEN-END:variables
 }

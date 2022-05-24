@@ -71,8 +71,8 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jLabel3" min="-2" pref="462" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                  <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -85,7 +85,7 @@
               <Color blue="f3" green="eb" red="ec" type="rgb"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/resources/abra-o-livro(1).png"/>
+              <Image iconType="3" name="/lib/img/abra-o-livro(1).png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="&lt;html&gt;&#xa;&lt;center&gt;&#xa;&lt;h2&gt;Quem l&#xea;...&lt;/h2&gt;&#xa;Sabe mais&#xa;&lt;br&gt;&lt;br&gt;&#xa;Pensa melhor&#xa;&lt;br&gt;&lt;br&gt;&#xa;Compara ideias&#xa;&lt;br&gt;&lt;br&gt;&#xa;Prepara-se melhor&#xa;&lt;br&gt;&lt;br&gt;&#xa;Tem o que falar&#xa;&lt;br&gt;&lt;br&gt;&#xa;Tem o que responder&#xa;&lt;br&gt;&lt;br&gt;&#xa;Melhora o vocabul&#xe1;rio&#xa;&lt;br&gt;&lt;br&gt;&#xa;Absorve experi&#xea;ncia&#xa;&lt;br&gt;&lt;br&gt;&#xa;Transforma sua vida&#xa;&lt;/center&gt;&#xa;&lt;/html&gt;"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -188,7 +188,7 @@
               <Color blue="c" green="12" red="c" type="rgb"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/resources/book.png"/>
+              <Image iconType="3" name="/lib/img/book.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Configura&#xe7;&#xf5;es"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
@@ -219,7 +219,7 @@
               <Color blue="c" green="12" red="c" type="rgb"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/resources/bookstore.png"/>
+              <Image iconType="3" name="/lib/img/bookstore.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Editoras"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
@@ -250,7 +250,7 @@
               <Color blue="c" green="12" red="c" type="rgb"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/resources/book(1).png"/>
+              <Image iconType="3" name="/lib/img/book(1).png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Autores"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
@@ -281,7 +281,7 @@
               <Color blue="c" green="12" red="c" type="rgb"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/resources/books.png"/>
+              <Image iconType="3" name="/lib/img/books.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Livros"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
@@ -312,7 +312,7 @@
               <Color blue="c" green="12" red="c" type="rgb"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/resources/man.png"/>
+              <Image iconType="3" name="/lib/img/man.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Clientes"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
@@ -343,7 +343,7 @@
               <Color blue="c" green="12" red="c" type="rgb"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/resources/man(1).png"/>
+              <Image iconType="3" name="/lib/img/man(1).png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Funcion&#xe1;rios"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">

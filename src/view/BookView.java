@@ -473,19 +473,19 @@ public class BookView extends JFrame
 
         jPanel6.setBackground(new Color(194, 1, 20));
 
-        jLabel1.setIcon(new ImageIcon(getClass().getResource("/resources/books.png"))); // NOI18N
+        jLabel1.setIcon(new ImageIcon(getClass().getResource("/lib/img/books.png"))); // NOI18N
 
-        jLabel2.setIcon(new ImageIcon(getClass().getResource("/resources/books.png"))); // NOI18N
+        jLabel2.setIcon(new ImageIcon(getClass().getResource("/lib/img/books.png"))); // NOI18N
 
         GroupLayout jPanel6Layout = new GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGap(18, 18, 18)
+                .addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
                     .addComponent(jLabel1))
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()

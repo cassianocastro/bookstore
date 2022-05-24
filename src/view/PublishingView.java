@@ -1,5 +1,6 @@
 package view;
 
+import controller.PublishingController;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.Connection;
@@ -13,7 +14,7 @@ import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
 import model.factories.PublishingCiaFactory;
 import model.entities.PublishingCia;
-import model.dao.ConnectionSingleton;
+import model.factories.ConnectionSingleton;
 import model.dao.PublishingCiaDAO;
 import org.json.JSONObject;
 
@@ -24,9 +25,13 @@ import org.json.JSONObject;
 public class PublishingView extends JFrame
 {
 
-    public PublishingView()
+    private final PublishingController controller;
+
+    public PublishingView(PublishingController controller)
     {
         super("Editoras");
+
+        this.controller = controller;
 
         this.initComponents();
         this.initListeners();
@@ -38,132 +43,11 @@ public class PublishingView extends JFrame
         super.setVisible(true);
     }
 
-    public void setButtonsCRUD(boolean isEnabled)
-    {
-        this.buttonNew .setEnabled(isEnabled);
-        this.buttonEdit.setEnabled(isEnabled);
-        this.buttonDel .setEnabled(isEnabled);
-    }
-
-    public void setPanelState(boolean isEnabled)
-    {
-        this.fieldPublishingID.setEnabled(isEnabled);
-        this.fieldName        .setEnabled(isEnabled);
-
-        this.fieldUF          .setEnabled(isEnabled);
-        this.fieldCity        .setEnabled(isEnabled);
-        this.fieldDistrict    .setEnabled(isEnabled);
-        this.fieldCEP         .setEnabled(isEnabled);
-        this.fieldStreet      .setEnabled(isEnabled);
-        this.fieldNumber      .setEnabled(isEnabled);
-        this.fieldCompl       .setEnabled(isEnabled);
-
-        this.buttonSave       .setEnabled(isEnabled);
-        this.buttonCancel     .setEnabled(isEnabled);
-    }
-
-    public void setTextFields(String[] args)
-    {
-        this.fieldPublishingID.setText(args[0]);
-        this.fieldName        .setText(args[1]);
-        this.fieldUF          .setText(args[2]);
-        this.fieldCity        .setText(args[3]);
-        this.fieldDistrict    .setText(args[4]);
-        this.fieldCEP         .setText(args[5]);
-        this.fieldStreet      .setText(args[6]);
-        this.fieldNumber      .setText(args[7]);
-        this.fieldCompl       .setText(args[8]);
-    }
-
-    public String[] getTextFields()
-    {
-        String[] args = new String[9];
-
-        args[0] = this.fieldPublishingID.getText();
-        args[1] = this.fieldName        .getText();
-        args[2] = this.fieldUF          .getText();
-        args[3] = this.fieldCity        .getText();
-        args[4] = this.fieldDistrict    .getText();
-        args[5] = this.fieldCEP         .getText();
-        args[6] = this.fieldStreet      .getText();
-        args[7] = this.fieldNumber      .getText();
-        args[8] = this.fieldCompl       .getText();
-
-        return args;
-    }
-
-    public void clearFields()
-    {
-        String[] args = new String[9];
-
-        for ( String arg : args )
-        {
-            arg = "";
-        }
-        setTextFields(args);
-    }
-
-    public boolean hasSelectedRow()
-    {
-        int row = this.table.getSelectedRow();
-
-        return row != -1;
-    }
-
-    public void editFields()
-    {
-        String[] args = new String[9];
-
-        for ( int i = 0; i < args.length; i++ )
-        {
-            args[i] = table.getValueAt(this.table.getSelectedRow(), i).toString();
-        }
-
-        setTextFields(args);
-    }
-
-    public boolean foo()
-    {
-        String[] args = getTextFields();
-
-        if (args[0].isEmpty())
-            args[0] = "0";
-
-        for ( String arg : args )
-        {
-            if ( arg.isEmpty() ) return false;
-        }
-        this.getJSON();
-
-        return true;
-    }
-
-    public JSONObject getJSON()
-    {
-        JSONObject json = new JSONObject();
-        String id = this.fieldPublishingID.getText();
-
-        if (id.isEmpty())
-            id = "0";
-
-        json.put("companyID",     id);
-        json.put("companyName",   this.fieldName  .getText());
-        json.put("addressCity",   this.fieldCity  .getText());
-        json.put("addressDistrict", this.fieldDistrict.getText());
-        json.put("addressStreet", this.fieldStreet.getText());
-        json.put("addressNumber", this.fieldNumber.getText());
-        json.put("addressCompl",  this.fieldCompl .getText());
-        json.put("addressCEP",    this.fieldCEP   .getText());
-        json.put("addressUF",     this.fieldUF    .getText());
-
-        return json;
-    }
-
     private void initListeners()
     {
         this.buttonClose.addActionListener((ActionEvent e) ->
         {
-            dispose();
+            super.dispose();
         });
 
         this.buttonNew.addActionListener((ActionEvent e) ->
@@ -211,11 +95,11 @@ public class PublishingView extends JFrame
                     try
                     {
                         Connection connection = ConnectionSingleton.getInstance();
-                        new PublishingCiaDAO(connection).delete(id);
+                        // new PublishingCiaDAO(connection).delete(id);
                         loadTable();
-                    } catch(SQLException e)
+                    } catch (SQLException e)
                     {
-                        JOptionPane.showMessageDialog(null, e.getMessage());
+                        System.out.println(e.getMessage());
                     }
                 }
             }
@@ -237,7 +121,7 @@ public class PublishingView extends JFrame
                 loadTable();
             } catch (SQLException e)
             {
-                JOptionPane.showMessageDialog(null, e.getMessage());
+                System.out.println(e.getMessage());
             }
             clearFields();
             setPanelState(false);
@@ -247,39 +131,157 @@ public class PublishingView extends JFrame
 
     public void loadTable()
     {
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+
+        while ( model.getRowCount() > 0 )
+        {
+            model.removeRow(0);
+        }
         try
         {
-            DefaultTableModel model = (DefaultTableModel) table.getModel();
-
-            while ( table.getRowCount() > 0 )
-            {
-                model.removeRow(0);
-            }
-
             Connection connection = ConnectionSingleton.getInstance();
             List<PublishingCia> list = new PublishingCiaDAO(connection).getAll();
 
-            for ( PublishingCia publishingCia : list )
+            for ( PublishingCia cia : list )
             {
                 model.addRow(
                     new Object[]
                     {
-                        publishingCia.getID(),
-                        publishingCia.getName(),
-                        publishingCia.getAddress().getUF(),
-                        publishingCia.getAddress().getCity(),
-                        publishingCia.getAddress().getDistrict(),
-                        publishingCia.getAddress().getCEP(),
-                        publishingCia.getAddress().getStreet(),
-                        publishingCia.getAddress().getNumber(),
-                        publishingCia.getAddress().getComplement()
+                        cia.getID(),
+                        cia.getName(),
+                        cia.getAddress().getUF(),
+                        cia.getAddress().getCity(),
+                        cia.getAddress().getDistrict(),
+                        cia.getAddress().getCEP(),
+                        cia.getAddress().getStreet(),
+                        cia.getAddress().getNumber(),
+                        cia.getAddress().getComplement()
                     }
                 );
             }
         } catch (SQLException e)
         {
-            JOptionPane.showMessageDialog(null, e.getMessage());
+            System.out.println(e.getMessage());
         }
+    }
+
+    public void setPanelState(boolean state)
+    {
+        this.fieldPublishingID.setEnabled(state);
+        this.fieldName        .setEnabled(state);
+
+        this.fieldUF          .setEnabled(state);
+        this.fieldCity        .setEnabled(state);
+        this.fieldDistrict    .setEnabled(state);
+        this.fieldCEP         .setEnabled(state);
+        this.fieldStreet      .setEnabled(state);
+        this.fieldNumber      .setEnabled(state);
+        this.fieldCompl       .setEnabled(state);
+
+        this.buttonSave       .setEnabled(state);
+        this.buttonCancel     .setEnabled(state);
+    }
+
+    public void setButtonsCRUD(boolean state)
+    {
+        this.buttonNew .setEnabled(state);
+        this.buttonEdit.setEnabled(state);
+        this.buttonDel .setEnabled(state);
+    }
+
+    public void editFields()
+    {
+        String[] args = new String[9];
+
+        for ( int i = 0; i < args.length; i++ )
+        {
+            args[i] = table.getValueAt(this.table.getSelectedRow(), i).toString();
+        }
+
+        setTextFields(args);
+    }
+
+    public void clearFields()
+    {
+        String[] args = new String[9];
+
+        for ( String arg : args )
+        {
+            arg = "";
+        }
+        setTextFields(args);
+    }
+
+    public void setTextFields(String[] args)
+    {
+        this.fieldPublishingID.setText(args[0]);
+        this.fieldName        .setText(args[1]);
+        this.fieldUF          .setText(args[2]);
+        this.fieldCity        .setText(args[3]);
+        this.fieldDistrict    .setText(args[4]);
+        this.fieldCEP         .setText(args[5]);
+        this.fieldStreet      .setText(args[6]);
+        this.fieldNumber      .setText(args[7]);
+        this.fieldCompl       .setText(args[8]);
+    }
+
+    public boolean hasSelectedRow()
+    {
+        int row = this.table.getSelectedRow();
+
+        return row != -1;
+    }
+
+    public boolean foo()
+    {
+        String[] args = getTextFields();
+
+        if ( args[0].isEmpty() ) args[0] = "0";
+
+        for ( String arg : args )
+        {
+            if ( arg.isEmpty() ) return false;
+        }
+        this.getJSON();
+
+        return true;
+    }
+
+    public String[] getTextFields()
+    {
+        String[] args = new String[9];
+
+        args[0] = this.fieldPublishingID.getText();
+        args[1] = this.fieldName        .getText();
+        args[2] = this.fieldUF          .getText();
+        args[3] = this.fieldCity        .getText();
+        args[4] = this.fieldDistrict    .getText();
+        args[5] = this.fieldCEP         .getText();
+        args[6] = this.fieldStreet      .getText();
+        args[7] = this.fieldNumber      .getText();
+        args[8] = this.fieldCompl       .getText();
+
+        return args;
+    }
+
+    public JSONObject getJSON()
+    {
+        JSONObject json = new JSONObject();
+        String id       = this.fieldPublishingID.getText();
+
+        if ( id.isEmpty() ) id = "0";
+
+        json.put("companyID",     id);
+        json.put("companyName",   this.fieldName  .getText());
+        json.put("addressCity",   this.fieldCity  .getText());
+        json.put("addressDistrict", this.fieldDistrict.getText());
+        json.put("addressStreet", this.fieldStreet.getText());
+        json.put("addressNumber", this.fieldNumber.getText());
+        json.put("addressCompl",  this.fieldCompl .getText());
+        json.put("addressCEP",    this.fieldCEP   .getText());
+        json.put("addressUF",     this.fieldUF    .getText());
+
+        return json;
     }
 
     /**
@@ -452,19 +454,19 @@ public class PublishingView extends JFrame
 
         jPanel10.setBackground(new Color(194, 1, 20));
 
-        jLabel3.setIcon(new ImageIcon(getClass().getResource("/resources/bookstore.png"))); // NOI18N
+        jLabel3.setIcon(new ImageIcon(getClass().getResource("/lib/img/bookstore.png"))); // NOI18N
 
-        jLabel4.setIcon(new ImageIcon(getClass().getResource("/resources/bookstore.png"))); // NOI18N
+        jLabel4.setIcon(new ImageIcon(getClass().getResource("/lib/img/bookstore.png"))); // NOI18N
 
         GroupLayout jPanel10Layout = new GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(jPanel10Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel10Layout.createSequentialGroup()
-                .addGap(18, 18, 18)
+                .addContainerGap()
                 .addGroup(jPanel10Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
                     .addComponent(jLabel3))
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel10Layout.setVerticalGroup(jPanel10Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel10Layout.createSequentialGroup()

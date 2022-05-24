@@ -1,16 +1,9 @@
 package view;
 
-import controller.BookController;
+import controller.IndexController;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.IOException;
-import java.sql.*;
 import javax.swing.*;
-import model.DBConfig;
-import model.dao.ConfigDAO;
-import model.dao.ConnectionSingleton;
-import model.factories.ConfigFactory;
-import org.json.JSONObject;
 
 /**
  *
@@ -19,9 +12,13 @@ import org.json.JSONObject;
 public class IndexView extends JFrame
 {
 
-    public IndexView()
+    private final IndexController controller;
+
+    public IndexView(IndexController controller)
     {
         super("Livraria Leia Mais");
+
+        this.controller = controller;
 
         this.initComponents();
         this.initListeners();
@@ -31,86 +28,58 @@ public class IndexView extends JFrame
         super.setVisible(true);
     }
 
-    public void setButtonsEnabled(boolean isEnabled)
+    public void setButtonsEnabled(boolean state)
     {
-        this.buttonBooks     .setEnabled(isEnabled);
-        this.buttonPublishing.setEnabled(isEnabled);
-        this.buttonAuthors   .setEnabled(isEnabled);
-        this.buttonClient    .setEnabled(isEnabled);
-        this.buttonEmployee  .setEnabled(isEnabled);
+        this.buttonBooks     .setEnabled(state);
+        this.buttonPublishing.setEnabled(state);
+        this.buttonAuthors   .setEnabled(state);
+        this.buttonClient    .setEnabled(state);
+        this.buttonEmployee  .setEnabled(state);
     }
 
     private void initListeners()
     {
-        IndexView view = this;
-
         this.buttonBooks.addActionListener((ActionEvent e) ->
         {
-            new BookView(new BookController());
+            this.controller.createBooksView();
         });
 
         this.buttonPublishing.addActionListener((ActionEvent e) ->
         {
-            new PublishingView();
+            this.controller.createPublishingsView();
         });
 
         this.buttonAuthors.addActionListener((ActionEvent e) ->
         {
-            new AuthorView();
+            this.controller.createAuthorsView();
         });
 
-//        this.buttonClient.addActionListener((ActionEvent e) ->
-//        {
-//        });
-//
-//        this.buttonEmployee.addActionListener((ActionEvent e) ->
-//        {
-//        });
+        this.buttonClient.addActionListener((ActionEvent e) ->
+        {
+            this.controller.createClientsView();
+        });
+
+        this.buttonEmployee.addActionListener((ActionEvent e) ->
+        {
+            this.controller.createEmployeesView();
+        });
 
         this.buttonConfig.addActionListener((ActionEvent e) ->
         {
-            new ConfigView();
+            this.controller.createConfigView();
         });
 
         this.buttonConnect.addActionListener((ActionEvent event) ->
         {
-            try
-            {
-                JSONObject json = new ConfigDAO().read();
-                DBConfig config = new ConfigFactory().buildFrom(json);
-                ConnectionSingleton.setConfig(config);
-                ConnectionSingleton.getInstance();
-
-                setButtonsEnabled(true);
-                view.labelResponse.setText("Conexão estabelecida.");
-            } catch(IOException | ClassNotFoundException e)
-            {
-                JOptionPane.showMessageDialog(
-                    view,
-                    "Não foi possível conectar-se. Verifique as configurações."
-                );
-            } catch(SQLException e)
-            {
-                JOptionPane.showMessageDialog(view, e.getMessage());
-                setButtonsEnabled(false);
-            }
+            this.controller.connect();
         });
 
-        addWindowListener(new WindowAdapter() {
+        super.addWindowListener(new WindowAdapter()
+        {
             @Override
             public void windowClosing(WindowEvent event)
             {
-                try
-                {
-                    if ( ConnectionSingleton.getInstance() != null )
-                    {
-                        ConnectionSingleton.getInstance().close();
-                    }
-                } catch (SQLException e)
-                {
-                    JOptionPane.showMessageDialog(view, e.getMessage());
-                }
-                System.exit(0);
+                controller.closeConnection();
             }
         });
     }
@@ -146,7 +115,7 @@ public class IndexView extends JFrame
         jPanel1.setBackground(new Color(194, 1, 20));
 
         jLabel3.setForeground(new Color(236, 235, 243));
-        jLabel3.setIcon(new ImageIcon(getClass().getResource("/resources/abra-o-livro(1).png"))); // NOI18N
+        jLabel3.setIcon(new ImageIcon(getClass().getResource("/lib/img/abra-o-livro(1).png"))); // NOI18N
         jLabel3.setText("<html>\n<center>\n<h2>Quem lê...</h2>\nSabe mais\n<br><br>\nPensa melhor\n<br><br>\nCompara ideias\n<br><br>\nPrepara-se melhor\n<br><br>\nTem o que falar\n<br><br>\nTem o que responder\n<br><br>\nMelhora o vocabulário\n<br><br>\nAbsorve experiência\n<br><br>\nTransforma sua vida\n</center>\n</html>");
         jLabel3.setHorizontalTextPosition(SwingConstants.CENTER);
         jLabel3.setVerticalTextPosition(SwingConstants.BOTTOM);
@@ -161,8 +130,8 @@ public class IndexView extends JFrame
         );
         jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel3, GroupLayout.PREFERRED_SIZE, 462, GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -182,7 +151,7 @@ public class IndexView extends JFrame
         buttonConfig.setBackground(new Color(236, 235, 243));
         buttonConfig.setFont(new Font("Dialog", 1, 16)); // NOI18N
         buttonConfig.setForeground(new Color(12, 18, 12));
-        buttonConfig.setIcon(new ImageIcon(getClass().getResource("/resources/book.png"))); // NOI18N
+        buttonConfig.setIcon(new ImageIcon(getClass().getResource("/lib/img/book.png"))); // NOI18N
         buttonConfig.setText("Configurações");
         buttonConfig.setBorder(BorderFactory.createLineBorder(new Color(152, 58, 69), 3));
         buttonConfig.setContentAreaFilled(false);
@@ -194,7 +163,7 @@ public class IndexView extends JFrame
         buttonPublishing.setBackground(new Color(236, 235, 243));
         buttonPublishing.setFont(new Font("Dialog", 1, 16)); // NOI18N
         buttonPublishing.setForeground(new Color(12, 18, 12));
-        buttonPublishing.setIcon(new ImageIcon(getClass().getResource("/resources/bookstore.png"))); // NOI18N
+        buttonPublishing.setIcon(new ImageIcon(getClass().getResource("/lib/img/bookstore.png"))); // NOI18N
         buttonPublishing.setText("Editoras");
         buttonPublishing.setBorder(BorderFactory.createLineBorder(new Color(152, 58, 69), 3));
         buttonPublishing.setContentAreaFilled(false);
@@ -206,7 +175,7 @@ public class IndexView extends JFrame
         buttonAuthors.setBackground(new Color(236, 235, 243));
         buttonAuthors.setFont(new Font("Dialog", 1, 16)); // NOI18N
         buttonAuthors.setForeground(new Color(12, 18, 12));
-        buttonAuthors.setIcon(new ImageIcon(getClass().getResource("/resources/book(1).png"))); // NOI18N
+        buttonAuthors.setIcon(new ImageIcon(getClass().getResource("/lib/img/book(1).png"))); // NOI18N
         buttonAuthors.setText("Autores");
         buttonAuthors.setBorder(BorderFactory.createLineBorder(new Color(152, 58, 69), 3));
         buttonAuthors.setContentAreaFilled(false);
@@ -218,7 +187,7 @@ public class IndexView extends JFrame
         buttonBooks.setBackground(new Color(236, 235, 243));
         buttonBooks.setFont(new Font("Dialog", 1, 16)); // NOI18N
         buttonBooks.setForeground(new Color(12, 18, 12));
-        buttonBooks.setIcon(new ImageIcon(getClass().getResource("/resources/books.png"))); // NOI18N
+        buttonBooks.setIcon(new ImageIcon(getClass().getResource("/lib/img/books.png"))); // NOI18N
         buttonBooks.setText("Livros");
         buttonBooks.setBorder(BorderFactory.createLineBorder(new Color(152, 58, 69), 3));
         buttonBooks.setContentAreaFilled(false);
@@ -230,7 +199,7 @@ public class IndexView extends JFrame
         buttonClient.setBackground(new Color(236, 235, 243));
         buttonClient.setFont(new Font("Dialog", 1, 16)); // NOI18N
         buttonClient.setForeground(new Color(12, 18, 12));
-        buttonClient.setIcon(new ImageIcon(getClass().getResource("/resources/man.png"))); // NOI18N
+        buttonClient.setIcon(new ImageIcon(getClass().getResource("/lib/img/man.png"))); // NOI18N
         buttonClient.setText("Clientes");
         buttonClient.setBorder(BorderFactory.createLineBorder(new Color(152, 58, 69), 3));
         buttonClient.setContentAreaFilled(false);
@@ -242,7 +211,7 @@ public class IndexView extends JFrame
         buttonEmployee.setBackground(new Color(236, 235, 243));
         buttonEmployee.setFont(new Font("Dialog", 1, 16)); // NOI18N
         buttonEmployee.setForeground(new Color(12, 18, 12));
-        buttonEmployee.setIcon(new ImageIcon(getClass().getResource("/resources/man(1).png"))); // NOI18N
+        buttonEmployee.setIcon(new ImageIcon(getClass().getResource("/lib/img/man(1).png"))); // NOI18N
         buttonEmployee.setText("Funcionários");
         buttonEmployee.setBorder(BorderFactory.createLineBorder(new Color(152, 58, 69), 3));
         buttonEmployee.setContentAreaFilled(false);

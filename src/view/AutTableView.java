@@ -8,7 +8,7 @@ import java.sql.*;
 import java.util.List;
 import model.entities.Author;
 import model.dao.AuthorDAO;
-import model.dao.ConnectionSingleton;
+import model.factories.ConnectionSingleton;
 
 /**
  *
@@ -33,21 +33,29 @@ public class AutTableView extends JFrame
         super.setVisible(true);
     }
 
-    public int getID()
+    private void initListeners(BookView parent)
     {
-        return this.id;
+        this.buttonOkay.addActionListener((ActionEvent e) ->
+        {
+            this.okay(parent);
+        });
+
+        this.buttonCancel.addActionListener((ActionEvent e) ->
+        {
+            super.dispose();
+        });
     }
 
     private void loadTable()
     {
+        DefaultTableModel model = (DefaultTableModel) this.table.getModel();
+
+        while ( model.getRowCount() > 0 )
+        {
+            model.removeRow(0);
+        }
         try
         {
-            DefaultTableModel model = (DefaultTableModel) this.table.getModel();
-
-            while ( this.table.getRowCount() > 0 )
-            {
-                model.removeRow(0);
-            }
             Connection connection = ConnectionSingleton.getInstance();
             List<Author> list = new AuthorDAO(connection).getAll();
 
@@ -57,28 +65,25 @@ public class AutTableView extends JFrame
             }
         } catch (SQLException e)
         {
-            JOptionPane.showMessageDialog(this, e.getMessage());
+            System.out.println(e.getMessage());
         }
     }
 
-    private void initListeners(BookView parent)
+    private void okay(BookView parent)
     {
-        this.buttonOkay.addActionListener((ActionEvent e) ->
-        {
-            int row = table.getSelectedRow();
+        int row = table.getSelectedRow();
 
-            if ( row != -1 )
-            {
-                id = (int) table.getValueAt(row, 0);
-                parent.getFieldAuthor().setText(String.valueOf(id));
-            }
-            dispose();
-        });
-
-        this.buttonCancel.addActionListener((ActionEvent e) ->
+        if ( row != -1 )
         {
-            dispose();
-        });
+            id = (int) table.getValueAt(row, 0);
+            parent.getFieldAuthor().setText(String.valueOf(id));
+        }
+        super.dispose();
+    }
+
+    public int getID()
+    {
+        return this.id;
     }
 
     /**

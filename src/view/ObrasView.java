@@ -6,7 +6,7 @@ import java.util.List;
 import java.sql.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import model.dao.ConnectionSingleton;
+import model.factories.ConnectionSingleton;
 import model.dao.ObrasDAO;
 import org.json.JSONObject;
 
@@ -31,20 +31,28 @@ public class ObrasView extends JFrame
         super.setVisible(true);
     }
 
+    private void initListeners()
+    {
+        this.buttonOkay.addActionListener((ActionEvent e) ->
+        {
+            super.dispose();
+        });
+    }
+
     private void loadTable(String id)
     {
         if ( id.isEmpty() ) return;
 
         int authorID = Integer.parseInt(id);
+        DefaultTableModel model = (DefaultTableModel) this.table.getModel();
+
+        while ( model.getRowCount() > 0 )
+        {
+            model.removeRow(0);
+        }
 
         try
         {
-            DefaultTableModel model = (DefaultTableModel) this.table.getModel();
-
-            while ( this.table.getRowCount() > 0 )
-            {
-                model.removeRow(0);
-            }
             Connection connection = ConnectionSingleton.getInstance();
             List<JSONObject> list = new ObrasDAO(connection).findBooksByAuthor(authorID);
 
@@ -62,16 +70,8 @@ public class ObrasView extends JFrame
             }
         } catch (SQLException e)
         {
-            JOptionPane.showMessageDialog(this, e.getMessage());
+            System.out.println(e.getMessage());
         }
-    }
-
-    private void initListeners()
-    {
-        this.buttonOkay.addActionListener((ActionEvent e) ->
-        {
-            dispose();
-        });
     }
 
     /**

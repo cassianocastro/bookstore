@@ -6,9 +6,9 @@ import java.sql.*;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import model.dao.ConnectionSingleton;
-import org.json.JSONObject;
+import model.factories.ConnectionSingleton;
 import model.dao.PublishingCiaDAO;
+import model.entities.PublishingCia;
 
 /**
  *
@@ -32,59 +32,57 @@ public class PubTableView extends JFrame
         super.setLocationRelativeTo(null);
     }
 
-    public int getID()
-    {
-        return this.id;
-    }
-
-    public void loadTable()
-    {
-        try
-        {
-            DefaultTableModel model = (DefaultTableModel) this.table.getModel();
-
-            while ( this.table.getRowCount() > 0 )
-            {
-                model.removeRow(0);
-            }
-
-            Connection connection = ConnectionSingleton.getInstance();
-            List<JSONObject> list = new PublishingCiaDAO(connection).getNamesAndIDs();
-
-            for ( JSONObject json : list )
-            {
-                model.addRow(
-                    new Object[]
-                    {
-                        json.getInt("publishingID"),
-                        json.getString("publishingName")
-                    }
-                );
-            }
-        } catch (SQLException e)
-        {
-            JOptionPane.showMessageDialog(this, e.getMessage());
-        }
-    }
-
     private void initListeners(BookView parent)
     {
         this.buttonOkay.addActionListener((ActionEvent e) ->
         {
-            int row = table.getSelectedRow();
-
-            if ( row != -1 )
-            {
-                id = (int) table.getValueAt(row, 0);
-                parent.getFieldPublishing().setText(String.valueOf(id));
-            }
-            dispose();
+            this.okay(parent);
         });
 
         this.buttonCancel.addActionListener((ActionEvent e) ->
         {
-            dispose();
+            super.dispose();
         });
+    }
+
+    private void loadTable()
+    {
+        DefaultTableModel model = (DefaultTableModel) this.table.getModel();
+
+        while ( model.getRowCount() > 0 )
+        {
+            model.removeRow(0);
+        }
+        try
+        {
+            Connection connection = ConnectionSingleton.getInstance();
+            List<PublishingCia> list = new PublishingCiaDAO(connection).getAll();
+
+            for ( PublishingCia cia : list )
+            {
+                model.addRow(new Object[] { cia.getID(), cia.getName() });
+            }
+        } catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void okay(BookView parent)
+    {
+        int row = table.getSelectedRow();
+
+        if ( row != -1 )
+        {
+            id = (int) table.getValueAt(row, 0);
+            parent.getFieldPublishing().setText(String.valueOf(id));
+        }
+        super.dispose();
+    }
+
+    public int getID()
+    {
+        return this.id;
     }
 
     /**

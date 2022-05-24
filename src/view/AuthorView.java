@@ -1,5 +1,6 @@
 package view;
 
+import controller.AuthorsController;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.Connection;
@@ -11,7 +12,7 @@ import javax.swing.table.DefaultTableModel;
 import model.entities.Author;
 import model.Name;
 import model.dao.AuthorDAO;
-import model.dao.ConnectionSingleton;
+import model.factories.ConnectionSingleton;
 
 /**
  *
@@ -20,9 +21,13 @@ import model.dao.ConnectionSingleton;
 public class AuthorView extends JFrame
 {
 
-    public AuthorView()
+    private final AuthorsController controller;
+
+    public AuthorView(AuthorsController controller)
     {
         super("Autores");
+
+        this.controller = controller;
 
         this.initComponents();
         this.initListeners();
@@ -34,22 +39,143 @@ public class AuthorView extends JFrame
         super.setVisible(true);
     }
 
-    public void setButtonsCRUD(boolean isEnabled)
+    private void initListeners()
     {
-        this.buttonNew .setEnabled(isEnabled);
-        this.buttonEdit.setEnabled(isEnabled);
-        this.buttonDel .setEnabled(isEnabled);
+        this.buttonClose.addActionListener((ActionEvent e) ->
+        {
+            super.dispose();
+        });
+
+        this.buttonNew.addActionListener((ActionEvent e) ->
+        {
+            buttonWildCard.setText("Cadastrar");
+            setPanelState(true);
+            setButtonsCRUD(false);
+        });
+
+        this.buttonEdit.addActionListener((ActionEvent event) ->
+        {
+            if (hasSelectedRow())
+            {
+                editFields();
+                buttonWildCard.setText("Atualizar");
+                setPanelState(true);
+                setButtonsCRUD(false);
+            }
+        });
+
+        this.buttonShow.addActionListener((ActionEvent e) ->
+        {
+            String id = getTextFromFieldID();
+
+            new ObrasView(id);
+        });
+
+        this.buttonCancel.addActionListener((ActionEvent event) ->
+        {
+            clearFields();
+            setPanelState(false);
+            setButtonsCRUD(true);
+        });
+
+        AuthorView authorView = this;
+
+        this.buttonDel.addActionListener((ActionEvent event) ->
+        {
+            if ( hasSelectedRow() )
+            {
+                int confirm = JOptionPane.showConfirmDialog(
+                    authorView,
+                    "Confirma a exclusão do cadastro? ",
+                    "Confirmação",
+                    JOptionPane.YES_NO_OPTION
+                );
+                if ( confirm == JOptionPane.YES_OPTION )
+                {
+                    int row = table.getSelectedRow();
+                    int id  = (int) table.getValueAt(row, 0);
+                    try
+                    {
+                        Connection connection = ConnectionSingleton.getInstance();
+                        // new AuthorDAO(connection).delete(id);
+                        loadTable();
+                    } catch(SQLException e)
+                    {
+                        System.out.println(e.getMessage());
+                    }
+                }
+            }
+        });
+
+        this.buttonWildCard.addActionListener((ActionEvent event) ->
+        {
+            String label  = buttonWildCard.getText();
+            Author author = getAuthor();
+
+            try
+            {
+                Connection connection = ConnectionSingleton.getInstance();
+
+                if ( label.equals("Atualizar") )
+                    new AuthorDAO(connection).update(author);
+                else
+                    new AuthorDAO(connection).insert(author);
+                loadTable();
+            } catch (SQLException e)
+            {
+                System.out.println(e.getMessage());
+            }
+            JOptionPane.showMessageDialog(authorView, "Registro Salvo.");
+            clearFields();
+            setPanelState(false);
+            setButtonsCRUD(true);
+        });
     }
 
-    private void setPanelState(boolean isEnabled)
+    private void loadTable()
     {
-        this.fieldAuthorID .setEnabled(isEnabled);
-        this.fieldFirstName.setEnabled(isEnabled);
-        this.fieldLastName .setEnabled(isEnabled);
+        DefaultTableModel model = (DefaultTableModel) this.table.getModel();
 
-        this.buttonWildCard.setEnabled(isEnabled);
-        this.buttonCancel  .setEnabled(isEnabled);
-        this.buttonShow    .setEnabled(isEnabled);
+        while (model.getRowCount() > 0)
+        {
+            model.removeRow(0);
+        }
+        try
+        {
+            Connection connection = ConnectionSingleton.getInstance();
+            List<Author> list = new AuthorDAO(connection).getAll();
+
+            for ( Author author : list )
+            {
+                model.addRow(new Object[]
+                {
+                    author.getID(),
+                    author.getName().getFirst(),
+                    author.getName().getLast()
+                });
+            }
+        } catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void setButtonsCRUD(boolean state)
+    {
+        this.buttonNew .setEnabled(state);
+        this.buttonEdit.setEnabled(state);
+        this.buttonDel .setEnabled(state);
+    }
+
+    private void setPanelState(boolean state)
+    {
+        this.fieldAuthorID .setEnabled(state);
+        this.fieldFirstName.setEnabled(state);
+        this.fieldLastName .setEnabled(state);
+
+        this.buttonWildCard.setEnabled(state);
+        this.buttonCancel  .setEnabled(state);
+        this.buttonShow    .setEnabled(state);
     }
 
     public void setTextFields(String[] args)
@@ -61,7 +187,7 @@ public class AuthorView extends JFrame
 
     public void clearFields()
     {
-        setTextFields( new String[] {"", "", ""} );
+        setTextFields(new String[] {"", "", ""});
     }
 
     public boolean hasSelectedRow()
@@ -100,133 +226,6 @@ public class AuthorView extends JFrame
         return this.fieldAuthorID.getText();
     }
 
-    public JTable getTable()
-    {
-        return table;
-    }
-
-    private void initListeners()
-    {
-        AuthorView authorView = this;
-
-        this.buttonClose.addActionListener((ActionEvent e) ->
-        {
-            dispose();
-        });
-
-        this.buttonNew.addActionListener((ActionEvent e) ->
-        {
-            buttonWildCard.setText("Cadastrar");
-            setPanelState(true);
-            setButtonsCRUD(false);
-        });
-
-        this.buttonEdit.addActionListener((ActionEvent event) ->
-        {
-            if (hasSelectedRow())
-            {
-                editFields();
-                buttonWildCard.setText("Atualizar");
-                setPanelState(true);
-                setButtonsCRUD(false);
-            }
-        });
-
-        this.buttonShow.addActionListener((ActionEvent e) ->
-        {
-            String id = getTextFromFieldID();
-
-            new ObrasView(id);
-        });
-
-        this.buttonCancel.addActionListener((ActionEvent event) ->
-        {
-            clearFields();
-            setPanelState(false);
-            setButtonsCRUD(true);
-        });
-
-        this.buttonDel.addActionListener((ActionEvent event) ->
-        {
-            JTable table1 = getTable();
-            int row = table1.getSelectedRow();
-
-            if ( row != -1 )
-            {
-                int confirm = JOptionPane.showConfirmDialog(
-                    authorView,
-                        "Confirma a exclusão do cadastro? ",
-                        "Confirmação",
-                        JOptionPane.YES_NO_OPTION
-                );
-                if ( confirm == JOptionPane.YES_OPTION )
-                {
-                    int id = (int) table1.getValueAt(row, 0);
-                    try
-                    {
-                        Connection connection = ConnectionSingleton.getInstance();
-                        // new AuthorDAO(connection).delete(id);
-                        loadTable();
-                    } catch(SQLException e)
-                    {
-                        JOptionPane.showMessageDialog(authorView, e.getMessage());
-                    }
-                }
-            }
-        });
-
-        this.buttonWildCard.addActionListener((ActionEvent event) ->
-        {
-            String label  = buttonWildCard.getText();
-            Author author = getAuthor();
-
-            try
-            {
-                Connection connection = ConnectionSingleton.getInstance();
-
-                if ( label.equals("Atualizar") )
-                    new AuthorDAO(connection).update(author);
-                else
-                    new AuthorDAO(connection).insert(author);
-                loadTable();
-            } catch (SQLException e)
-            {
-                JOptionPane.showMessageDialog(authorView, e.getMessage());
-            }
-            JOptionPane.showMessageDialog(authorView, "Registro Salvo.");
-            clearFields();
-            setPanelState(false);
-            setButtonsCRUD(true);
-        });
-    }
-
-    private void loadTable()
-    {
-        try
-        {
-            DefaultTableModel model = (DefaultTableModel) this.table.getModel();
-
-            while (this.table.getRowCount() > 0)
-            {
-                model.removeRow(0);
-            }
-            Connection connection = ConnectionSingleton.getInstance();
-            List<Author> list = new AuthorDAO(connection).getAll();
-
-            for ( Author author : list )
-            {
-                model.addRow( new Object[]
-                {
-                    author.getID(),
-                    author.getName().getFirst(),
-                    author.getName().getLast()
-                });
-            }
-        } catch (SQLException e)
-        {
-            JOptionPane.showMessageDialog(null, e.getMessage());
-        }
-    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -264,19 +263,19 @@ public class AuthorView extends JFrame
 
         jPanel6.setBackground(new Color(194, 1, 20));
 
-        jLabel2.setIcon(new ImageIcon(getClass().getResource("/resources/book(1).png"))); // NOI18N
+        jLabel2.setIcon(new ImageIcon(getClass().getResource("/lib/img/book(1).png"))); // NOI18N
 
-        jLabel3.setIcon(new ImageIcon(getClass().getResource("/resources/book(1).png"))); // NOI18N
+        jLabel3.setIcon(new ImageIcon(getClass().getResource("/lib/img/book(1).png"))); // NOI18N
 
         GroupLayout jPanel6Layout = new GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGap(18, 18, 18)
+                .addGap(9, 9, 9)
                 .addGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
                     .addComponent(jLabel2))
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
