@@ -4,7 +4,7 @@ package model.entities;
  *
  *
  */
-public class Address
+public class Address extends Entity
 {
 
     private final String uf;
@@ -15,8 +15,9 @@ public class Address
     private final String cep;
     private final int number;
 
-    public Address(String uf, String city, String district, String street, int number, String compl, String cep)
+    public Address(int id, String uf, String city, String district, String street, int number, String compl, String cep)
     {
+        super(id);
         this.uf         = uf;
         this.city       = city;
         this.district   = district;
