@@ -1,7 +1,7 @@
 package model.factories;
 
 import java.math.BigDecimal;
-import model.Book;
+import model.entities.Book;
 import org.json.JSONObject;
 
 /**
@@ -13,26 +13,26 @@ public class BookFactory
 
     public Book buildFrom(JSONObject json)
     {
-        String bookID       = json.getString("bookID");
-        String publishingID = json.getString("publishingID");
-        String authorID     = json.getString("authorID");
+        String id         = json.getString("ID");
+        String publishing = json.getString("publishing");
+        String author     = json.getString("author");
 
-        String title        = json.getString("title");
-        String gender       = json.getString("gender");
-        String releaseYear  = json.getString("releaseYear");
-        String finishing    = json.getString("finishing");
-        String pages        = json.getString("numberPages");
+        String title      = json.getString("title");
+        String gender     = json.getString("gender");
+        String year       = json.getString("year");
+        String finishing  = json.getString("finishing");
+        String pages      = json.getString("pages");
 
-        String code         = json.getString("code");
-        String sell         = json.getString("sellValue");
-        String buy          = json.getString("buyValue");
+        String code       = json.getString("code");
+        String sell       = json.getString("sellValue");
+        String buy        = json.getString("buyValue");
 
         return new Book(
-            Integer.parseInt(bookID),
-            Integer.parseInt(publishingID),
-            Integer.parseInt(authorID),
+            Integer.parseInt(id),
+            null,
+            null,
             Integer.parseInt(code),
-            Integer.parseInt(releaseYear),
+            Integer.parseInt(year),
             Integer.parseInt(pages),
             title,
             gender,
