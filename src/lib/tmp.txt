@@ -1,0 +1,106 @@
+
+Editora
+	id
+	nome
+	contato
+		email
+		telefone
+			tipo
+	endereço
+		cidade/UF
+		bairro
+		rua
+		número
+		complemento
+	data/hora de registro
+
+Telefone
+	id
+	ddd
+	string Telefone
+	tipo
+		fixo
+			residencial
+			trabalho
+		movel
+Livro
+	id
+	titulo
+	autor
+	sinopse/descricao
+	número de páginas
+	genero
+	usado/novo
+	editora
+	acabamento
+	ano de lançamento
+	codigo de barras
+	valor de venda
+	valor de compra
+	quantidade em estoque
+	data/hora de registro
+
+Pessoa
+	Autor
+		id
+		nome
+		conjunto de obras
+		data/hora de registro
+
+	Cliente
+		id
+		nome
+			primeiro nome
+			sobrenome
+		cpf
+		contato
+			telefone
+				tipo
+			email
+		nota fiscal
+		data/hora de registro
+
+	Funcionário
+		id
+		nome
+			primeiro nome
+			sobrenome
+		usuario
+		senha
+		email
+		data de admissão
+		matricula
+		departamento
+		nacionalidade
+		endereço
+			cidade/UF
+			bairro
+			rua
+			número
+			complemento
+		data/hora de registro
+
+Nota Fiscal
+	id
+	número da nota fiscal
+	nome da empresa
+	nome do cliente
+	cpf do cliente
+	data da compra
+	valor da compra
+	quantidade adquirida
+	data/hora de registro
+
+Logs
+	data/hora do registro
+	nome do evento
+	causa do evento
+	mensagem do evento
+
+Configuracao de Base de Dados
+	Servidor
+	Nome do Banco
+	Porta
+	Nome da Base de Dados
+	Usuario
+	Senha
