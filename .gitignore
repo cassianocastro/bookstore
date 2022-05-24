@@ -1,4 +1,7 @@
 build/
 lib/
 src/org/json
-src/lib/
+src/lib/der/autosave.chc
+src/lib/der/config.chc
+src/lib/db.sqlite
+test/
