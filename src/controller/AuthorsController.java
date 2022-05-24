@@ -1,13 +1,18 @@
 package controller;
 
-import org.json.JSONObject;
+import view.AuthorView;
 
 /**
  *
  *
  */
-public interface Command
+public class AuthorsController
 {
 
-    public void execute(JSONObject json);
+    private final AuthorView view;
+
+    public AuthorsController()
+    {
+        this.view = new AuthorView(this);
+    }
 }

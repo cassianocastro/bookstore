@@ -1,35 +1,19 @@
 package controller;
 
-import model.dao.BookDAO;
-import org.json.JSONObject;
-import java.sql.*;
-import javax.swing.JOptionPane;
+import view.PublishingView;
 
 /**
  *
  *
  */
-public class DelBookCommand implements Command
+public class PublishingController
 {
 
-    private final BookDAO bookDAO;
+    private final PublishingView view;
 
-    public DelBookCommand(BookDAO bookDAO)
+    public PublishingController()
     {
-        this.bookDAO = bookDAO;
+        this.view = new PublishingView(this);
     }
 
-    @Override
-    public void execute(JSONObject json)
-    {
-        int id = json.getInt("bookID");
-
-        try
-        {
-            this.bookDAO.delete(id);
-        } catch (SQLException e)
-        {
-            JOptionPane.showMessageDialog(null, e.getMessage());
-        }
-    }
 }

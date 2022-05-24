@@ -1,11 +1,6 @@
 package controller;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.List;
-import model.entities.Book;
-import model.dao.*;
-import org.json.JSONObject;
+import view.BookView;
 
 /**
  *
@@ -14,38 +9,11 @@ import org.json.JSONObject;
 public class BookController
 {
 
-    private final Invoker invoker;
+    private final BookView view;
 
     public BookController()
     {
-        this.invoker = new Invoker();
-        this.foo();
+        this.view = new BookView(this);
     }
 
-    private void foo()
-    {
-        try
-        {
-            Connection connection = ConnectionSingleton.getInstance();
-            BookDAO bookDAO = new BookDAO(connection);
-
-            invoker.put("NewCommand", new NewBookCommand(bookDAO));
-            invoker.put("EditCommand", new EditBookCommand(bookDAO));
-            invoker.put("DelCommand", new DelBookCommand(bookDAO));
-            invoker.put("ReadCommand", new ReadBookCommand(bookDAO));
-        } catch (SQLException e)
-        {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public void invoke(String cmd, JSONObject json)
-    {
-        this.invoker.invoke(cmd, json);
-    }
-
-    public List<Book> getList()
-    {
-        return this.invoker.getList();
-    }
 }
