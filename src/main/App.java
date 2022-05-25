@@ -13,7 +13,7 @@ public class App
     {
         java.awt.EventQueue.invokeLater(() ->
         {
-            new IndexController();
+            new IndexController().createIndexView();
         });
     }
 }
