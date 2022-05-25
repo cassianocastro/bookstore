@@ -11,12 +11,12 @@ import org.json.JSONObject;
  *
  *
  */
-public class ObrasDAO
+public class AuthorWorksDAO
 {
 
     private final Connection connection;
 
-    public ObrasDAO(Connection connection)
+    public AuthorWorksDAO(Connection connection)
     {
         this.connection = connection;
     }
