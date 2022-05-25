@@ -1,29 +1,29 @@
 package view;
 
+import controller.AuthorWorksController;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.util.List;
-import java.sql.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import model.factories.ConnectionSingleton;
-import model.dao.ObrasDAO;
-import org.json.JSONObject;
 
 /**
  *
  *
  */
-public class ObrasView extends JFrame
+public class AuthorWorksView extends JFrame
 {
 
-    public ObrasView(String id)
+    private final AuthorWorksController controller;
+
+    public AuthorWorksView(AuthorWorksController controller)
     {
         super("Obras");
 
+        this.controller = controller;
+
         this.initComponents();
         this.initListeners();
-        this.loadTable(id);
+        this.controller.loadTable();
 
         super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         super.setResizable(false);
@@ -39,39 +39,9 @@ public class ObrasView extends JFrame
         });
     }
 
-    private void loadTable(String id)
+    public JTable getTable()
     {
-        if ( id.isEmpty() ) return;
-
-        int authorID = Integer.parseInt(id);
-        DefaultTableModel model = (DefaultTableModel) this.table.getModel();
-
-        while ( model.getRowCount() > 0 )
-        {
-            model.removeRow(0);
-        }
-
-        try
-        {
-            Connection connection = ConnectionSingleton.getInstance();
-            List<JSONObject> list = new ObrasDAO(connection).findBooksByAuthor(authorID);
-
-            for ( JSONObject json : list )
-            {
-                model.addRow(
-                    new Object[]
-                    {
-                        json.getInt("authorID"),
-                        json.getString("authorFirstName") + " " +
-                        json.getString("authorLastName"),
-                        json.getString("bookTitle")
-                    }
-                );
-            }
-        } catch (SQLException e)
-        {
-            System.out.println(e.getMessage());
-        }
+        return this.table;
     }
 
     /**
@@ -123,21 +93,21 @@ public class ObrasView extends JFrame
         table.setModel(new DefaultTableModel(
             new Object [][]
             {
-                {null, null, null}
+                {null, null}
             },
             new String []
             {
-                "ID", "Autor", "Título da Obra"
+                "Autor", "Título da Obra"
             }
         )
         {
             Class[] types = new Class []
             {
-                Integer.class, String.class, String.class
+                String.class, String.class
             };
             boolean[] canEdit = new boolean []
             {
-                false, false, false
+                false, false
             };
 
             public Class getColumnClass(int columnIndex)
@@ -159,9 +129,8 @@ public class ObrasView extends JFrame
         jScrollPane1.setViewportView(table);
         if (table.getColumnModel().getColumnCount() > 0)
         {
-            table.getColumnModel().getColumn(0).setPreferredWidth(150);
+            table.getColumnModel().getColumn(0).setPreferredWidth(300);
             table.getColumnModel().getColumn(1).setPreferredWidth(300);
-            table.getColumnModel().getColumn(2).setPreferredWidth(300);
         }
 
         buttonOkay.setBackground(new Color(236, 235, 243));

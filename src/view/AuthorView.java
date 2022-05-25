@@ -3,16 +3,11 @@ package view;
 import controller.AuthorsController;
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.List;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import model.entities.Author;
 import model.Name;
-import model.dao.AuthorDAO;
-import model.factories.ConnectionSingleton;
 
 /**
  *
@@ -31,7 +26,7 @@ public class AuthorView extends JFrame
 
         this.initComponents();
         this.initListeners();
-        this.loadTable();
+        this.controller.loadTable();
         this.setPanelState(false);
 
         super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -48,116 +43,33 @@ public class AuthorView extends JFrame
 
         this.buttonNew.addActionListener((ActionEvent e) ->
         {
-            buttonWildCard.setText("Cadastrar");
-            setPanelState(true);
-            setButtonsCRUD(false);
+            this.controller.newAuthor();
         });
 
         this.buttonEdit.addActionListener((ActionEvent event) ->
         {
-            if (hasSelectedRow())
-            {
-                editFields();
-                buttonWildCard.setText("Atualizar");
-                setPanelState(true);
-                setButtonsCRUD(false);
-            }
+            this.controller.edit();
         });
 
         this.buttonShow.addActionListener((ActionEvent e) ->
         {
-            String id = getTextFromFieldID();
-
-            new ObrasView(id);
+            this.controller.showa();
         });
 
         this.buttonCancel.addActionListener((ActionEvent event) ->
         {
-            clearFields();
-            setPanelState(false);
-            setButtonsCRUD(true);
+            this.controller.cancel();
         });
-
-        AuthorView authorView = this;
 
         this.buttonDel.addActionListener((ActionEvent event) ->
         {
-            if ( hasSelectedRow() )
-            {
-                int confirm = JOptionPane.showConfirmDialog(
-                    authorView,
-                    "Confirma a exclusão do cadastro? ",
-                    "Confirmação",
-                    JOptionPane.YES_NO_OPTION
-                );
-                if ( confirm == JOptionPane.YES_OPTION )
-                {
-                    int row = table.getSelectedRow();
-                    int id  = (int) table.getValueAt(row, 0);
-                    try
-                    {
-                        Connection connection = ConnectionSingleton.getInstance();
-                        // new AuthorDAO(connection).delete(id);
-                        loadTable();
-                    } catch(SQLException e)
-                    {
-                        System.out.println(e.getMessage());
-                    }
-                }
-            }
+            this.controller.del();
         });
 
         this.buttonWildCard.addActionListener((ActionEvent event) ->
         {
-            String label  = buttonWildCard.getText();
-            Author author = getAuthor();
-
-            try
-            {
-                Connection connection = ConnectionSingleton.getInstance();
-
-                if ( label.equals("Atualizar") )
-                    new AuthorDAO(connection).update(author);
-                else
-                    new AuthorDAO(connection).insert(author);
-                loadTable();
-            } catch (SQLException e)
-            {
-                System.out.println(e.getMessage());
-            }
-            JOptionPane.showMessageDialog(authorView, "Registro Salvo.");
-            clearFields();
-            setPanelState(false);
-            setButtonsCRUD(true);
+            this.controller.wildcard();
         });
-    }
-
-    private void loadTable()
-    {
-        DefaultTableModel model = (DefaultTableModel) this.table.getModel();
-
-        while (model.getRowCount() > 0)
-        {
-            model.removeRow(0);
-        }
-        try
-        {
-            Connection connection = ConnectionSingleton.getInstance();
-            List<Author> list = new AuthorDAO(connection).getAll();
-
-            for ( Author author : list )
-            {
-                model.addRow(new Object[]
-                {
-                    author.getID(),
-                    author.getName().getFirst(),
-                    author.getName().getLast()
-                });
-            }
-        } catch (SQLException e)
-        {
-            System.out.println(e.getMessage());
-        }
     }
 
     public void setButtonsCRUD(boolean state)
@@ -167,7 +79,7 @@ public class AuthorView extends JFrame
         this.buttonDel .setEnabled(state);
     }
 
-    private void setPanelState(boolean state)
+    public void setPanelState(boolean state)
     {
         this.fieldAuthorID .setEnabled(state);
         this.fieldFirstName.setEnabled(state);
@@ -176,25 +88,6 @@ public class AuthorView extends JFrame
         this.buttonWildCard.setEnabled(state);
         this.buttonCancel  .setEnabled(state);
         this.buttonShow    .setEnabled(state);
-    }
-
-    public void setTextFields(String[] args)
-    {
-        this.fieldAuthorID .setText(args[0]);
-        this.fieldFirstName.setText(args[1]);
-        this.fieldLastName .setText(args[2]);
-    }
-
-    public void clearFields()
-    {
-        setTextFields(new String[] {"", "", ""});
-    }
-
-    public boolean hasSelectedRow()
-    {
-        int row = this.table.getSelectedRow();
-
-        return row != -1;
     }
 
     public void editFields()
@@ -206,6 +99,18 @@ public class AuthorView extends JFrame
             args[i] = table.getValueAt(table.getSelectedRow(), i).toString();
         }
         setTextFields(args);
+    }
+
+    public void clearFields()
+    {
+        setTextFields(new String[] {"", "", ""});
+    }
+
+    public void setTextFields(String[] args)
+    {
+        this.fieldAuthorID .setText(args[0]);
+        this.fieldFirstName.setText(args[1]);
+        this.fieldLastName .setText(args[2]);
     }
 
     public Author getAuthor()
@@ -224,6 +129,16 @@ public class AuthorView extends JFrame
     public String getTextFromFieldID()
     {
         return this.fieldAuthorID.getText();
+    }
+
+    public JButton getWildCard()
+    {
+        return this.buttonWildCard;
+    }
+
+    public JTable getTable()
+    {
+        return this.table;
     }
 
     /**
@@ -421,21 +336,21 @@ public class AuthorView extends JFrame
         table.setModel(new DefaultTableModel(
             new Object [][]
             {
-                {null, null, null}
+                {null}
             },
             new String []
             {
-                "ID do Autor", "Nome", "Sobrenome"
+                "Nome"
             }
         )
         {
             Class[] types = new Class []
             {
-                Integer.class, String.class, String.class
+                String.class
             };
             boolean[] canEdit = new boolean []
             {
-                false, false, false
+                false
             };
 
             public Class getColumnClass(int columnIndex)
@@ -456,9 +371,7 @@ public class AuthorView extends JFrame
         jScrollPane1.setViewportView(table);
         if (table.getColumnModel().getColumnCount() > 0)
         {
-            table.getColumnModel().getColumn(0).setPreferredWidth(150);
-            table.getColumnModel().getColumn(1).setPreferredWidth(300);
-            table.getColumnModel().getColumn(2).setPreferredWidth(300);
+            table.getColumnModel().getColumn(0).setPreferredWidth(500);
         }
 
         jPanel4.setBackground(new Color(236, 235, 243));

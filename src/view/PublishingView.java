@@ -3,19 +3,12 @@ package view;
 import controller.PublishingController;
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.text.ParseException;
-import java.util.List;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
-import model.factories.PublishingCiaFactory;
-import model.entities.PublishingCia;
-import model.factories.ConnectionSingleton;
-import model.dao.PublishingCiaDAO;
 import org.json.JSONObject;
 
 /**
@@ -35,7 +28,7 @@ public class PublishingView extends JFrame
 
         this.initComponents();
         this.initListeners();
-        this.loadTable();
+        this.controller.loadTable();
         this.setPanelState(false);
 
         super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -52,117 +45,28 @@ public class PublishingView extends JFrame
 
         this.buttonNew.addActionListener((ActionEvent e) ->
         {
-            buttonSave.setText("Cadastrar");
-            setPanelState(true);
-            setButtonsCRUD(false);
+            this.controller.newPub();
         });
 
         this.buttonEdit.addActionListener((ActionEvent event) ->
         {
-            if ( hasSelectedRow() )
-            {
-                editFields();
-                buttonSave.setText("Atualizar");
-                setPanelState(true);
-                setButtonsCRUD(false);
-            }
+            this.controller.edit();
         });
 
         this.buttonCancel.addActionListener((ActionEvent event) ->
         {
-            clearFields();
-            setPanelState(false);
-            setButtonsCRUD(true);
+            this.controller.cancel();
         });
 
         this.buttonDel.addActionListener((ActionEvent event) ->
         {
-            int row = table.getSelectedRow();
-
-            if ( row != -1 )
-            {
-                int confirm = JOptionPane.showConfirmDialog(
-                    null,
-                    "Confirma a exclusão do cadastro? ",
-                    "Confirmação",
-                    JOptionPane.YES_NO_OPTION
-                );
-
-                if ( confirm == JOptionPane.YES_OPTION )
-                {
-                    int id = (int) table.getValueAt(row, 0);
-
-                    try
-                    {
-                        Connection connection = ConnectionSingleton.getInstance();
-                        // new PublishingCiaDAO(connection).delete(id);
-                        loadTable();
-                    } catch (SQLException e)
-                    {
-                        System.out.println(e.getMessage());
-                    }
-                }
-            }
+            this.controller.del();
         });
 
         this.buttonSave.addActionListener((ActionEvent event) ->
         {
-            String labelWildCard = buttonSave.getText();
-            JSONObject json      = getJSON();
-            PublishingCia publishingCia = new PublishingCiaFactory().buildFrom(json);
-
-            try
-            {
-                Connection connection = ConnectionSingleton.getInstance();
-                if ( labelWildCard.equals("Atualizar") )
-                    new PublishingCiaDAO(connection).update(publishingCia);
-                else
-                    new PublishingCiaDAO(connection).insert(publishingCia);
-                loadTable();
-            } catch (SQLException e)
-            {
-                System.out.println(e.getMessage());
-            }
-            clearFields();
-            setPanelState(false);
-            setButtonsCRUD(true);
+            this.controller.save();
         });
-    }
-
-    public void loadTable()
-    {
-        DefaultTableModel model = (DefaultTableModel) table.getModel();
-
-        while ( model.getRowCount() > 0 )
-        {
-            model.removeRow(0);
-        }
-        try
-        {
-            Connection connection = ConnectionSingleton.getInstance();
-            List<PublishingCia> list = new PublishingCiaDAO(connection).getAll();
-
-            for ( PublishingCia cia : list )
-            {
-                model.addRow(
-                    new Object[]
-                    {
-                        cia.getID(),
-                        cia.getName(),
-                        cia.getAddress().getUF(),
-                        cia.getAddress().getCity(),
-                        cia.getAddress().getDistrict(),
-                        cia.getAddress().getCEP(),
-                        cia.getAddress().getStreet(),
-                        cia.getAddress().getNumber(),
-                        cia.getAddress().getComplement()
-                    }
-                );
-            }
-        } catch (SQLException e)
-        {
-            System.out.println(e.getMessage());
-        }
     }
 
     public void setPanelState(boolean state)
@@ -225,13 +129,6 @@ public class PublishingView extends JFrame
         this.fieldCompl       .setText(args[8]);
     }
 
-    public boolean hasSelectedRow()
-    {
-        int row = this.table.getSelectedRow();
-
-        return row != -1;
-    }
-
     public boolean foo()
     {
         String[] args = getTextFields();
@@ -282,6 +179,16 @@ public class PublishingView extends JFrame
         json.put("addressUF",     this.fieldUF    .getText());
 
         return json;
+    }
+
+    public JButton getSaveButton()
+    {
+        return this.buttonSave;
+    }
+
+    public JTable getTable()
+    {
+        return this.table;
     }
 
     /**
@@ -380,17 +287,17 @@ public class PublishingView extends JFrame
         table.setModel(new DefaultTableModel(
             new Object [][]
             {
-                {null, null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null}
             },
             new String []
             {
-                "ID Editora", "Nome da Cia.", "UF/Estado", "Cidade", "Bairro", "CEP", "Rua", "Número", "Complemento"
+                "Nome da Cia.", "UF/Estado", "Cidade", "Bairro", "CEP", "Rua", "Número", "Complemento"
             }
         )
         {
             Class[] types = new Class []
             {
-                Integer.class, String.class, String.class, String.class, String.class, String.class, String.class, Integer.class, String.class
+                String.class, String.class, String.class, String.class, String.class, String.class, Integer.class, String.class
             };
 
             public Class getColumnClass(int columnIndex)
@@ -407,15 +314,14 @@ public class PublishingView extends JFrame
         jScrollPane1.setViewportView(table);
         if (table.getColumnModel().getColumnCount() > 0)
         {
-            table.getColumnModel().getColumn(0).setPreferredWidth(150);
-            table.getColumnModel().getColumn(1).setPreferredWidth(300);
-            table.getColumnModel().getColumn(2).setPreferredWidth(100);
+            table.getColumnModel().getColumn(0).setPreferredWidth(300);
+            table.getColumnModel().getColumn(1).setPreferredWidth(100);
+            table.getColumnModel().getColumn(2).setPreferredWidth(200);
             table.getColumnModel().getColumn(3).setPreferredWidth(200);
-            table.getColumnModel().getColumn(4).setPreferredWidth(200);
-            table.getColumnModel().getColumn(5).setPreferredWidth(100);
-            table.getColumnModel().getColumn(6).setPreferredWidth(200);
-            table.getColumnModel().getColumn(7).setPreferredWidth(100);
-            table.getColumnModel().getColumn(8).setPreferredWidth(500);
+            table.getColumnModel().getColumn(4).setPreferredWidth(100);
+            table.getColumnModel().getColumn(5).setPreferredWidth(200);
+            table.getColumnModel().getColumn(6).setPreferredWidth(100);
+            table.getColumnModel().getColumn(7).setPreferredWidth(500);
         }
 
         jPanel7.setBackground(new Color(173, 30, 45));

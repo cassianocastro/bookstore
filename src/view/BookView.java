@@ -4,13 +4,11 @@ import controller.BookController;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.text.ParseException;
-import java.util.List;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
-import model.entities.Book;
 import org.json.JSONObject;
 
 /**
@@ -31,7 +29,7 @@ public class BookView extends JFrame
         this.initComponents();
         this.initListeners();
         this.setPanelState(false);
-        this.loadTable();
+        // this.controller.loadTable();
 
         super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         super.setLocationRelativeTo(null);
@@ -42,121 +40,43 @@ public class BookView extends JFrame
     {
         this.buttonClose.addActionListener((ActionEvent e) ->
         {
-            dispose();
+            super.dispose();
         });
 
         this.buttonNew.addActionListener((ActionEvent e) ->
         {
-            buttonWildCard.setText("Cadastrar");
-            templateMethod(true, false);
+            this.controller.newBook();
         });
 
         this.buttonEdit.addActionListener((ActionEvent event) ->
         {
-            if ( hasSelectedRow() )
-            {
-                editFields();
-                buttonWildCard.setText("Atualizar");
-                templateMethod(true, false);
-            }
+            this.controller.edit();
         });
 
         this.buttonDel.addActionListener((ActionEvent e) ->
         {
-            int row = table.getSelectedRow();
-
-            if (row != -1)
-            {
-                int confirm = JOptionPane.showConfirmDialog(
-                    null,
-                        "Confirma a exclusão do cadastro? ",
-                        "Confirmação",
-                        JOptionPane.YES_NO_OPTION
-                );
-
-                if (confirm == JOptionPane.YES_OPTION)
-                {
-                    int id = (int) table.getValueAt(row, 0);
-
-                    controller.invoke("DelCommand", new JSONObject().put("bookID", id));
-                    loadTable();
-                }
-            }
+            this.controller.del();
         });
 
         this.buttonCancel.addActionListener((ActionEvent event) ->
         {
-            clearFields();
-            templateMethod(false, true);
+            this.controller.cancel();
         });
 
         this.buttonWildCard.addActionListener((ActionEvent event) ->
         {
-            if ( fieldsOkay() )
-            {
-                JSONObject json = new JSONObject();
-
-                if ( buttonWildCard.getText().equals("Atualizar") )
-                    controller.invoke("EditCommand", json);
-                else
-                    controller.invoke("NewCommand", json);
-
-                loadTable();
-                clearFields();
-                templateMethod(false, true);
-            }
+            this.controller.wildcard();
         });
 
-        BookView view = this;
         this.buttonShowPublishing.addActionListener((ActionEvent e) ->
         {
-            new PubTableView(view);
+            this.controller.showPub();
         });
 
         this.buttonShowAuthor.addActionListener((ActionEvent e) ->
         {
-            new AutTableView(view);
+            this.controller.showAuthor();
         });
-    }
-
-    public void loadTable()
-    {
-        DefaultTableModel model = (DefaultTableModel) this.table.getModel();
-        this.clearTable(model);
-
-        List<Book> list = this.controller.getList();
-        this.addRowsToTable(model, list);
-    }
-
-    private void clearTable(DefaultTableModel model)
-    {
-        while ( model.getRowCount() > 0 )
-        {
-            model.removeRow(0);
-        }
-    }
-
-    private void addRowsToTable(DefaultTableModel model, List<Book> list)
-    {
-        for ( Book book : list )
-        {
-            model.addRow(
-                new Object[]
-                {
-                    book.getID(),
-                    book.getPublishing().getID(),
-                    book.getAuthor().getID(),
-                    book.getTitle(),
-                    book.getGender(),
-                    book.getFinishing(),
-                    book.getNumberPages(),
-                    book.getReleaseYear(),
-                    book.getCode(),
-                    book.getSellValue().toString(),
-                    book.getBuyValue().toString()
-                }
-            );
-        }
     }
 
     public void templateMethod(boolean panelState, boolean buttonsState)
@@ -193,13 +113,6 @@ public class BookView extends JFrame
         this.buttonNew .setEnabled(state);
         this.buttonEdit.setEnabled(state);
         this.buttonDel .setEnabled(state);
-    }
-
-    public boolean hasSelectedRow()
-    {
-        int row = this.table.getSelectedRow();
-
-        return row != -1;
     }
 
     public void editFields()
@@ -288,32 +201,42 @@ public class BookView extends JFrame
     {
         JSONObject json = new JSONObject();
 
-        json.put("ID",      args[0]);
+        json.put("ID",        args[0]);
         json.put("publishing",args[1]);
         json.put("author",    args[2]);
 
-        json.put("title",       args[3]);
-        json.put("gender",      args[4]);
+        json.put("title",     args[3]);
+        json.put("gender",    args[4]);
 
-        json.put("finishing",   args[5]);
-        json.put("pages", args[6]);
-        json.put("year", args[7]);
+        json.put("finishing", args[5]);
+        json.put("pages",     args[6]);
+        json.put("year",      args[7]);
 
-        json.put("code",        args[8]);
-        json.put("sellValue",   args[9]);
-        json.put("buyValue",    args[10]);
+        json.put("code",      args[8]);
+        json.put("sellValue", args[9]);
+        json.put("buyValue",  args[10]);
 
         return json;
     }
 
-    public JFormattedTextField getFieldPublishing()
+    public JFormattedTextField getPublishingField()
     {
         return this.fieldPublishingID;
     }
 
-    public JFormattedTextField getFieldAuthor()
+    public JFormattedTextField getAuthorField()
     {
         return this.fieldAuthorID;
+    }
+
+    public JButton getWildCard()
+    {
+        return this.buttonWildCard;
+    }
+
+    public JTable getTable()
+    {
+        return this.table;
     }
 
     /**
@@ -371,21 +294,21 @@ public class BookView extends JFrame
         table.setModel(new DefaultTableModel(
             new Object [][]
             {
-                {null, null, null, null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null, null}
             },
             new String []
             {
-                "ID Livro", "ID Editora", "ID Autor", "Título", "Gênero", "Acabamento", "Número de Páginas", "Ano de Lançamento", "Código de Barras", "Valor de Venda", "Valor de Compra"
+                "Código de Barras", "Editora", "Autor", "Título", "Gênero", "Acabamento", "Número de Páginas", "Ano de Lançamento", "Valor de Venda", "Valor de Compra"
             }
         )
         {
             Class[] types = new Class []
             {
-                Integer.class, Integer.class, Integer.class, String.class, String.class, String.class, Integer.class, Integer.class, Integer.class, String.class, String.class
+                Integer.class, String.class, String.class, String.class, String.class, String.class, Integer.class, Integer.class, String.class, String.class
             };
             boolean[] canEdit = new boolean []
             {
-                false, false, false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex)
@@ -407,7 +330,7 @@ public class BookView extends JFrame
         jScrollPane1.setViewportView(table);
         if (table.getColumnModel().getColumnCount() > 0)
         {
-            table.getColumnModel().getColumn(0).setPreferredWidth(100);
+            table.getColumnModel().getColumn(0).setPreferredWidth(150);
             table.getColumnModel().getColumn(1).setPreferredWidth(100);
             table.getColumnModel().getColumn(2).setPreferredWidth(100);
             table.getColumnModel().getColumn(3).setPreferredWidth(300);
@@ -415,9 +338,8 @@ public class BookView extends JFrame
             table.getColumnModel().getColumn(5).setPreferredWidth(150);
             table.getColumnModel().getColumn(6).setPreferredWidth(150);
             table.getColumnModel().getColumn(7).setPreferredWidth(150);
-            table.getColumnModel().getColumn(8).setPreferredWidth(150);
+            table.getColumnModel().getColumn(8).setPreferredWidth(120);
             table.getColumnModel().getColumn(9).setPreferredWidth(120);
-            table.getColumnModel().getColumn(10).setPreferredWidth(120);
         }
 
         jPanel5.setBackground(new Color(236, 235, 243));
@@ -660,7 +582,7 @@ public class BookView extends JFrame
 
         fieldPublishingID.setEditable(false);
         fieldPublishingID.setBackground(new Color(236, 235, 243));
-        fieldPublishingID.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2), "ID da Editora", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
+        fieldPublishingID.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2), "Editora", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
         fieldPublishingID.setForeground(new Color(12, 18, 12));
         fieldPublishingID.setCaretColor(new Color(194, 1, 20));
         fieldPublishingID.setSelectedTextColor(new Color(236, 235, 243));
@@ -668,7 +590,7 @@ public class BookView extends JFrame
 
         fieldAuthorID.setEditable(false);
         fieldAuthorID.setBackground(new Color(236, 235, 243));
-        fieldAuthorID.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2), "ID do Autor", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
+        fieldAuthorID.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2), "Autor", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
         fieldAuthorID.setForeground(new Color(12, 18, 12));
         fieldAuthorID.setCaretColor(new Color(194, 1, 20));
         fieldAuthorID.setSelectedTextColor(new Color(236, 235, 243));

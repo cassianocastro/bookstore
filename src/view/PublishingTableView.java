@@ -1,42 +1,39 @@
 package view;
 
+import controller.PublishingTableController;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.sql.*;
-import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import model.factories.ConnectionSingleton;
-import model.dao.PublishingCiaDAO;
-import model.entities.PublishingCia;
 
 /**
  *
  *
  */
-public class PubTableView extends JFrame
+public class PublishingTableView extends JFrame
 {
 
-    private int id;
+    private final PublishingTableController controller;
 
-    public PubTableView(BookView parent)
+    public PublishingTableView(PublishingTableController controller)
     {
         super("Editoras cadastradas");
 
+        this.controller = controller;
         this.initComponents();
-        this.initListeners(parent);
-        this.loadTable();
+        this.initListeners();
+        this.controller.loadTable();
 
         super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         super.setResizable(false);
         super.setLocationRelativeTo(null);
     }
 
-    private void initListeners(BookView parent)
+    private void initListeners()
     {
         this.buttonOkay.addActionListener((ActionEvent e) ->
         {
-            this.okay(parent);
+            this.controller.okay();
         });
 
         this.buttonCancel.addActionListener((ActionEvent e) ->
@@ -45,44 +42,9 @@ public class PubTableView extends JFrame
         });
     }
 
-    private void loadTable()
+    public JTable getTable()
     {
-        DefaultTableModel model = (DefaultTableModel) this.table.getModel();
-
-        while ( model.getRowCount() > 0 )
-        {
-            model.removeRow(0);
-        }
-        try
-        {
-            Connection connection = ConnectionSingleton.getInstance();
-            List<PublishingCia> list = new PublishingCiaDAO(connection).getAll();
-
-            for ( PublishingCia cia : list )
-            {
-                model.addRow(new Object[] { cia.getID(), cia.getName() });
-            }
-        } catch (SQLException e)
-        {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    private void okay(BookView parent)
-    {
-        int row = table.getSelectedRow();
-
-        if ( row != -1 )
-        {
-            id = (int) table.getValueAt(row, 0);
-            parent.getFieldPublishing().setText(String.valueOf(id));
-        }
-        super.dispose();
-    }
-
-    public int getID()
-    {
-        return this.id;
+        return this.table;
     }
 
     /**
@@ -124,21 +86,21 @@ public class PubTableView extends JFrame
         table.setModel(new DefaultTableModel(
             new Object [][]
             {
-                {null, null}
+                {null}
             },
             new String []
             {
-                "ID", "Editora"
+                "Editora"
             }
         )
         {
             Class[] types = new Class []
             {
-                Integer.class, String.class
+                String.class
             };
             boolean[] canEdit = new boolean []
             {
-                false, false
+                false
             };
 
             public Class getColumnClass(int columnIndex)
@@ -161,8 +123,7 @@ public class PubTableView extends JFrame
         jScrollPane1.setViewportView(table);
         if (table.getColumnModel().getColumnCount() > 0)
         {
-            table.getColumnModel().getColumn(0).setPreferredWidth(150);
-            table.getColumnModel().getColumn(1).setPreferredWidth(300);
+            table.getColumnModel().getColumn(0).setPreferredWidth(350);
         }
 
         buttonCancel.setBackground(new Color(236, 235, 243));

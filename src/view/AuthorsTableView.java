@@ -1,31 +1,29 @@
 package view;
 
+import controller.AuthorsTableController;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.sql.*;
-import java.util.List;
-import model.entities.Author;
-import model.dao.AuthorDAO;
-import model.factories.ConnectionSingleton;
 
 /**
  *
  *
  */
-public class AutTableView extends JFrame
+public class AuthorsTableView extends JFrame
 {
 
-    private int id;
+    private final AuthorsTableController controller;
 
-    public AutTableView(BookView parent)
+    public AuthorsTableView(AuthorsTableController controller)
     {
         super("Autores Cadastrados");
 
+        this.controller = controller;
+
         this.initComponents();
-        this.initListeners(parent);
-        this.loadTable();
+        this.initListeners();
+        this.controller.loadTable();
 
         super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         super.setResizable(false);
@@ -33,11 +31,11 @@ public class AutTableView extends JFrame
         super.setVisible(true);
     }
 
-    private void initListeners(BookView parent)
+    private void initListeners()
     {
         this.buttonOkay.addActionListener((ActionEvent e) ->
         {
-            this.okay(parent);
+            this.controller.okay();
         });
 
         this.buttonCancel.addActionListener((ActionEvent e) ->
@@ -46,44 +44,9 @@ public class AutTableView extends JFrame
         });
     }
 
-    private void loadTable()
+    public JTable getTable()
     {
-        DefaultTableModel model = (DefaultTableModel) this.table.getModel();
-
-        while ( model.getRowCount() > 0 )
-        {
-            model.removeRow(0);
-        }
-        try
-        {
-            Connection connection = ConnectionSingleton.getInstance();
-            List<Author> list = new AuthorDAO(connection).getAll();
-
-            for ( Author author : list )
-            {
-                model.addRow(new Object[] { author.getID(), author.getName().toString() });
-            }
-        } catch (SQLException e)
-        {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    private void okay(BookView parent)
-    {
-        int row = table.getSelectedRow();
-
-        if ( row != -1 )
-        {
-            id = (int) table.getValueAt(row, 0);
-            parent.getFieldAuthor().setText(String.valueOf(id));
-        }
-        super.dispose();
-    }
-
-    public int getID()
-    {
-        return this.id;
+        return this.table;
     }
 
     /**
@@ -147,21 +110,21 @@ public class AutTableView extends JFrame
         table.setModel(new DefaultTableModel(
             new Object [][]
             {
-                {null, null, null}
+                {null}
             },
             new String []
             {
-                "ID", "Autor", "Title 3"
+                "Autor"
             }
         )
         {
             Class[] types = new Class []
             {
-                Integer.class, String.class, Object.class
+                String.class
             };
             boolean[] canEdit = new boolean []
             {
-                false, false, true
+                false
             };
 
             public Class getColumnClass(int columnIndex)
@@ -184,8 +147,7 @@ public class AutTableView extends JFrame
         jScrollPane1.setViewportView(table);
         if (table.getColumnModel().getColumnCount() > 0)
         {
-            table.getColumnModel().getColumn(0).setPreferredWidth(150);
-            table.getColumnModel().getColumn(1).setPreferredWidth(300);
+            table.getColumnModel().getColumn(0).setPreferredWidth(350);
         }
 
         buttonCancel.setBackground(new Color(236, 235, 243));

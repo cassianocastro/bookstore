@@ -22,7 +22,7 @@ public class IndexView extends JFrame
 
         this.initComponents();
         this.initListeners();
-        this.setButtonsEnabled(false);
+        // this.setButtonsEnabled(false);
 
         super.setLocationRelativeTo(null);
         super.setVisible(true);
@@ -69,9 +69,9 @@ public class IndexView extends JFrame
             this.controller.createConfigView();
         });
 
-        this.buttonConnect.addActionListener((ActionEvent event) ->
+        this.buttonExit.addActionListener((ActionEvent event) ->
         {
-            this.controller.connect();
+            this.controller.exit();
         });
 
         super.addWindowListener(new WindowAdapter()
@@ -107,7 +107,7 @@ public class IndexView extends JFrame
         jLabel2 = new JLabel();
         jPanel4 = new JPanel();
         labelResponse = new JLabel();
-        buttonConnect = new JButton();
+        buttonExit = new JButton();
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setBackground(new Color(242, 244, 243));
@@ -233,14 +233,14 @@ public class IndexView extends JFrame
         labelResponse.setHorizontalAlignment(SwingConstants.CENTER);
         labelResponse.setHorizontalTextPosition(SwingConstants.CENTER);
 
-        buttonConnect.setBackground(new Color(12, 18, 12));
-        buttonConnect.setFont(new Font("Dialog", 1, 13)); // NOI18N
-        buttonConnect.setForeground(new Color(236, 235, 243));
-        buttonConnect.setText("Conectar");
-        buttonConnect.setBorder(BorderFactory.createLineBorder(new Color(236, 235, 243), 2));
-        buttonConnect.setContentAreaFilled(false);
-        buttonConnect.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        buttonConnect.setFocusPainted(false);
+        buttonExit.setBackground(new Color(12, 18, 12));
+        buttonExit.setFont(new Font("Dialog", 1, 13)); // NOI18N
+        buttonExit.setForeground(new Color(236, 235, 243));
+        buttonExit.setText("Exit");
+        buttonExit.setBorder(BorderFactory.createLineBorder(new Color(236, 235, 243), 2));
+        buttonExit.setContentAreaFilled(false);
+        buttonExit.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        buttonExit.setFocusPainted(false);
 
         GroupLayout jPanel4Layout = new GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -249,14 +249,14 @@ public class IndexView extends JFrame
                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(labelResponse, GroupLayout.PREFERRED_SIZE, 362, GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(buttonConnect, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE)
+                .addComponent(buttonExit, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(9, 9, 9)
                 .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addComponent(buttonConnect)
+                    .addComponent(buttonExit)
                     .addComponent(labelResponse, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(9, Short.MAX_VALUE))
         );
@@ -331,8 +331,8 @@ public class IndexView extends JFrame
     private JButton buttonBooks;
     private JButton buttonClient;
     private JButton buttonConfig;
-    private JButton buttonConnect;
     private JButton buttonEmployee;
+    private JButton buttonExit;
     private JButton buttonPublishing;
     private JLabel jLabel2;
     private JLabel jLabel3;

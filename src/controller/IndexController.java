@@ -16,11 +16,9 @@ import view.IndexView;
 public class IndexController
 {
 
-    private final IndexView view;
-
-    public IndexController()
+    public void createIndexView()
     {
-        this.view = new IndexView(this);
+        new IndexView(this);
     }
 
     public void createBooksView()
@@ -45,31 +43,32 @@ public class IndexController
 
     public void createEmployeesView()
     {
-
+        new EmployeesController();
     }
 
     public void createClientsView()
     {
-
+        new ClientsController();
     }
 
-    public void connect()
+    public void exit()
     {
-        try
-        {
-            JSONObject config = new ConfigDAO().read();
-            DBConfig dbc = new ConfigFactory().createConfig(new String[]{});
-
-            ConnectionSingleton.setConfig(dbc);
-            ConnectionSingleton.getInstance();
-
-            this.view.setButtonsEnabled(true);
-            // this.view.labelResponse.setText("Conexão estabelecida.");
-        } catch (IOException | ClassNotFoundException | SQLException e)
-        {
-            System.out.println(e.getMessage());
-        }
-        this.view.setButtonsEnabled(false);
+//        try
+//        {
+//            JSONObject config = new ConfigDAO().read();
+//            DBConfig dbc = new ConfigFactory().createConfig(new String[]{});
+//
+//            ConnectionSingleton.setConfig(dbc);
+//            ConnectionSingleton.getInstance();
+//
+//            this.view.setButtonsEnabled(true);
+//            // this.view.labelResponse.setText("Conexão estabelecida.");
+//        } catch (IOException | ClassNotFoundException | SQLException e)
+//        {
+//            System.out.println(e.getMessage());
+//        }
+//        this.view.setButtonsEnabled(false);
+        System.exit(0);
     }
 
     public void closeConnection()
