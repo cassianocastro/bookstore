@@ -1,152 +1,203 @@
--- 1
-CREATE TABLE IF NOT EXISTS editora (
-    editorID    INT NOT NULL auto_increment,
-    nome        VARCHAR(50) NOT NULL,
-    uf          VARCHAR(2) NOT NULL,
-    cidade      VARCHAR(50),
-    bairro      VARCHAR(50),
-    rua         VARCHAR(50),
-    numero      INT NOT NULL,
-    complemento VARCHAR(50),
-    cep         VARCHAR(9) NOT NULL,
+/*
+ *
+ *
+ */
 
-    PRIMARY KEY (editorID)
-) engine = InnoDB;
+CREATE TABLE IF NOT EXISTS address (
+    PK_ID      INTEGER PRIMARY KEY,
+    uf         TEXT NOT NULL,
+    city       TEXT NOT NULL,
+    district   TEXT NOT NULL,
+    street     TEXT NOT NULL,
+    number     INTEGER NOT NULL,
+    cep        TEXT NOT NULL,
+    complement TEXT
+);
 
--- 2
-CREATE TABLE IF NOT EXISTS livro (
-    bookID       INT NOT NULL auto_increment,
-    editorID     INT,
-    titulo       VARCHAR(50) NOT NULL,
-    genero       VARCHAR(20) NOT NULL,
-    acabamento   VARCHAR(30),
-    sinopse      VARCHAR(500),
-    codigoBarras INT NOT NULL,
-    lancamento   INT NOT NULL,
-    numberPages  INT NOT NULL,
+CREATE TABLE IF NOT EXISTS publishingCia (
+    PK_ID        INTEGER PRIMARY KEY,
+    FK_addressID INTEGER,
+    name         TEXT NOT NULL,
+    
+    FOREIGN KEY (FK_addressID) REFERENCES 
+        address (PK_ID) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE
+);
 
-    FOREIGN KEY(editorID) REFERENCES 
-        editor(editorID) 
-    ON DELETE CASCADE, 
+CREATE INDEX index_addressID ON publishinCia(FK_addressID);
 
-    PRIMARY KEY (bookID)
-) engine = InnoDB;
+CREATE TABLE IF NOT EXISTS book (
+    PK_ID           INTEGER PRIMARY KEY,
+    FK_publishingID INTEGER,
+    FK_categoryID   INTEGER,
+    code            INTEGER NOT NULL,
+    title           TEXT NOT NULL,
+    finishing       TEXT,
+    release         INTEGER NOT NULL,
+    pages           INTEGER NOT NULL,
 
--- 3
-CREATE TABLE IF NOT EXISTS cliente (
-    clienteID   INT NOT NULL auto_increment,
-    nome        VARCHAR(20) NOT NULL,
-    sobrenome   VARCHAR(50) NOT NULL,
-    cpf         VARCHAR(14) NOT NULL,
-    uf          VARCHAR(2),
-    cidade      VARCHAR(50),
-    bairro      VARCHAR(50),
-    rua         VARCHAR(50),
-    numero      INT,
-    complemento VARCHAR(50),
-    cep         VARCHAR(9),
+    FOREIGN KEY (FK_publishingID) REFERENCES 
+        publishingCia (PK_ID) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE,
 
-    PRIMARY KEY (clienteID)
-) engine = InnoDB;
+    FOREIGN KEY (FK_categoryID) REFERENCES 
+        category (PK_ID) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE
+);
 
--- 4
-CREATE TABLE IF NOT EXISTS funcionario (
-    funcionarioID INT NOT NULL auto_increment,
-    matricula     INT NOT NULL,
-    sexo          CHAR(1),
-    nome          VARCHAR(20) NOT NULL,
-    sobrenome     VARCHAR(50) NOT NULL,
-    dataNasc      DATE NOT NULL,
-    depto         VARCHAR(20) NOT NULL,
-    cargo         VARCHAR(30) NOT NULL,
-    cpf           VARCHAR(14) NOT NULL,
-    uf            VARCHAR(2),
-    cidade        VARCHAR(50),
-    bairro        VARCHAR(50),
-    rua           VARCHAR(50),
-    numero        INT,
-    complemento   VARCHAR(50),
-    cep           VARCHAR(9),
+CREATE INDEX index_publishingID ON book(FK_publishingID);
+CREATE INDEX index_categoryID ON book(FK_categoryID);
 
-    PRIMARY KEY (funcionarioID)
-) engine = InnoDB;
+CREATE TABLE IF NOT EXISTS client (
+    PK_ID        INTEGER PRIMARY KEY,
+    FK_addressID INTEGER,
+    firstName    TEXT NOT NULL,
+    lastName     TEXT NOT NULL,
+    cpf          INTEGER UNIQUE NOT NULL,
 
--- 5
-CREATE TABLE estoque (
-    stockID INT NOT NULL auto_increment,
-    bookID  INT,
-    lote    VARCHAR(20),
+    FOREIGN KEY (FK_addressID) REFERENCES 
+        address (PK_ID) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE
+);
 
-    FOREIGN KEY(bookID) REFERENCES 
-        book(bookID) 
-    ON DELETE CASCADE,
+CREATE INDEX index_addressID ON client(FK_addressID);
 
-    PRIMARY KEY (stockID)
-) engine = InnoDB;
+CREATE TABLE IF NOT EXISTS employee (
+    PK_ID           INTEGER PRIMARY KEY,
+    FK_departmentID INTEGER,
+    FK_addressID    INTEGER,
+    register        INTEGER NOT NULL,
+    firstName       TEXT NOT NULL,
+    lastName        TEXT NOT NULL,
+    sex             TEXT,
+    cpf             INTEGER UNIQUE NOT NULL,
+    birthDate       INTEGER,
+    office          TEXT NOT NULL,
+    
+    FOREIGN KEY (FK_departmentID) REFERENCES 
+        department (PK_ID) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE
 
--- 6
-CREATE TABLE IF NOT EXISTS autor (
-    autorID   INT NOT NULL auto_increment,
-    nome      VARCHAR(30),
-    sobrenome VARCHAR(50),
+    FOREIGN KEY (FK_addressID) REFERENCES 
+        address (PK_ID) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE
+);
 
-    PRIMARY KEY (autorID)
-) engine = InnoDB;
+CREATE INDEX index_departmentID ON employee(FK_departmentID);
+CREATE INDEX index_addressID ON employee(FK_addressID);
 
--- 7
-CREATE TABLE IF NOT EXISTS venda (
-    vendaID       INT NOT NULL auto_increment,
-    dataEvento    DATE NOT NULL,
-    funcionarioID INT,
-    clienteID     INT,
+CREATE TABLE IF NOT EXISTS author (
+    PK_ID     INTEGER PRIMARY KEY,
+    firstName TEXT,
+    lastName  TEXT,
+);
 
-    FOREIGN KEY (funcionarioID) REFERENCES 
-        funcionario(funcionarioID),
-    FOREIGN KEY (clienteID) REFERENCES 
-        cliente(clienteID),
-
-    PRIMARY KEY (vendaID)
-) engine = InnoDB;
-
--- 8
 CREATE TABLE IF NOT EXISTS escreve (
-    autorID INT,
-    bookID  INT,
+    FK_authorID INTEGER,
+    FK_bookID  INTEGER,
 
-    FOREIGN KEY (autorID) REFERENCES autor(autorID),
-    FOREIGN KEY (bookID) REFERENCES livro(bookID)
-) engine = InnoDB;
+    FOREIGN KEY (FK_authorID) REFERENCES 
+        author (PK_ID) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE,
 
--- 9
+    FOREIGN KEY (FK_bookID) REFERENCES 
+        book (PK_ID) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE,
+
+    PRIMARY KEY (FK_authorID, FK_bookID)
+);
+
+CREATE TABLE IF NOT EXISTS stock (
+    PK_ID      INTEGER PRIMARY KEY,
+    FK_bookID  INTEGER,
+    lote       TEXT,
+
+    FOREIGN KEY (FK_bookID) REFERENCES 
+        book (PK_ID) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE
+);
+
+CREATE INDEX index_bookID ON stock(FK_bookID);
+
+CREATE TABLE IF NOT EXISTS sell (
+    PK_ID         INTEGER PRIMARY KEY,
+    FK_employeeID INTEGER,
+    FK_clientID   INTEGER,
+    eventDate     INTEGER NOT NULL,
+    
+    FOREIGN KEY (FK_employeeID) REFERENCES 
+        employee (PK_ID) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE,
+
+    FOREIGN KEY (FK_clientID) REFERENCES 
+        client (PK_ID) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE
+);
+
+CREATE INDEX index_employeeID ON sell(FK_employeeID);
+CREATE INDEX index_clientID ON sell(FK_clientID);
+
 CREATE TABLE IF NOT EXISTS transacao (
-    stockID    INT,
-    vendaID    INT,
-    quantidade INT,
+    FK_stockID INTEGER,
+    FK_sellID  INTEGER,
+    quantity   INTEGER,
 
-    FOREIGN KEY (stockID) REFERENCES estoque(stockID),
-    FOREIGN KEY (vendaID) REFERENCES venda(vendaID)
-) engine = InnoDB;
+    FOREIGN KEY (FK_stockID) REFERENCES 
+        stock (PK_ID) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE,
 
--- 10
-CREATE TABLE IF NOT EXISTS contatoEditora (
-    editorID INT,
-    contato  VARCHAR(40),
+    FOREIGN KEY (FK_sellID) REFERENCES 
+        sell (PK_ID) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE,
 
-    FOREIGN KEY (editorID) REFERENCES editora(editorID)
-) engine = InnoDB;
+    PRIMARY KEY (FK_stockID, FK_sellID)
+);
 
--- 11
-CREATE TABLE IF NOT EXISTS contatoCliente (
-    clienteID INT,
-    contato   VARCHAR(40),
+CREATE TABLE IF NOT EXISTS publishingContact (
+    FK_publishingID INTEGER,
+    contact         TEXT,
 
-    FOREIGN KEY (clienteID) REFERENCES cliente(clienteID)
-) engine = InnoDB;
+    FOREIGN KEY (FK_publishingID) REFERENCES 
+        publishingCia (PK_ID) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE,
 
--- 12
-CREATE TABLE IF NOT EXISTS contato (
-    funcionarioID INT,
-    contato       VARCHAR(40),
+    PRIMARY KEY (FK_publishingID, contact)
+);
 
-    FOREIGN KEY (funcionarioID) REFERENCES funcionario(funcionarioID)
-) engine = InnoDB;
+CREATE TABLE IF NOT EXISTS clientContact (
+    FK_clientID INTEGER,
+    contact     TEXT,
+
+    FOREIGN KEY (FK_clientID) REFERENCES 
+        client (PK_ID) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE,
+    
+    PRIMARY KEY (FK_clientID, contact)
+);
+
+CREATE TABLE IF NOT EXISTS employeeContact (
+    FK_employeeID INTEGER,
+    contact       TEXT,
+
+    FOREIGN KEY (FK_employeeID) REFERENCES 
+        employee (PK_ID) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE,
+
+    PRIMARY KEY (FK_employeeID, contact)
+);
