@@ -1,5 +1,4 @@
 build/
 test/
-src/org/json
-src/lib/db.sqlite
+db.sqlite
 *.chc
