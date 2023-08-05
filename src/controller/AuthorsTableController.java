@@ -5,15 +5,14 @@ import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
-import model.TableChecker;
-import model.dao.AuthorDAO;
+import model.utils.TableChecker;
+import model.dao.AuthorRepository;
 import model.entities.Author;
 import model.factories.ConnectionSingleton;
 import view.AuthorsTableView;
 import view.BookView;
 
 /**
- *
  *
  */
 public class AuthorsTableController
@@ -37,6 +36,7 @@ public class AuthorsTableController
         {
             model.removeRow(0);
         }
+        
         List<Author> list = this.getAll();
 
         for ( Author author : list )
@@ -49,11 +49,13 @@ public class AuthorsTableController
     {
         try (Connection connection = ConnectionSingleton.getInstance())
         {
-            return new AuthorDAO(connection).getAll();
-        } catch (SQLException e)
+            return new AuthorRepository(connection).getAll();
+        }
+        catch (SQLException e)
         {
             System.out.println(e.getMessage());
         }
+        
         return Collections.emptyList();
     }
 
@@ -67,6 +69,7 @@ public class AuthorsTableController
             id      = (int) table.getValueAt(row, 0);
             parentView.getAuthorField().setText(String.valueOf(id));
         }
+        
         this.view.dispose();
     }
 

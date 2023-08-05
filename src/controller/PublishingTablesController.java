@@ -5,8 +5,8 @@ import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
-import model.TableChecker;
-import model.dao.PublishingCiaDAO;
+import model.utils.TableChecker;
+import model.dao.PublishingRepository;
 import model.entities.PublishingCia;
 import model.factories.ConnectionSingleton;
 import view.BookView;
@@ -14,16 +14,15 @@ import view.PublishingTableView;
 
 /**
  *
- *
  */
-public class PublishingTableController
+public class PublishingTablesController
 {
 
     private final PublishingTableView view;
     private final BookView parentView;
     private int id;
 
-    public PublishingTableController(BookView parentView)
+    public PublishingTablesController(BookView parentView)
     {
         this.view       = new PublishingTableView(this);
         this.parentView = parentView;
@@ -37,6 +36,7 @@ public class PublishingTableController
         {
             model.removeRow(0);
         }
+        
         List<PublishingCia> list = this.getAll();
 
         for ( PublishingCia cia : list )
@@ -49,11 +49,13 @@ public class PublishingTableController
     {
         try (Connection connection = ConnectionSingleton.getInstance())
         {
-            return new PublishingCiaDAO(connection).getAll();
-        } catch (SQLException e)
+            return new PublishingRepository(connection).getAll();
+        }
+        catch (SQLException e)
         {
             System.out.println(e.getMessage());
         }
+        
         return Collections.emptyList();
     }
 
@@ -67,6 +69,7 @@ public class PublishingTableController
             id      = (int) table.getValueAt(row, 0);
             parentView.getPublishingField().setText(String.valueOf(id));
         }
+        
         this.view.dispose();
     }
 

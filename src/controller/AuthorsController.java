@@ -6,14 +6,13 @@ import java.util.Collections;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import model.TableChecker;
-import model.dao.AuthorDAO;
+import model.utils.TableChecker;
+import model.dao.AuthorRepository;
 import model.entities.Author;
 import model.factories.ConnectionSingleton;
 import view.AuthorView;
 
 /**
- *
  *
  */
 public class AuthorsController
@@ -70,6 +69,7 @@ public class AuthorsController
                 "Confirmação",
                 JOptionPane.YES_NO_OPTION
             );
+            
             if ( response == JOptionPane.YES_OPTION )
             {
                 int row = table.getSelectedRow();
@@ -78,10 +78,12 @@ public class AuthorsController
                 try (Connection connection = ConnectionSingleton.getInstance())
                 {
                     // new AuthorDAO(connection).delete(id);
-                } catch (SQLException e)
+                }
+                catch (SQLException e)
                 {
                     System.out.println(e.getMessage());
                 }
+                
                 this.loadTable();
             }
         }
@@ -95,13 +97,15 @@ public class AuthorsController
         try (Connection connection = ConnectionSingleton.getInstance())
         {
             if ( label.equals("Atualizar") )
-                new AuthorDAO(connection).update(author);
+                new AuthorRepository(connection).update(author);
             else
-                new AuthorDAO(connection).insert(author);
-        } catch (SQLException e)
+                new AuthorRepository(connection).insert(author);
+        }
+        catch (SQLException e)
         {
             System.out.println(e.getMessage());
         }
+        
         this.loadTable();
         JOptionPane.showMessageDialog(this.view, "Registro Salvo.");
 
@@ -118,6 +122,7 @@ public class AuthorsController
         {
             model.removeRow(0);
         }
+        
         List<Author> list = getAll();
 
         for ( Author author : list )
@@ -130,11 +135,13 @@ public class AuthorsController
     {
         try (Connection connection = ConnectionSingleton.getInstance())
         {
-            return new AuthorDAO(connection).getAll();
-        } catch (SQLException e)
+            return new AuthorRepository(connection).getAll();
+        }
+        catch (SQLException e)
         {
             System.out.println(e.getMessage());
         }
+        
         return Collections.emptyList();
     }
 }

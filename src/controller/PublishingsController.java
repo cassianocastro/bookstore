@@ -6,24 +6,22 @@ import java.util.Collections;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import model.TableChecker;
-import model.dao.PublishingCiaDAO;
+import model.utils.TableChecker;
+import model.dao.PublishingRepository;
 import model.entities.PublishingCia;
 import model.factories.ConnectionSingleton;
-import model.factories.PublishingCiaFactory;
-import org.json.JSONObject;
+import model.factories.PublishingsFactory;
 import view.PublishingView;
 
 /**
  *
- *
  */
-public class PublishingController
+public class PublishingsController
 {
 
     private final PublishingView view;
 
-    public PublishingController()
+    public PublishingsController()
     {
         this.view = new PublishingView(this);
     }
@@ -74,10 +72,12 @@ public class PublishingController
                 try (Connection connection = ConnectionSingleton.getInstance())
                 {
                     // new PublishingCiaDAO(connection).delete(id);
-                } catch (SQLException e)
+                }
+                catch (SQLException e)
                 {
                     System.out.println(e.getMessage());
                 }
+                
                 this.loadTable();
             }
         }
@@ -86,19 +86,21 @@ public class PublishingController
     public void save()
     {
         String labelWildCard = this.view.getSaveButton().getText();
-        JSONObject json      = this.view.getJSON();
-        PublishingCia publishingCia = new PublishingCiaFactory().buildFrom(json);
+        Object json      = this.view.getJSON();
+        PublishingCia publishingCia = new PublishingsFactory().create();
 
         try (Connection connection = ConnectionSingleton.getInstance())
         {
             if ( labelWildCard.equals("Atualizar") )
-                new PublishingCiaDAO(connection).update(publishingCia);
+                new PublishingRepository(connection).update(publishingCia);
             else
-                new PublishingCiaDAO(connection).insert(publishingCia);
-        } catch (SQLException e)
+                new PublishingRepository(connection).insert(publishingCia);
+        }
+        catch (SQLException e)
         {
             System.out.println(e.getMessage());
         }
+        
         this.loadTable();
         this.view.clearFields();
         this.view.setPanelState(false);
@@ -113,6 +115,7 @@ public class PublishingController
         {
             model.removeRow(0);
         }
+        
         List<PublishingCia> list = getAll();
 
         for ( PublishingCia cia : list )
@@ -137,11 +140,13 @@ public class PublishingController
     {
         try (Connection connection = ConnectionSingleton.getInstance())
         {
-            return new PublishingCiaDAO(connection).getAll();
-        } catch (SQLException e)
+            return new PublishingRepository(connection).getAll();
+        }
+        catch (SQLException e)
         {
             System.out.println(e.getMessage());
         }
+        
         return Collections.emptyList();
     }
 }

@@ -1,16 +1,10 @@
 package controller;
 
-import java.io.IOException;
 import java.sql.SQLException;
-import model.DBConfig;
-import model.dao.ConfigDAO;
 import model.factories.ConnectionSingleton;
-import model.factories.ConfigFactory;
-import org.json.JSONObject;
 import view.IndexView;
 
 /**
- *
  *
  */
 public class IndexController
@@ -23,12 +17,12 @@ public class IndexController
 
     public void createBooksView()
     {
-        new BookController();
+        new BooksController();
     }
 
     public void createPublishingsView()
     {
-        new PublishingController();
+        new PublishingsController();
     }
 
     public void createAuthorsView()
@@ -38,7 +32,7 @@ public class IndexController
 
     public void createConfigView()
     {
-        new ConfigController();
+        new ConfigsController();
     }
 
     public void createEmployeesView()
@@ -83,6 +77,7 @@ public class IndexController
         {
             System.out.println(e.getMessage());
         }
+        
         System.exit(0);
     }
 }

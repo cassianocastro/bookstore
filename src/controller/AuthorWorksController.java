@@ -5,13 +5,11 @@ import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
-import model.dao.AuthorWorksDAO;
+import model.dao.AuthorWorksRepository;
 import model.factories.ConnectionSingleton;
-import org.json.JSONObject;
 import view.AuthorWorksView;
 
 /**
- *
  *
  */
 public class AuthorWorksController
@@ -42,25 +40,25 @@ public class AuthorWorksController
             model.removeRow(0);
         }
 
-        List<JSONObject> list = this.getAll();
+        List list = this.getAll();
 
-        for ( JSONObject json : list )
+        for ( Object json : list )
         {
             model.addRow(
                 new Object[]
                 {
-                    json.getString("authorFirstName") + " " + json.getString("authorLastName"),
-                    json.getString("bookTitle")
+                    //json.getString("authorFirstName") + " " + json.getString("authorLastName"),
+                    //json.getString("bookTitle")
                 }
             );
         }
     }
 
-    private List<JSONObject> getAll()
+    private List getAll()
     {
         try (Connection connection = ConnectionSingleton.getInstance())
         {
-            return new AuthorWorksDAO(connection).findBooksByAuthor(0);
+            return new AuthorWorksRepository(connection).findBooksByAuthor(0);
         } catch (SQLException e)
         {
             System.out.println(e.getMessage());

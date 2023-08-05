@@ -6,21 +6,20 @@ import java.util.Collections;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import model.TableChecker;
+import model.utils.TableChecker;
 import model.entities.Book;
 import model.factories.ConnectionSingleton;
 import view.BookView;
 
 /**
  *
- *
  */
-public class BookController
+public class BooksController
 {
 
     private final BookView view;
 
-    public BookController()
+    public BooksController()
     {
         this.view = new BookView(this);
     }
@@ -88,7 +87,7 @@ public class BookController
 
     public void showPub()
     {
-        new PublishingTableController(view);
+        new PublishingTablesController(view);
     }
 
     public void showAuthor()
@@ -110,10 +109,12 @@ public class BookController
         try (Connection connection = ConnectionSingleton.getInstance())
         {
 
-        } catch (SQLException e)
+        }
+        catch (SQLException e)
         {
 
         }
+        
         return Collections.emptyList();
     }
 
