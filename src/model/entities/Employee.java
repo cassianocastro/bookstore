@@ -1,76 +1,27 @@
 package model.entities;
 
 import java.util.Calendar;
-import model.Name;
-import model.Sex;
+import model.utils.Contract;
+import model.utils.Name;
+import model.utils.Sex;
 
 /**
  *
- *
  */
-public class Employee extends Entity
+public class Employee extends PF
 {
 
-    private final int matricula;
-    private final Name name;
-    private final String cpf;
-    private final String depto;
-    private final String cargo;
-    private final Calendar date;
-    private final Sex sex;
-    private final Address address;
+    private final Contract contract;
 
-    public Employee(int id, Name name, Address address, String cpf,
-                    int matricula, String depto, String cargo, Calendar date, Sex sex)
+    public Employee(int id, Name name, Address address, String cpf, Calendar date, Sex sex, Contract contract)
     {
-        super(id);
-        this.name      = name;
-        this.matricula = matricula;
-        this.depto     = depto;
-        this.cargo     = cargo;
-        this.date      = date;
-        this.sex       = sex;
-        this.cpf       = cpf;
-        this.address   = address;
+        super(id, name, date, address, cpf, sex);
+        
+        this.contract = contract;
     }
 
-    public Name getName()
+    public Contract getContract()
     {
-        return this.name;
-    }
-
-    public int getMatricula()
-    {
-        return this.matricula;
-    }
-
-    public String getDepto()
-    {
-        return this.depto;
-    }
-
-    public String getCargo()
-    {
-        return this.cargo;
-    }
-
-    public Calendar getDate()
-    {
-        return this.date;
-    }
-
-    public Sex getSex()
-    {
-        return this.sex;
-    }
-
-    public Address getAddress()
-    {
-        return this.address;
-    }
-
-    public String getCPF()
-    {
-        return this.cpf;
+        return this.contract;
     }
 }
