@@ -2,7 +2,6 @@ package model.entities;
 
 /**
  *
- *
  */
 public class Address extends Entity
 {

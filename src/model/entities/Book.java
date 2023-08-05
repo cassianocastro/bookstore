@@ -1,10 +1,11 @@
 package model.entities;
 
 import java.math.BigDecimal;
-import model.Product;
+
+import model.utils.Gender;
+import model.utils.Product;
 
 /**
- *
  *
  */
 public class Book extends Product
@@ -12,19 +13,19 @@ public class Book extends Product
 
     private final PublishingCia publishing;
     private final Author author;
-    private final int year;
+    private final int release;
     private final int pages;
     private final String title;
-    private final String gender;
+    private final Gender gender;
     private final String finishing;
 
-    public Book(int id, PublishingCia publishing, Author author, int code, int year, int pages,
-            String title, String gender, String finishing, BigDecimal sellValue, BigDecimal buyValue)
+    public Book(int id, PublishingCia publishing, Author author, int code, int release, int pages,
+            String title, Gender gender, String finishing, BigDecimal sellValue, BigDecimal buyValue)
     {
         super(id, code, sellValue, buyValue);
         this.publishing = publishing;
         this.author     = author;
-        this.year       = year;
+        this.release    = release;
         this.pages      = pages;
         this.title      = title;
         this.gender     = gender;
@@ -43,7 +44,7 @@ public class Book extends Product
 
     public int getReleaseYear()
     {
-        return this.year;
+        return this.release;
     }
 
     public int getNumberPages()
@@ -56,7 +57,7 @@ public class Book extends Product
         return this.title;
     }
 
-    public String getGender()
+    public Gender getGender()
     {
         return this.gender;
     }

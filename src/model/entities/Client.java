@@ -1,9 +1,8 @@
 package model.entities;
 
-import model.Name;
+import model.utils.Name;
 
 /**
- *
  *
  */
 public class Client extends Entity
@@ -15,6 +14,7 @@ public class Client extends Entity
     public Client(int id, Name name, String cpf)
     {
         super(id);
+        
         this.name = name;
         this.cpf  = cpf;
     }
