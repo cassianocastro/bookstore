@@ -1,13 +1,12 @@
-package model;
+package model.utils;
 
 /**
- *
  *
  */
 public enum Sex
 {
 
-    MALE("M"), FEMALE("F");
+    FEMALE("F"), MALE("M");
 
     private final String description;
 

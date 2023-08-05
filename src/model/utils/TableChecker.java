@@ -1,9 +1,8 @@
-package model;
+package model.utils;
 
 import javax.swing.JTable;
 
 /**
- *
  *
  */
 public class TableChecker

@@ -1,7 +1,6 @@
-package model;
+package model.utils;
 
 /**
- *
  *
  */
 public class Name

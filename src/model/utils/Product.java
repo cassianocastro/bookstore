@@ -1,10 +1,9 @@
-package model;
+package model.utils;
 
 import model.entities.Entity;
 import java.math.BigDecimal;
 
 /**
- *
  *
  */
 abstract public class Product extends Entity
