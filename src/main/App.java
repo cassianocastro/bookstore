@@ -4,7 +4,6 @@ import controller.IndexController;
 
 /**
  *
- *
  */
 public class App
 {
