@@ -1,29 +1,16 @@
 package model.entities;
 
+import java.util.Calendar;
+import model.utils.Name;
+
 /**
  *
- *
  */
-public class PublishingCia extends Entity
+public class PublishingCia extends PJ
 {
 
-    private final String name;
-    private final Address address;
-
-    public PublishingCia(int id, String name, Address address)
+    public PublishingCia(int id, Name name, Calendar date, Address address, String cnpj)
     {
-        super(id);
-        this.name    = name;
-        this.address = address;
-    }
-
-    public String getName()
-    {
-        return this.name;
-    }
-
-    public Address getAddress()
-    {
-        return this.address;
+        super(id, name, date, address, cnpj);
     }
 }
