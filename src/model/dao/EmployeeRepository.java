@@ -4,34 +4,34 @@ import java.sql.*;
 import java.util.*;
 import model.entities.Employee;
 import model.entities.Address;
-import model.Name;
-import model.Sex;
+import model.utils.Contract;
+import model.utils.Name;
+import model.utils.Sex;
 
 /**
  *
- *
  */
-public class EmployeeDAO
+public class EmployeeRepository
 {
 
     private final Connection connection;
 
-    public EmployeeDAO(Connection connection)
+    public EmployeeRepository(Connection connection)
     {
         this.connection = connection;
     }
 
-    public void insert(Employee employee) throws SQLException
+    public void insert(final Employee employee) throws SQLException
     {
-        final String SQL = "INSERT INTO funcionario(nome, sobrenome, matricula, depto, cargo, cpf, address, sexo, dataNasc) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        final String SQL = "INSERT INTO employee(name, surname, matricula, depto, cargo, cpf, address, sex, dataNasc) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (var ps = this.connection.prepareStatement(SQL))
         {
             ps.setString(1, employee.getName().getFirst());
             ps.setString(2, employee.getName().getLast());
-            ps.setInt(3, employee.getMatricula());
-            ps.setString(4, employee.getDepto());
-            ps.setString(5, employee.getCargo());
+            ps.setInt(3, employee.getContract().getMatricula());
+            ps.setString(4, employee.getContract().getDepto());
+            ps.setString(5, employee.getContract().getCargo());
             ps.setString(6, employee.getCPF());
             ps.setInt(7, employee.getAddress().getID());
             ps.setString(8, employee.getSex().getDescription());
@@ -41,18 +41,18 @@ public class EmployeeDAO
         }
     }
 
-    public void update(Employee employee) throws SQLException
+    public void update(final Employee employee) throws SQLException
     {
-        final String SQL = "UPDATE funcionario SET nome = ?,"
-            + "sobrenome = ?, matricula = ?, depto = ?, cargo = ?, cpf = ?, address = ?, sexo = ?, dataNasc = ? WHERE funcionarioID = ?";
+        final String SQL = "UPDATE employee SET name = ?,"
+            + "surname = ?, matricula = ?, depto = ?, cargo = ?, cpf = ?, address = ?, sex = ?, dataNasc = ? WHERE id = ?";
 
         try (var ps = this.connection.prepareStatement(SQL))
         {
             ps.setString(1, employee.getName().getFirst());
             ps.setString(2, employee.getName().getLast());
-            ps.setInt(3, employee.getMatricula());
-            ps.setString(4, employee.getDepto());
-            ps.setString(5, employee.getCargo());
+            ps.setInt(3, employee.getContract().getMatricula());
+            ps.setString(4, employee.getContract().getDepto());
+            ps.setString(5, employee.getContract().getCargo());
             ps.setString(6, employee.getCPF());
             ps.setInt(7, employee.getAddress().getID());
             ps.setString(8, employee.getSex().getDescription());
@@ -63,9 +63,9 @@ public class EmployeeDAO
         }
     }
 
-    public void delete(Employee employee) throws SQLException
+    public void delete(final Employee employee) throws SQLException
     {
-        final String SQL = "DELETE FROM funcionario WHERE funcionarioID = ?";
+        final String SQL = "DELETE FROM employee WHERE id = ?";
 
         try (var statement = this.connection.prepareStatement(SQL))
         {
@@ -77,7 +77,7 @@ public class EmployeeDAO
 
     public List<Employee> getAll() throws SQLException
     {
-        final String SQL = "SELECT * FROM funcionario";
+        final String SQL = "SELECT * FROM employee";
 
         try (var statement = this.connection.createStatement();
             var rs = statement.executeQuery(SQL))
@@ -86,10 +86,10 @@ public class EmployeeDAO
 
             while ( rs.next() )
             {
-                int id              = rs.getInt("funcionarioID");
-                String firstName    = rs.getString("nome");
-                String lastName     = rs.getString("sobrenome");
-                Sex sex             = Sex.valueOf(rs.getString("sexo"));
+                int id              = rs.getInt("id");
+                String firstName    = rs.getString("name");
+                String lastName     = rs.getString("surname");
+                Sex sex             = Sex.valueOf(rs.getString("sex"));
                 String cpf          = rs.getString("cpf");
                 Calendar date       = Calendar.getInstance();
                 date.setTime(rs.getDate("dataNasc"));
@@ -100,21 +100,23 @@ public class EmployeeDAO
                 int addressID = rs.getInt("address");
 
                 Name name       = new Name(firstName, lastName);
+                Contract contract = new Contract(matricula, depto, cargo);
                 // Address address = new Address(uf, city, bairro, street, number, compl, cep);
 
-                list.add(new Employee(id, name, null, cpf, matricula, depto, cargo, date, sex));
+                list.add(new Employee(id, name, null, cpf, date, sex, contract));
             }
+            
             return list;
         }
     }
 
-    public Employee findByID(int id) throws SQLException
+    public Employee findByID(final int ID) throws SQLException
     {
-        final String SQL = "SELECT * FROM funcionario WHERE funcionarioID = ?";
+        final String SQL = "SELECT * FROM employee WHERE id = ?";
 
         try (var statement = this.connection.prepareStatement(SQL))
         {
-            statement.setInt(1, id);
+            statement.setInt(1, ID);
 
             var rs = statement.executeQuery();
 
@@ -122,10 +124,11 @@ public class EmployeeDAO
             {
                 throw new SQLException("Employee not found!");
             }
-            String firstName    = rs.getString("nome");
-            String lastName     = rs.getString("sobrenome");
+            
+            String firstName    = rs.getString("name");
+            String lastName     = rs.getString("surname");
             String cpf          = rs.getString("cpf");
-            Sex sex             = Sex.valueOf(rs.getString("sexo"));
+            Sex sex             = Sex.valueOf(rs.getString("sex"));
             Calendar date       = Calendar.getInstance();
             date.setTime(rs.getDate("dataNasc"));
 
@@ -135,9 +138,10 @@ public class EmployeeDAO
             int addressID = rs.getInt("address");
 
             Name name       = new Name(firstName, lastName);
+            Contract contract = new Contract(matricula, depto, cargo);
             // Address address = new Address(uf, city, bairro, street, number, compl, cep);
 
-            return new Employee(id, name, null, cpf, matricula, depto, cargo, date, sex);
+            return new Employee(ID, name, null, cpf, date, sex, contract);
         }
     }
 }

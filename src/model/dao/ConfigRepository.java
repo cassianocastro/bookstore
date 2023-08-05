@@ -1,48 +1,38 @@
 package model.dao;
 
 import java.io.*;
-import model.DBConfig;
-import org.json.JSONObject;
+import model.utils.DBConfig;
 
 /**
  *
- *
  */
-public class ConfigDAO
+public class ConfigRepository
 {
 
-    private final String pathName;
+    private final String path;
 
-    public ConfigDAO()
+    public ConfigRepository()
     {
-        this.pathName = "src/lib/config.txt";
+        this.path = "lib/config.txt";
     }
 
     public void write(DBConfig config) throws IOException
     {
         try (ObjectOutputStream output
-            = new ObjectOutputStream(new FileOutputStream(this.pathName)))
+            = new ObjectOutputStream(
+                new FileOutputStream(this.path)))
         {
             output.writeObject(config);
         }
     }
 
-    public JSONObject read() throws IOException, ClassNotFoundException
+    public DBConfig read() throws IOException, ClassNotFoundException
     {
         try (ObjectInputStream input
-            = new ObjectInputStream(new FileInputStream(this.pathName)))
+            = new ObjectInputStream(
+                new FileInputStream(this.path)))
         {
-            DBConfig config = (DBConfig) input.readObject();
-            JSONObject json = new JSONObject();
-
-            json.put("host", config.getHost());
-            json.put("port", config.getPort());
-            json.put("driver", config.getDriver());
-            json.put("database", config.getDatabase());
-            json.put("user", config.getUser());
-            json.put("password", config.getPassword());
-
-            return json;
+            return (DBConfig) input.readObject();
         }
     }
 }

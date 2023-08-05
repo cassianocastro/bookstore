@@ -3,43 +3,44 @@ package model.dao;
 import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
+
 import model.entities.Address;
 import model.entities.PublishingCia;
+import model.utils.Name;
 
 /**
  *
- *
  */
-public class PublishingCiaDAO
+public class PublishingRepository
 {
 
     private final Connection connection;
 
-    public PublishingCiaDAO(Connection connection)
+    public PublishingRepository(Connection connection)
     {
         this.connection = connection;
     }
 
-    public void insert(PublishingCia cia) throws SQLException
+    public void insert(final PublishingCia cia) throws SQLException
     {
         final String SQL = "INSERT INTO editora(nome, address) VALUES (?, ?)";
 
         try (var ps = this.connection.prepareStatement(SQL))
         {
-            ps.setString(1, cia.getName());
+            ps.setString(1, cia.getName().toString());
             ps.setInt(2, cia.getAddress().getID());
 
             ps.executeUpdate();
         }
     }
 
-    public void update(PublishingCia cia) throws SQLException
+    public void update(final PublishingCia cia) throws SQLException
     {
         final String SQL = "UPDATE editora SET nome = ?, address = ? WHERE editorID = ?";
 
         try (var ps = this.connection.prepareStatement(SQL))
         {
-            ps.setString(1, cia.getName());
+            ps.setString(1, cia.getName().toString());
             ps.setInt(2, cia.getAddress().getID());
             ps.setInt(3, cia.getID());
 
@@ -47,7 +48,7 @@ public class PublishingCiaDAO
         }
     }
 
-    public void delete(PublishingCia cia) throws SQLException
+    public void delete(final PublishingCia cia) throws SQLException
     {
         final String SQL = "DELETE FROM editora WHERE editorID = ?";
 
@@ -76,8 +77,9 @@ public class PublishingCiaDAO
 
                 // Address address = new Address(uf, city, bairro, street, number, compl, cep);
 
-                list.add(new PublishingCia(ciaID, name, null));
+                list.add(new PublishingCia(ciaID, new Name(name, ""), null, null, null));
             }
+
             return list;
         }
     }

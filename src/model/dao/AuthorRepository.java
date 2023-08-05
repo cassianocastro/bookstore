@@ -3,26 +3,26 @@ package model.dao;
 import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
+
 import model.entities.Author;
-import model.Name;
+import model.utils.Name;
 
 /**
  *
- *
  */
-public class AuthorDAO
+public class AuthorRepository
 {
 
     private final Connection connection;
 
-    public AuthorDAO(Connection connection)
+    public AuthorRepository(Connection connection)
     {
         this.connection = connection;
     }
 
-    public void insert(Author author) throws SQLException
+    public void insert(final Author author) throws SQLException
     {
-        final String SQL = "INSERT INTO autor(nome, sobrenome) VALUES (?, ?)";
+        final String SQL = "INSERT INTO author(name, surname) VALUES (?, ?)";
 
         try (var statement = this.connection.prepareStatement(SQL))
         {
@@ -33,9 +33,9 @@ public class AuthorDAO
         }
     }
 
-    public void update(Author author) throws SQLException
+    public void update(final Author author) throws SQLException
     {
-        final String SQL = "UPDATE autor SET nome = ?, sobrenome = ? WHERE autorID = ?";
+        final String SQL = "UPDATE author SET name = ?, surname = ? WHERE id = ?";
 
         try (var statement = this.connection.prepareStatement(SQL))
         {
@@ -47,9 +47,9 @@ public class AuthorDAO
         }
     }
 
-    public void delete(Author author) throws SQLException
+    public void delete(final Author author) throws SQLException
     {
-        final String SQL = "DELETE FROM autor WHERE autorID = ?";
+        final String SQL = "DELETE FROM author WHERE id = ?";
 
         try (var statement = this.connection.prepareStatement(SQL))
         {
@@ -61,7 +61,7 @@ public class AuthorDAO
 
     public List<Author> getAll() throws SQLException
     {
-        final String SQL = "SELECT autorID, nome, sobrenome FROM autor";
+        final String SQL = "SELECT id, name, surname FROM author";
 
         try (var statement = this.connection.createStatement();
             var rs = statement.executeQuery(SQL))
@@ -70,12 +70,13 @@ public class AuthorDAO
 
             while ( rs.next() )
             {
-                int id       = rs.getInt("autorID");
-                String first = rs.getString("nome");
-                String last  = rs.getString("sobrenome");
+                int id       = rs.getInt("id");
+                String first = rs.getString("name");
+                String last  = rs.getString("surname");
 
                 list.add(new Author(id, new Name(first, last)));
             }
+            
             return list;
         }
     }

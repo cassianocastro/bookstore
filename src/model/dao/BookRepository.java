@@ -8,21 +8,20 @@ import model.entities.Book;
 
 /**
  *
- *
  */
-public class BookDAO
+public class BookRepository
 {
 
     private final Connection connection;
 
-    public BookDAO(Connection connection)
+    public BookRepository(Connection connection)
     {
         this.connection = connection;
     }
 
-    public void insert(Book book) throws SQLException
+    public void insert(final Book book) throws SQLException
     {
-        final String SQL = "INSERT INTO livro (titulo, editorID, autorID, genero, acabamento, "
+        final String SQL = "INSERT INTO book(title, editorID, autorID, genero, acabamento, "
             + "codigoBarras, lancamento, numberPages, valorCompra, valorVenda) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (var ps = this.connection.prepareStatement(SQL))
@@ -30,7 +29,7 @@ public class BookDAO
             ps.setString(1, book.getTitle());
             ps.setInt(2, book.getPublishing().getID());
             ps.setInt(3, book.getAuthor().getID());
-            ps.setString(4, book.getGender());
+            ps.setString(4, book.getGender().toString());
             ps.setString(5, book.getFinishing());
             ps.setInt(6, book.getCode());
             ps.setInt(7, book.getReleaseYear());
@@ -42,18 +41,18 @@ public class BookDAO
         }
     }
 
-    public void update(Book book) throws SQLException
+    public void update(final Book book) throws SQLException
     {
-        final String SQL = "UPDATE livro SET titulo = ?, editorID = ?, autorID = ?,"
+        final String SQL = "UPDATE book SET title = ?, editorID = ?, autorID = ?,"
             + "genero = ?, acabamento = ?, codigoBarras = ?, lancamento = ?,"
-            + "numberPages = ?, valorCompra = ?, valorVenda = ? WHERE bookID = ?";
+            + "numberPages = ?, valorCompra = ?, valorVenda = ? WHERE id = ?";
 
         try (var ps = this.connection.prepareStatement(SQL))
         {
             ps.setString(1, book.getTitle());
             ps.setInt(2, book.getPublishing().getID());
             ps.setInt(3, book.getAuthor().getID());
-            ps.setString(4, book.getGender());
+            ps.setString(4, book.getGender().toString());
             ps.setString(5, book.getFinishing());
             ps.setInt(6, book.getCode());
             ps.setInt(7, book.getReleaseYear());
@@ -66,9 +65,9 @@ public class BookDAO
         }
     }
 
-    public void delete(Book book) throws SQLException
+    public void delete(final Book book) throws SQLException
     {
-        final String SQL = "DELETE FROM livro WHERE bookID = ?";
+        final String SQL = "DELETE FROM book WHERE id = ?";
 
         try (var ps = this.connection.prepareStatement(SQL))
         {
@@ -80,7 +79,7 @@ public class BookDAO
 
     public List<Book> getAll() throws SQLException
     {
-        final String SQL = "SELECT * FROM livro";
+        final String SQL = "SELECT * FROM book";
 
         try (var ps = this.connection.createStatement();
             var rs = ps.executeQuery(SQL))
@@ -89,7 +88,7 @@ public class BookDAO
 
             while ( rs.next() )
             {
-                int id           = rs.getInt("bookID");
+                int id           = rs.getInt("id");
                 int editorID     = rs.getInt("editorID");
                 int authorID     = rs.getInt("autorID");
                 int code         = rs.getInt("codigoBarras");
@@ -101,19 +100,18 @@ public class BookDAO
                 String buyValue  = rs.getString("valorCompra");
                 String sellValue = rs.getString("valorVenda");
 
-                // Author author = new Author(authorID);
-
-                list.add(new Book(id, null, null, code, year, pages, title, gender, finishing,
+                list.add(new Book(id, null, null, code, year, pages, title, null, finishing,
                     new BigDecimal(sellValue), new BigDecimal(buyValue)
                 ));
             }
+            
             return list;
         }
     }
 
-    public Book findByID(int id) throws SQLException
+    public Book findByID(final int id) throws SQLException
     {
-        final String SQL = "SELECT * FROM livro WHERE bookID = ?";
+        final String SQL = "SELECT * FROM book WHERE id = ?";
 
         try (var ps = this.connection.prepareStatement(SQL))
         {
@@ -125,6 +123,7 @@ public class BookDAO
             {
                 throw new SQLException("Book not found!");
             }
+            
             int editorID     = rs.getInt("editorID");
             int authorID     = rs.getInt("autorID");
             int code         = rs.getInt("codigoBarras");
@@ -136,10 +135,8 @@ public class BookDAO
             String buyValue  = rs.getString("valorCompra");
             String sellValue = rs.getString("valorVenda");
 
-            // Author author = new Author(authorID);
-
             return new Book(
-                id, null, null, code, year, pages, title, gender, finishing,
+                id, null, null, code, year, pages, title, null, finishing,
                 new BigDecimal(sellValue), new BigDecimal(buyValue)
             );
         }

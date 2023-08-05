@@ -5,19 +5,18 @@ import model.entities.Address;
 
 /**
  *
- *
  */
-public class AddressDAO
+public class AddressRepository
 {
 
     private final Connection connection;
 
-    public AddressDAO(Connection connection)
+    public AddressRepository(Connection connection)
     {
         this.connection = connection;
     }
 
-    public void insert(Address address) throws SQLException
+    public void insert(final Address address) throws SQLException
     {
         final String SQL = "INSERT INTO address(uf, city, district, street, number, complement, cep)"
             + " VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -36,12 +35,12 @@ public class AddressDAO
         }
     }
 
-    public void update(Address address)
+    public void update(final Address address)
     {
 
     }
 
-    public void delete(Address address)
+    public void delete(final Address address)
     {
 
     }

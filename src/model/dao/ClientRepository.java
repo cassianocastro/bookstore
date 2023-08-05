@@ -3,25 +3,24 @@ package model.dao;
 import java.sql.*;
 import java.util.*;
 import model.entities.Client;
-import model.Name;
+import model.utils.Name;
 
 /**
  *
- *
  */
-public class ClientDAO
+public class ClientRepository
 {
 
     private final Connection connection;
 
-    public ClientDAO(Connection connection)
+    public ClientRepository(Connection connection)
     {
         this.connection = connection;
     }
 
-    public void insert(Client client) throws SQLException
+    public void insert(final Client client) throws SQLException
     {
-        final String SQL = "INSERT INTO cliente(nome, sobrenome, cpf) VALUES (?, ?, ?)";
+        final String SQL = "INSERT INTO client(name, surname, cpf) VALUES (?, ?, ?)";
 
         try (var statement = this.connection.prepareStatement(SQL))
         {
@@ -33,9 +32,9 @@ public class ClientDAO
         }
     }
 
-    public void update(Client client) throws SQLException
+    public void update(final Client client) throws SQLException
     {
-        final String SQL = "UPDATE cliente SET nome = ?, sobrenome = ?, cpf = ? WHERE clienteID = ?";
+        final String SQL = "UPDATE client SET name = ?, surname = ?, cpf = ? WHERE id = ?";
 
         try (var statement = this.connection.prepareStatement(SQL))
         {
@@ -48,9 +47,9 @@ public class ClientDAO
         }
     }
 
-    public void delete(Client client) throws SQLException
+    public void delete(final Client client) throws SQLException
     {
-        final String SQL = "DELETE FROM cliente WHERE clienteID = ?";
+        final String SQL = "DELETE FROM client WHERE id = ?";
 
         try (var statement = this.connection.prepareStatement(SQL))
         {
@@ -62,7 +61,7 @@ public class ClientDAO
 
     public List<Client> getAll() throws SQLException
     {
-        final String SQL = "SELECT clienteID, nome, sobrenome, cpf FROM cliente";
+        final String SQL = "SELECT id, name, surname, cpf FROM client";
 
         try (var statement = this.connection.createStatement();
             var rs = statement.executeQuery(SQL))
@@ -71,24 +70,25 @@ public class ClientDAO
 
             while ( rs.next() )
             {
-                int id       = rs.getInt("clienteID");
+                int id       = rs.getInt("id");
                 String first = rs.getString("nome");
                 String last  = rs.getString("sobrenome");
                 String cpf   = rs.getString("cpf");
 
                 list.add(new Client(id, new Name(first, last), cpf));
             }
+            
             return list;
         }
     }
 
-    public Client findByID(int id) throws SQLException
+    public Client findByID(final int ID) throws SQLException
     {
-        final String SQL = "SELECT nome, sobrenome, cpf FROM cliente WHERE clienteID = ?";
+        final String SQL = "SELECT name, surname, cpf FROM client WHERE id = ?";
 
         try (var statement = this.connection.prepareStatement(SQL))
         {
-            statement.setInt(1, id);
+            statement.setInt(1, ID);
 
             var rs = statement.executeQuery();
 
@@ -96,11 +96,12 @@ public class ClientDAO
             {
                 throw new SQLException("Client not found!");
             }
-            String firstName = rs.getString("nome");
-            String lastName  = rs.getString("sobrenome");
+            
+            String firstName = rs.getString("name");
+            String lastName  = rs.getString("surname");
             String cpf       = rs.getString("cpf");
 
-            return new Client(id, new Name(firstName, lastName), cpf);
+            return new Client(ID, new Name(firstName, lastName), cpf);
         }
     }
 }
