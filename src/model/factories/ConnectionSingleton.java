@@ -1,10 +1,9 @@
 package model.factories;
 
-import model.DBConfig;
+import model.utils.DBConfig;
 import java.sql.*;
 
 /**
- *
  *
  */
 public class ConnectionSingleton
@@ -30,6 +29,7 @@ public class ConnectionSingleton
                 config.getPassword()
             );
         }
+        
         return connection;
     }
 }

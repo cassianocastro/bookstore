@@ -1,22 +1,15 @@
 package model.factories;
 
-import model.entities.Address;
 import model.entities.PublishingCia;
-import org.json.JSONObject;
 
 /**
  *
- *
  */
-public class PublishingCiaFactory
+public class PublishingsFactory
 {
 
-    public PublishingCia buildFrom(JSONObject json)
+    public PublishingCia create()
     {
-        String ID      = json.getString("companyID");
-        String name    = json.getString("companyName");
-        String address = json.getString("address");
-
-        return new PublishingCia(Integer.parseInt(ID), name, null /* new Address() */);
+        return null;
     }
 }
