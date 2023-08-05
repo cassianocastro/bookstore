@@ -1,9 +1,8 @@
-package model;
+package model.utils;
 
 import java.io.Serializable;
 
 /**
- *
  *
  */
 final public class DBConfig implements Serializable
@@ -57,7 +56,7 @@ final public class DBConfig implements Serializable
         return this.password;
     }
 
-    public String getDSN()
+    public final String getDSN()
     {
         return "jdbc:"  + this.driver
                 + "://" + this.host
