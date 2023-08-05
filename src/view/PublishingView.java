@@ -1,6 +1,5 @@
 package view;
 
-import controller.PublishingController;
 import java.awt.*;
 import java.awt.event.*;
 import java.text.ParseException;
@@ -9,18 +8,18 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
-import org.json.JSONObject;
+
+import controller.PublishingsController;
 
 /**
- *
  *
  */
 public class PublishingView extends JFrame
 {
 
-    private final PublishingController controller;
+    private final PublishingsController controller;
 
-    public PublishingView(PublishingController controller)
+    public PublishingView(PublishingsController controller)
     {
         super("Editoras");
 
@@ -97,7 +96,7 @@ public class PublishingView extends JFrame
     {
         String[] args = new String[9];
 
-        for ( int i = 0; i < args.length; i++ )
+        for ( int i = 0; i < args.length; ++i )
         {
             args[i] = table.getValueAt(this.table.getSelectedRow(), i).toString();
         }
@@ -113,6 +112,7 @@ public class PublishingView extends JFrame
         {
             arg = "";
         }
+        
         setTextFields(args);
     }
 
@@ -139,6 +139,7 @@ public class PublishingView extends JFrame
         {
             if ( arg.isEmpty() ) return false;
         }
+        
         this.getJSON();
 
         return true;
@@ -161,24 +162,23 @@ public class PublishingView extends JFrame
         return args;
     }
 
-    public JSONObject getJSON()
+    public Object getJSON()
     {
-        JSONObject json = new JSONObject();
-        String id       = this.fieldPublishingID.getText();
+        String id = this.fieldPublishingID.getText();
 
         if ( id.isEmpty() ) id = "0";
 
-        json.put("companyID",     id);
-        json.put("companyName",   this.fieldName  .getText());
-        json.put("addressCity",   this.fieldCity  .getText());
-        json.put("addressDistrict", this.fieldDistrict.getText());
-        json.put("addressStreet", this.fieldStreet.getText());
-        json.put("addressNumber", this.fieldNumber.getText());
-        json.put("addressCompl",  this.fieldCompl .getText());
-        json.put("addressCEP",    this.fieldCEP   .getText());
-        json.put("addressUF",     this.fieldUF    .getText());
+//        json.put("companyID",     id);
+//        json.put("companyName",   this.fieldName  .getText());
+//        json.put("addressCity",   this.fieldCity  .getText());
+//        json.put("addressDistrict", this.fieldDistrict.getText());
+//        json.put("addressStreet", this.fieldStreet.getText());
+//        json.put("addressNumber", this.fieldNumber.getText());
+//        json.put("addressCompl",  this.fieldCompl .getText());
+//        json.put("addressCEP",    this.fieldCEP   .getText());
+//        json.put("addressUF",     this.fieldUF    .getText());
 
-        return json;
+        return null;
     }
 
     public JButton getSaveButton()

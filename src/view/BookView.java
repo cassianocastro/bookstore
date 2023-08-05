@@ -1,6 +1,5 @@
 package view;
 
-import controller.BookController;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.text.ParseException;
@@ -9,18 +8,18 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
-import org.json.JSONObject;
+
+import controller.BooksController;
 
 /**
- *
  *
  */
 public class BookView extends JFrame
 {
 
-    private final BookController controller;
+    private final BooksController controller;
 
-    public BookView(BookController controller)
+    public BookView(BooksController controller)
     {
         super("Livros");
 
@@ -123,6 +122,7 @@ public class BookView extends JFrame
         {
             args[i] = table.getValueAt(this.table.getSelectedRow(), i).toString();
         }
+        
         setTextFields(args);
     }
 
@@ -134,6 +134,7 @@ public class BookView extends JFrame
         {
             arg = "";
         }
+        
         setTextFields(args);
     }
 
@@ -171,6 +172,7 @@ public class BookView extends JFrame
         {
             if ( arg.isEmpty() ) return false;
         }
+        
         this.getJSON(args);
 
         return true;
@@ -197,26 +199,26 @@ public class BookView extends JFrame
         return args;
     }
 
-    public JSONObject getJSON(String[] args)
+    public Object getJSON(String[] args)
     {
-        JSONObject json = new JSONObject();
+//        JSONObject json = new JSONObject();
+//
+//        json.put("ID",        args[0]);
+//        json.put("publishing",args[1]);
+//        json.put("author",    args[2]);
+//
+//        json.put("title",     args[3]);
+//        json.put("gender",    args[4]);
+//
+//        json.put("finishing", args[5]);
+//        json.put("pages",     args[6]);
+//        json.put("year",      args[7]);
+//
+//        json.put("code",      args[8]);
+//        json.put("sellValue", args[9]);
+//        json.put("buyValue",  args[10]);
 
-        json.put("ID",        args[0]);
-        json.put("publishing",args[1]);
-        json.put("author",    args[2]);
-
-        json.put("title",     args[3]);
-        json.put("gender",    args[4]);
-
-        json.put("finishing", args[5]);
-        json.put("pages",     args[6]);
-        json.put("year",      args[7]);
-
-        json.put("code",      args[8]);
-        json.put("sellValue", args[9]);
-        json.put("buyValue",  args[10]);
-
-        return json;
+        return null;
     }
 
     public JFormattedTextField getPublishingField()
@@ -262,7 +264,7 @@ public class BookView extends JFrame
         jPanel7 = new JPanel();
         jPanel8 = new JPanel();
         buttonClose = new JButton();
-        jPanel9 = new JPanel();
+        fieldsPanel = new JPanel();
         jPanel2 = new JPanel();
         fieldTitle = new JFormattedTextField();
         fieldGender = new JFormattedTextField();
@@ -450,8 +452,8 @@ public class BookView extends JFrame
             .addComponent(buttonClose, GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
         );
 
-        jPanel9.setBackground(new Color(236, 235, 243));
-        jPanel9.setBorder(BorderFactory.createLineBorder(new Color(12, 18, 12), 3));
+        fieldsPanel.setBackground(new Color(236, 235, 243));
+        fieldsPanel.setBorder(BorderFactory.createLineBorder(new Color(12, 18, 12), 3));
 
         jPanel2.setBackground(new Color(236, 235, 243));
 
@@ -668,10 +670,10 @@ public class BookView extends JFrame
                 .addContainerGap())
         );
 
-        GroupLayout jPanel9Layout = new GroupLayout(jPanel9);
-        jPanel9.setLayout(jPanel9Layout);
-        jPanel9Layout.setHorizontalGroup(jPanel9Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel9Layout.createSequentialGroup()
+        GroupLayout fieldsPanelLayout = new GroupLayout(fieldsPanel);
+        fieldsPanel.setLayout(fieldsPanelLayout);
+        fieldsPanelLayout.setHorizontalGroup(fieldsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(fieldsPanelLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addComponent(jPanel2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
@@ -679,10 +681,10 @@ public class BookView extends JFrame
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel9Layout.setVerticalGroup(jPanel9Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel9Layout.createSequentialGroup()
+        fieldsPanelLayout.setVerticalGroup(fieldsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(fieldsPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel9Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addGroup(fieldsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -707,14 +709,14 @@ public class BookView extends JFrame
                                 .addComponent(jScrollPane1))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
-                                .addComponent(jPanel9, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addComponent(fieldsPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addContainerGap())))
         );
         jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel7, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel9, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(fieldsPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jPanel5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
@@ -757,6 +759,7 @@ public class BookView extends JFrame
     private JFormattedTextField fieldSell;
     private JFormattedTextField fieldTitle;
     private JFormattedTextField fieldYear;
+    private JPanel fieldsPanel;
     private JLabel jLabel1;
     private JLabel jLabel2;
     private JPanel jPanel1;
@@ -767,7 +770,6 @@ public class BookView extends JFrame
     private JPanel jPanel6;
     private JPanel jPanel7;
     private JPanel jPanel8;
-    private JPanel jPanel9;
     private JScrollPane jScrollPane1;
     private JTable table;
     // End of variables declaration//GEN-END:variables

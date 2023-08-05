@@ -1,12 +1,12 @@
 package view;
 
-import controller.IndexController;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+import controller.IndexController;
+
 /**
- *
  *
  */
 public class IndexView extends JFrame
@@ -30,11 +30,11 @@ public class IndexView extends JFrame
 
     public void setButtonsEnabled(boolean state)
     {
-        this.buttonBooks     .setEnabled(state);
+        this.buttonBooks.setEnabled(state);
         this.buttonPublishing.setEnabled(state);
-        this.buttonAuthors   .setEnabled(state);
-        this.buttonClient    .setEnabled(state);
-        this.buttonEmployee  .setEnabled(state);
+        this.buttonAuthors.setEnabled(state);
+        this.buttonClient.setEnabled(state);
+        this.buttonEmployee.setEnabled(state);
     }
 
     private void initListeners()

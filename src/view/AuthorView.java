@@ -1,16 +1,16 @@
 package view;
 
-import controller.AuthorsController;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
+
+import controller.AuthorsController;
 import model.entities.Author;
-import model.Name;
+import model.utils.Name;
 
 /**
- *
  *
  */
 public class AuthorView extends JFrame

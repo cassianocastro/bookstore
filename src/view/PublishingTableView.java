@@ -1,21 +1,21 @@
 package view;
 
-import controller.PublishingTableController;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import controller.PublishingTablesController;
+
 /**
- *
  *
  */
 public class PublishingTableView extends JFrame
 {
 
-    private final PublishingTableController controller;
+    private final PublishingTablesController controller;
 
-    public PublishingTableView(PublishingTableController controller)
+    public PublishingTableView(PublishingTablesController controller)
     {
         super("Editoras cadastradas");
 

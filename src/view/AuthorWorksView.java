@@ -1,13 +1,13 @@
 package view;
 
-import controller.AuthorWorksController;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import controller.AuthorWorksController;
+
 /**
- *
  *
  */
 public class AuthorWorksView extends JFrame
