@@ -11,19 +11,18 @@ final public class DBConfig implements Serializable
     private final int port;
     private final String host;
     private final String driver;
-    private final String database;
+    private final String dbname;
     private final String user;
-    private final String password;
+    private final String pass;
 
-    public DBConfig(String host, int port, String driver,
-            String database, String user, String password)
+    public DBConfig(String host, int port, String driver, String dbname, String user, String pass)
     {
-        this.host     = host;
-        this.port     = port;
-        this.driver   = driver;
-        this.database = database;
-        this.user     = user;
-        this.password = password;
+        this.host   = host;
+        this.port   = port;
+        this.driver = driver;
+        this.dbname = dbname;
+        this.user   = user;
+        this.pass   = pass;
     }
 
     public String getHost()
@@ -43,7 +42,7 @@ final public class DBConfig implements Serializable
 
     public String getDatabase()
     {
-        return this.database;
+        return this.dbname;
     }
 
     public String getUser()
@@ -53,7 +52,7 @@ final public class DBConfig implements Serializable
 
     public String getPassword()
     {
-        return this.password;
+        return this.pass;
     }
 
     public final String getDSN()
@@ -61,6 +60,6 @@ final public class DBConfig implements Serializable
         return "jdbc:"  + this.driver
                 + "://" + this.host
                 + ":"   + this.port
-                + "/"   + this.database;
+                + "/"   + this.dbname;
     }
 }
