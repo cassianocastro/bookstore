@@ -22,13 +22,13 @@ public class IndexView extends JFrame
 
         this.initComponents();
         this.initListeners();
-        // this.setButtonsEnabled(false);
+//        this.setMenuEnabled(false);
 
         super.setLocationRelativeTo(null);
         super.setVisible(true);
     }
 
-    public void setButtonsEnabled(boolean state)
+    public void setMenuEnabled(boolean state)
     {
         this.buttonBooks.setEnabled(state);
         this.buttonPublishing.setEnabled(state);
@@ -39,40 +39,19 @@ public class IndexView extends JFrame
 
     private void initListeners()
     {
-        this.buttonBooks.addActionListener((ActionEvent e) ->
-        {
-            this.controller.createBooksView();
-        });
+        this.buttonBooks.addActionListener((ActionEvent e)      -> this.controller.showBooksView());
 
-        this.buttonPublishing.addActionListener((ActionEvent e) ->
-        {
-            this.controller.createPublishingsView();
-        });
+        this.buttonPublishing.addActionListener((ActionEvent e) -> this.controller.showPublishingsView());
 
-        this.buttonAuthors.addActionListener((ActionEvent e) ->
-        {
-            this.controller.createAuthorsView();
-        });
+        this.buttonAuthors.addActionListener((ActionEvent e)    -> this.controller.showAuthorsView());
 
-        this.buttonClient.addActionListener((ActionEvent e) ->
-        {
-            this.controller.createClientsView();
-        });
+        this.buttonClient.addActionListener((ActionEvent e)     -> this.controller.showClientsView());
 
-        this.buttonEmployee.addActionListener((ActionEvent e) ->
-        {
-            this.controller.createEmployeesView();
-        });
+        this.buttonEmployee.addActionListener((ActionEvent e)   -> this.controller.showEmployeesView());
 
-        this.buttonConfig.addActionListener((ActionEvent e) ->
-        {
-            this.controller.createConfigView();
-        });
+        this.buttonConfig.addActionListener((ActionEvent e)     -> this.controller.showConfigView());
 
-        this.buttonExit.addActionListener((ActionEvent event) ->
-        {
-            this.controller.exit();
-        });
+        this.buttonExit.addActionListener((ActionEvent e)       -> this.controller.exit());
 
         super.addWindowListener(new WindowAdapter()
         {
@@ -115,7 +94,7 @@ public class IndexView extends JFrame
         jPanel1.setBackground(new Color(194, 1, 20));
 
         jLabel3.setForeground(new Color(236, 235, 243));
-        jLabel3.setIcon(new ImageIcon(getClass().getResource("/lib/img/abra-o-livro(1).png"))); // NOI18N
+        jLabel3.setIcon(new ImageIcon("/var/www/miscellaneous/java/BookStore/lib/img/abra-o-livro(1).png")); // NOI18N
         jLabel3.setText("<html>\n<center>\n<h2>Quem lê...</h2>\nSabe mais\n<br><br>\nPensa melhor\n<br><br>\nCompara ideias\n<br><br>\nPrepara-se melhor\n<br><br>\nTem o que falar\n<br><br>\nTem o que responder\n<br><br>\nMelhora o vocabulário\n<br><br>\nAbsorve experiência\n<br><br>\nTransforma sua vida\n</center>\n</html>");
         jLabel3.setHorizontalTextPosition(SwingConstants.CENTER);
         jLabel3.setVerticalTextPosition(SwingConstants.BOTTOM);
@@ -151,7 +130,7 @@ public class IndexView extends JFrame
         buttonConfig.setBackground(new Color(236, 235, 243));
         buttonConfig.setFont(new Font("Dialog", 1, 16)); // NOI18N
         buttonConfig.setForeground(new Color(12, 18, 12));
-        buttonConfig.setIcon(new ImageIcon(getClass().getResource("/lib/img/book.png"))); // NOI18N
+        buttonConfig.setIcon(new ImageIcon("/var/www/miscellaneous/java/BookStore/lib/img/book.png")); // NOI18N
         buttonConfig.setText("Configurações");
         buttonConfig.setBorder(BorderFactory.createLineBorder(new Color(152, 58, 69), 3));
         buttonConfig.setContentAreaFilled(false);
@@ -163,7 +142,7 @@ public class IndexView extends JFrame
         buttonPublishing.setBackground(new Color(236, 235, 243));
         buttonPublishing.setFont(new Font("Dialog", 1, 16)); // NOI18N
         buttonPublishing.setForeground(new Color(12, 18, 12));
-        buttonPublishing.setIcon(new ImageIcon(getClass().getResource("/lib/img/bookstore.png"))); // NOI18N
+        buttonPublishing.setIcon(new ImageIcon("/var/www/miscellaneous/java/BookStore/lib/img/bookstore.png")); // NOI18N
         buttonPublishing.setText("Editoras");
         buttonPublishing.setBorder(BorderFactory.createLineBorder(new Color(152, 58, 69), 3));
         buttonPublishing.setContentAreaFilled(false);
@@ -175,7 +154,7 @@ public class IndexView extends JFrame
         buttonAuthors.setBackground(new Color(236, 235, 243));
         buttonAuthors.setFont(new Font("Dialog", 1, 16)); // NOI18N
         buttonAuthors.setForeground(new Color(12, 18, 12));
-        buttonAuthors.setIcon(new ImageIcon(getClass().getResource("/lib/img/book(1).png"))); // NOI18N
+        buttonAuthors.setIcon(new ImageIcon("/var/www/miscellaneous/java/BookStore/lib/img/book(1).png")); // NOI18N
         buttonAuthors.setText("Autores");
         buttonAuthors.setBorder(BorderFactory.createLineBorder(new Color(152, 58, 69), 3));
         buttonAuthors.setContentAreaFilled(false);
@@ -187,7 +166,7 @@ public class IndexView extends JFrame
         buttonBooks.setBackground(new Color(236, 235, 243));
         buttonBooks.setFont(new Font("Dialog", 1, 16)); // NOI18N
         buttonBooks.setForeground(new Color(12, 18, 12));
-        buttonBooks.setIcon(new ImageIcon(getClass().getResource("/lib/img/books.png"))); // NOI18N
+        buttonBooks.setIcon(new ImageIcon("/var/www/miscellaneous/java/BookStore/lib/img/books.png")); // NOI18N
         buttonBooks.setText("Livros");
         buttonBooks.setBorder(BorderFactory.createLineBorder(new Color(152, 58, 69), 3));
         buttonBooks.setContentAreaFilled(false);
@@ -199,7 +178,7 @@ public class IndexView extends JFrame
         buttonClient.setBackground(new Color(236, 235, 243));
         buttonClient.setFont(new Font("Dialog", 1, 16)); // NOI18N
         buttonClient.setForeground(new Color(12, 18, 12));
-        buttonClient.setIcon(new ImageIcon(getClass().getResource("/lib/img/man.png"))); // NOI18N
+        buttonClient.setIcon(new ImageIcon("/var/www/miscellaneous/java/BookStore/lib/img/man.png")); // NOI18N
         buttonClient.setText("Clientes");
         buttonClient.setBorder(BorderFactory.createLineBorder(new Color(152, 58, 69), 3));
         buttonClient.setContentAreaFilled(false);
@@ -211,7 +190,7 @@ public class IndexView extends JFrame
         buttonEmployee.setBackground(new Color(236, 235, 243));
         buttonEmployee.setFont(new Font("Dialog", 1, 16)); // NOI18N
         buttonEmployee.setForeground(new Color(12, 18, 12));
-        buttonEmployee.setIcon(new ImageIcon(getClass().getResource("/lib/img/man(1).png"))); // NOI18N
+        buttonEmployee.setIcon(new ImageIcon("/var/www/miscellaneous/java/BookStore/lib/img/man(1).png")); // NOI18N
         buttonEmployee.setText("Funcionários");
         buttonEmployee.setBorder(BorderFactory.createLineBorder(new Color(152, 58, 69), 3));
         buttonEmployee.setContentAreaFilled(false);

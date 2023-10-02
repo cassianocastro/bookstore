@@ -84,9 +84,9 @@
                       <Component id="jScrollPane1" pref="0" max="32767" attributes="0"/>
                       <Group type="102" attributes="0">
                           <EmptySpace min="0" pref="142" max="32767" attributes="0"/>
-                          <Component id="buttonOkay" min="-2" pref="100" max="-2" attributes="0"/>
+                          <Component id="ok" min="-2" pref="100" max="-2" attributes="0"/>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
-                          <Component id="buttonCancel" min="-2" pref="100" max="-2" attributes="0"/>
+                          <Component id="cancel" min="-2" pref="100" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -100,8 +100,8 @@
                   <Component id="jScrollPane1" min="-2" pref="312" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="buttonOkay" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
-                      <Component id="buttonCancel" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
+                      <Component id="ok" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
+                      <Component id="cancel" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="0" pref="6" max="32767" attributes="0"/>
               </Group>
@@ -155,7 +155,7 @@
             </Component>
           </SubComponents>
         </Container>
-        <Component class="javax.swing.JButton" name="buttonCancel">
+        <Component class="javax.swing.JButton" name="cancel">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="f3" green="eb" red="ec" type="rgb"/>
@@ -166,7 +166,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="c" green="12" red="c" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Cancelar"/>
+            <Property name="text" type="java.lang.String" value="Cancel"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                 <LineBorder thickness="2"/>
@@ -179,7 +179,7 @@
             <Property name="focusPainted" type="boolean" value="false"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="buttonOkay">
+        <Component class="javax.swing.JButton" name="ok">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="f3" green="eb" red="ec" type="rgb"/>
@@ -190,7 +190,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="c" green="12" red="c" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Okay"/>
+            <Property name="text" type="java.lang.String" value="Ok"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                 <LineBorder thickness="2"/>

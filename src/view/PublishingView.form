@@ -102,11 +102,11 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="32767" attributes="0"/>
-                      <Component id="buttonNew" min="-2" pref="100" max="-2" attributes="0"/>
+                      <Component id="add" min="-2" pref="100" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="buttonEdit" min="-2" pref="100" max="-2" attributes="0"/>
+                      <Component id="update" min="-2" pref="100" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="buttonDel" min="-2" pref="100" max="-2" attributes="0"/>
+                      <Component id="delete" min="-2" pref="100" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -116,9 +116,9 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="buttonDel" alignment="0" max="32767" attributes="0"/>
-                          <Component id="buttonEdit" alignment="1" min="-2" pref="35" max="-2" attributes="0"/>
-                          <Component id="buttonNew" alignment="0" max="32767" attributes="0"/>
+                          <Component id="delete" alignment="0" max="32767" attributes="0"/>
+                          <Component id="update" alignment="1" min="-2" pref="35" max="-2" attributes="0"/>
+                          <Component id="add" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                   </Group>
@@ -126,7 +126,7 @@
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JButton" name="buttonNew">
+            <Component class="javax.swing.JButton" name="add">
               <Properties>
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="c" green="12" red="c" type="rgb"/>
@@ -146,7 +146,7 @@
                 <Property name="focusPainted" type="boolean" value="false"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JButton" name="buttonEdit">
+            <Component class="javax.swing.JButton" name="update">
               <Properties>
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="c" green="12" red="c" type="rgb"/>
@@ -166,7 +166,7 @@
                 <Property name="focusPainted" type="boolean" value="false"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JButton" name="buttonDel">
+            <Component class="javax.swing.JButton" name="delete">
               <Properties>
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="c" green="12" red="c" type="rgb"/>
@@ -322,19 +322,19 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="32767" attributes="0"/>
-                      <Component id="buttonClose" min="-2" pref="106" max="-2" attributes="0"/>
+                      <Component id="close" min="-2" pref="106" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="buttonClose" alignment="1" pref="35" max="32767" attributes="0"/>
+                  <Component id="close" alignment="1" pref="35" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JButton" name="buttonClose">
+            <Component class="javax.swing.JButton" name="close">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Dialog" size="14" style="1"/>
@@ -342,7 +342,7 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="f3" green="eb" red="ec" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Fechar"/>
+                <Property name="text" type="java.lang.String" value="Close"/>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                     <LineBorder thickness="3">
@@ -395,14 +395,14 @@
             <Component class="javax.swing.JLabel" name="jLabel3">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/lib/img/bookstore.png"/>
+                  <Image iconType="2" name="/var/www/miscellaneous/java/BookStore/lib/img/bookstore.png"/>
                 </Property>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel4">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/lib/img/bookstore.png"/>
+                  <Image iconType="2" name="/var/www/miscellaneous/java/BookStore/lib/img/bookstore.png"/>
                 </Property>
               </Properties>
             </Component>
@@ -434,9 +434,9 @@
                               <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="1" attributes="0">
-                              <Component id="fieldName" min="-2" pref="280" max="-2" attributes="0"/>
+                              <Component id="name" min="-2" pref="280" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
-                              <Component id="fieldPublishingID" min="-2" pref="280" max="-2" attributes="0"/>
+                              <Component id="pubID" min="-2" pref="280" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
@@ -448,8 +448,8 @@
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="fieldName" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="fieldPublishingID" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="name" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="pubID" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -464,7 +464,7 @@
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JTextField" name="fieldName">
+            <Component class="javax.swing.JTextField" name="name">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="f3" green="eb" red="ec" type="rgb"/>
@@ -495,7 +495,7 @@
                 </Property>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="fieldPublishingID">
+            <Component class="javax.swing.JTextField" name="pubID">
               <Properties>
                 <Property name="editable" type="boolean" value="false"/>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -540,9 +540,9 @@
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="fieldStreet" alignment="1" max="32767" attributes="0"/>
-                              <Component id="fieldDistrict" alignment="0" max="32767" attributes="0"/>
-                              <Component id="fieldCity" alignment="1" max="32767" attributes="0"/>
+                              <Component id="street" alignment="1" max="32767" attributes="0"/>
+                              <Component id="district" alignment="0" max="32767" attributes="0"/>
+                              <Component id="city" alignment="1" max="32767" attributes="0"/>
                               <Component id="jScrollPane2" alignment="0" pref="445" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
@@ -553,11 +553,11 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="fieldCity" min="-2" max="-2" attributes="0"/>
+                          <Component id="city" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="fieldDistrict" min="-2" max="-2" attributes="0"/>
+                          <Component id="district" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="fieldStreet" min="-2" max="-2" attributes="0"/>
+                          <Component id="street" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
                           <Component id="jScrollPane2" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
@@ -566,7 +566,7 @@
                 </DimensionLayout>
               </Layout>
               <SubComponents>
-                <Component class="javax.swing.JFormattedTextField" name="fieldCity">
+                <Component class="javax.swing.JFormattedTextField" name="city">
                   <Properties>
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="f3" green="eb" red="ec" type="rgb"/>
@@ -595,7 +595,7 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JFormattedTextField" name="fieldDistrict">
+                <Component class="javax.swing.JFormattedTextField" name="district">
                   <Properties>
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="f3" green="eb" red="ec" type="rgb"/>
@@ -624,7 +624,7 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JFormattedTextField" name="fieldStreet">
+                <Component class="javax.swing.JFormattedTextField" name="street">
                   <Properties>
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="f3" green="eb" red="ec" type="rgb"/>
@@ -660,7 +660,7 @@
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                   <SubComponents>
-                    <Component class="javax.swing.JTextArea" name="fieldCompl">
+                    <Component class="javax.swing.JTextArea" name="complement">
                       <Properties>
                         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="f3" green="eb" red="ec" type="rgb"/>
@@ -709,11 +709,11 @@
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="fieldNumber" alignment="0" max="32767" attributes="0"/>
-                              <Component id="fieldCEP" alignment="0" max="32767" attributes="0"/>
-                              <Component id="fieldUF" alignment="1" max="32767" attributes="0"/>
-                              <Component id="buttonSave" alignment="0" max="32767" attributes="0"/>
-                              <Component id="buttonCancel" alignment="0" pref="137" max="32767" attributes="0"/>
+                              <Component id="number" alignment="0" max="32767" attributes="0"/>
+                              <Component id="cep" alignment="0" max="32767" attributes="0"/>
+                              <Component id="uf" alignment="1" max="32767" attributes="0"/>
+                              <Component id="submit" alignment="0" max="32767" attributes="0"/>
+                              <Component id="cancel" alignment="0" pref="137" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -722,22 +722,22 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="fieldUF" min="-2" max="-2" attributes="0"/>
+                          <Component id="uf" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="fieldNumber" min="-2" max="-2" attributes="0"/>
+                          <Component id="number" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="fieldCEP" min="-2" max="-2" attributes="0"/>
+                          <Component id="cep" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="buttonSave" min="-2" pref="45" max="-2" attributes="0"/>
+                          <Component id="submit" min="-2" pref="45" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="buttonCancel" min="-2" pref="45" max="-2" attributes="0"/>
+                          <Component id="cancel" min="-2" pref="45" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
               </Layout>
               <SubComponents>
-                <Component class="javax.swing.JFormattedTextField" name="fieldUF">
+                <Component class="javax.swing.JFormattedTextField" name="uf">
                   <Properties>
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="f3" green="eb" red="ec" type="rgb"/>
@@ -769,7 +769,7 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JFormattedTextField" name="fieldNumber">
+                <Component class="javax.swing.JFormattedTextField" name="number">
                   <Properties>
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="f3" green="eb" red="ec" type="rgb"/>
@@ -798,7 +798,7 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JFormattedTextField" name="fieldCEP">
+                <Component class="javax.swing.JFormattedTextField" name="cep">
                   <Properties>
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="f3" green="eb" red="ec" type="rgb"/>
@@ -830,7 +830,7 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JButton" name="buttonSave">
+                <Component class="javax.swing.JButton" name="submit">
                   <Properties>
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="f3" green="eb" red="ec" type="rgb"/>
@@ -841,7 +841,7 @@
                     <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="c" green="12" red="c" type="rgb"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Salvar"/>
+                    <Property name="text" type="java.lang.String" value="Submit"/>
                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                       <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                         <LineBorder thickness="3">
@@ -856,7 +856,7 @@
                     <Property name="focusPainted" type="boolean" value="false"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JButton" name="buttonCancel">
+                <Component class="javax.swing.JButton" name="cancel">
                   <Properties>
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="f3" green="eb" red="ec" type="rgb"/>
@@ -867,7 +867,7 @@
                     <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="c" green="12" red="c" type="rgb"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Cancelar"/>
+                    <Property name="text" type="java.lang.String" value="Cancel"/>
                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                       <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                         <LineBorder thickness="3">

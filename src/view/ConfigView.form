@@ -89,14 +89,14 @@
         <Component class="javax.swing.JLabel" name="jLabel8">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/lib/img/iconfinder_6593863_and_config_configuration_files_folder_icon_64px.png"/>
+              <Image iconType="2" name="/var/www/miscellaneous/java/BookStore/lib/img/iconfinder_6593863_and_config_configuration_files_folder_icon_64px.png"/>
             </Property>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel7">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/lib/img/settings-gears.png"/>
+              <Image iconType="2" name="/var/www/miscellaneous/java/BookStore/lib/img/settings-gears.png"/>
             </Property>
           </Properties>
         </Component>
@@ -178,16 +178,16 @@
                   <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" max="-2" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <Component id="saveButton" min="-2" pref="120" max="-2" attributes="0"/>
+                          <Component id="submit" min="-2" pref="120" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
-                          <Component id="cancelButton" min="-2" pref="120" max="-2" attributes="0"/>
+                          <Component id="cancel" min="-2" pref="120" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="driverField" alignment="0" max="32767" attributes="0"/>
-                      <Component id="passwordField" alignment="0" max="32767" attributes="0"/>
-                      <Component id="userField" alignment="0" max="32767" attributes="0"/>
-                      <Component id="databaseField" alignment="0" max="32767" attributes="0"/>
-                      <Component id="portField" alignment="0" max="32767" attributes="0"/>
-                      <Component id="hostField" alignment="0" pref="270" max="32767" attributes="0"/>
+                      <Component id="driver" alignment="0" max="32767" attributes="0"/>
+                      <Component id="password" alignment="0" max="32767" attributes="0"/>
+                      <Component id="user" alignment="0" max="32767" attributes="0"/>
+                      <Component id="dbname" alignment="0" max="32767" attributes="0"/>
+                      <Component id="port" alignment="0" max="32767" attributes="0"/>
+                      <Component id="host" alignment="0" pref="270" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace pref="40" max="32767" attributes="0"/>
               </Group>
@@ -197,21 +197,21 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
-                  <Component id="hostField" min="-2" max="-2" attributes="0"/>
+                  <Component id="host" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                  <Component id="portField" min="-2" max="-2" attributes="0"/>
+                  <Component id="port" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                  <Component id="databaseField" min="-2" max="-2" attributes="0"/>
+                  <Component id="dbname" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                  <Component id="userField" min="-2" max="-2" attributes="0"/>
+                  <Component id="user" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                  <Component id="passwordField" min="-2" max="-2" attributes="0"/>
+                  <Component id="password" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                  <Component id="driverField" min="-2" max="-2" attributes="0"/>
+                  <Component id="driver" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="saveButton" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
-                      <Component id="cancelButton" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
+                      <Component id="submit" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
+                      <Component id="cancel" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
               </Group>
@@ -219,7 +219,7 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JTextField" name="hostField">
+        <Component class="javax.swing.JTextField" name="host">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="f3" green="eb" red="ec" type="rgb"/>
@@ -250,7 +250,7 @@
             </Property>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="portField">
+        <Component class="javax.swing.JTextField" name="port">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="f3" green="eb" red="ec" type="rgb"/>
@@ -281,7 +281,7 @@
             </Property>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="databaseField">
+        <Component class="javax.swing.JTextField" name="dbname">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="f3" green="eb" red="ec" type="rgb"/>
@@ -312,7 +312,7 @@
             </Property>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="userField">
+        <Component class="javax.swing.JTextField" name="user">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="f3" green="eb" red="ec" type="rgb"/>
@@ -343,7 +343,7 @@
             </Property>
           </Properties>
         </Component>
-        <Component class="javax.swing.JPasswordField" name="passwordField">
+        <Component class="javax.swing.JPasswordField" name="password">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="f3" green="eb" red="ec" type="rgb"/>
@@ -374,7 +374,7 @@
             </Property>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="driverField">
+        <Component class="javax.swing.JTextField" name="driver">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -407,7 +407,7 @@
             </Property>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="saveButton">
+        <Component class="javax.swing.JButton" name="submit">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="14" green="1" red="c2" type="rgb"/>
@@ -418,7 +418,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="c" green="12" red="c" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Salvar"/>
+            <Property name="text" type="java.lang.String" value="Save"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                 <LineBorder thickness="3">
@@ -434,7 +434,7 @@
             <Property name="verifyInputWhenFocusTarget" type="boolean" value="false"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="cancelButton">
+        <Component class="javax.swing.JButton" name="cancel">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="14" green="1" red="c2" type="rgb"/>
@@ -445,7 +445,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="c" green="12" red="c" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Cancelar"/>
+            <Property name="text" type="java.lang.String" value="Cancel"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                 <LineBorder thickness="3">

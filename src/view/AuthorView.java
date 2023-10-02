@@ -1,14 +1,12 @@
 package view;
 
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
 import controller.AuthorsController;
-import model.entities.Author;
-import model.utils.Name;
+import view.listeners.AuthorListener;
 
 /**
  *
@@ -16,124 +14,57 @@ import model.utils.Name;
 public class AuthorView extends JFrame
 {
 
-    private final AuthorsController controller;
-
     public AuthorView(AuthorsController controller)
     {
         super("Autores");
 
-        this.controller = controller;
-
         this.initComponents();
-        this.initListeners();
-        this.controller.loadTable();
-        this.setPanelState(false);
+        
+        new AuthorListener(this, controller);
 
         super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         super.setLocationRelativeTo(null);
         super.setVisible(true);
     }
 
-    private void initListeners()
+    public JTextField getIDField()
     {
-        this.buttonClose.addActionListener((ActionEvent e) ->
-        {
-            super.dispose();
-        });
-
-        this.buttonNew.addActionListener((ActionEvent e) ->
-        {
-            this.controller.newAuthor();
-        });
-
-        this.buttonEdit.addActionListener((ActionEvent event) ->
-        {
-            this.controller.edit();
-        });
-
-        this.buttonShow.addActionListener((ActionEvent e) ->
-        {
-            this.controller.showa();
-        });
-
-        this.buttonCancel.addActionListener((ActionEvent event) ->
-        {
-            this.controller.cancel();
-        });
-
-        this.buttonDel.addActionListener((ActionEvent event) ->
-        {
-            this.controller.del();
-        });
-
-        this.buttonWildCard.addActionListener((ActionEvent event) ->
-        {
-            this.controller.wildcard();
-        });
+        return this.id;
+    }
+    
+    public JTextField getNameField()
+    {
+        return this.name;
+    }
+    
+    public JButton getAddButton()
+    {
+        return this.add;
+    }
+    
+    public JButton getShowButton()
+    {
+        return this.show;
+    }
+    
+    public JButton getUpdateButton()
+    {
+        return this.update;
+    }
+    
+    public JButton getDeleteButton()
+    {
+        return this.delete;
     }
 
-    public void setButtonsCRUD(boolean state)
+    public JButton getSubmitButton()
     {
-        this.buttonNew .setEnabled(state);
-        this.buttonEdit.setEnabled(state);
-        this.buttonDel .setEnabled(state);
+        return this.submit;
     }
-
-    public void setPanelState(boolean state)
+    
+    public JButton getCancelButton()
     {
-        this.fieldAuthorID .setEnabled(state);
-        this.fieldFirstName.setEnabled(state);
-        this.fieldLastName .setEnabled(state);
-
-        this.buttonWildCard.setEnabled(state);
-        this.buttonCancel  .setEnabled(state);
-        this.buttonShow    .setEnabled(state);
-    }
-
-    public void editFields()
-    {
-        String[] args = new String[3];
-
-        for ( int i = 0; i < args.length; i++ )
-        {
-            args[i] = table.getValueAt(table.getSelectedRow(), i).toString();
-        }
-        setTextFields(args);
-    }
-
-    public void clearFields()
-    {
-        setTextFields(new String[] {"", "", ""});
-    }
-
-    public void setTextFields(String[] args)
-    {
-        this.fieldAuthorID .setText(args[0]);
-        this.fieldFirstName.setText(args[1]);
-        this.fieldLastName .setText(args[2]);
-    }
-
-    public Author getAuthor()
-    {
-        String id = this.fieldAuthorID.getText();
-
-        if ( id.isEmpty() ) id = "0";
-
-        int authorID = Integer.parseInt(id);
-        String first = this.fieldFirstName.getText();
-        String last  = this.fieldLastName.getText();
-
-        return new Author(authorID, new Name(first, last));
-    }
-
-    public String getTextFromFieldID()
-    {
-        return this.fieldAuthorID.getText();
-    }
-
-    public JButton getWildCard()
-    {
-        return this.buttonWildCard;
+        return this.cancel;
     }
 
     public JTable getTable()
@@ -155,32 +86,31 @@ public class AuthorView extends JFrame
         jLabel2 = new JLabel();
         jLabel3 = new JLabel();
         jPanel8 = new JPanel();
-        buttonClose = new JButton();
+        close = new JButton();
         jPanel1 = new JPanel();
         jPanel2 = new JPanel();
         jSplitPane1 = new JSplitPane();
-        buttonWildCard = new JButton();
-        buttonCancel = new JButton();
+        submit = new JButton();
+        cancel = new JButton();
         jPanel3 = new JPanel();
-        fieldAuthorID = new JFormattedTextField();
-        fieldFirstName = new JFormattedTextField();
-        fieldLastName = new JFormattedTextField();
-        buttonShow = new JButton();
+        id = new JFormattedTextField();
+        name = new JFormattedTextField();
+        show = new JButton();
         jScrollPane1 = new JScrollPane();
         table = new JTable();
         jPanel4 = new JPanel();
-        buttonNew = new JButton();
-        buttonEdit = new JButton();
-        buttonDel = new JButton();
+        add = new JButton();
+        update = new JButton();
+        delete = new JButton();
         jPanel7 = new JPanel();
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         jPanel6.setBackground(new Color(194, 1, 20));
 
-        jLabel2.setIcon(new ImageIcon(getClass().getResource("/lib/img/book(1).png"))); // NOI18N
+        jLabel2.setIcon(new ImageIcon("/var/www/miscellaneous/java/BookStore/lib/img/book(1).png")); // NOI18N
 
-        jLabel3.setIcon(new ImageIcon(getClass().getResource("/lib/img/book(1).png"))); // NOI18N
+        jLabel3.setIcon(new ImageIcon("/var/www/miscellaneous/java/BookStore/lib/img/book(1).png")); // NOI18N
 
         GroupLayout jPanel6Layout = new GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -203,23 +133,23 @@ public class AuthorView extends JFrame
 
         jPanel8.setBackground(new Color(12, 18, 12));
 
-        buttonClose.setFont(new Font("Dialog", 1, 14)); // NOI18N
-        buttonClose.setForeground(new Color(236, 235, 243));
-        buttonClose.setText("Fechar");
-        buttonClose.setBorder(BorderFactory.createLineBorder(new Color(194, 1, 20), 3));
-        buttonClose.setContentAreaFilled(false);
-        buttonClose.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        buttonClose.setFocusPainted(false);
+        close.setFont(new Font("Dialog", 1, 14)); // NOI18N
+        close.setForeground(new Color(236, 235, 243));
+        close.setText("Fechar");
+        close.setBorder(BorderFactory.createLineBorder(new Color(194, 1, 20), 3));
+        close.setContentAreaFilled(false);
+        close.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        close.setFocusPainted(false);
 
         GroupLayout jPanel8Layout = new GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(jPanel8Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(buttonClose, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE))
+                .addComponent(close, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE))
         );
         jPanel8Layout.setVerticalGroup(jPanel8Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addComponent(buttonClose, GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
+            .addComponent(close, GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
         );
 
         jPanel1.setBackground(new Color(236, 235, 243));
@@ -229,46 +159,40 @@ public class AuthorView extends JFrame
 
         jSplitPane1.setBackground(new Color(236, 235, 243));
 
-        buttonWildCard.setForeground(new Color(12, 18, 12));
-        buttonWildCard.setText("Salvar");
-        buttonWildCard.setBorder(BorderFactory.createLineBorder(new Color(194, 1, 20), 3));
-        buttonWildCard.setContentAreaFilled(false);
-        buttonWildCard.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        buttonWildCard.setFocusPainted(false);
-        buttonWildCard.setMaximumSize(new Dimension(100, 31));
-        buttonWildCard.setMinimumSize(new Dimension(100, 31));
-        buttonWildCard.setPreferredSize(new Dimension(100, 31));
-        jSplitPane1.setLeftComponent(buttonWildCard);
+        submit.setForeground(new Color(12, 18, 12));
+        submit.setText("Submit");
+        submit.setBorder(BorderFactory.createLineBorder(new Color(194, 1, 20), 3));
+        submit.setContentAreaFilled(false);
+        submit.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        submit.setFocusPainted(false);
+        submit.setMaximumSize(new Dimension(100, 31));
+        submit.setMinimumSize(new Dimension(100, 31));
+        submit.setPreferredSize(new Dimension(100, 31));
+        jSplitPane1.setLeftComponent(submit);
 
-        buttonCancel.setForeground(new Color(12, 18, 12));
-        buttonCancel.setText("Cancelar");
-        buttonCancel.setBorder(BorderFactory.createLineBorder(new Color(194, 1, 20), 3));
-        buttonCancel.setContentAreaFilled(false);
-        buttonCancel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        buttonCancel.setFocusPainted(false);
-        buttonCancel.setPreferredSize(new Dimension(100, 31));
-        jSplitPane1.setRightComponent(buttonCancel);
+        cancel.setForeground(new Color(12, 18, 12));
+        cancel.setText("Cancelar");
+        cancel.setBorder(BorderFactory.createLineBorder(new Color(194, 1, 20), 3));
+        cancel.setContentAreaFilled(false);
+        cancel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        cancel.setFocusPainted(false);
+        cancel.setPreferredSize(new Dimension(100, 31));
+        jSplitPane1.setRightComponent(cancel);
 
         jPanel3.setBackground(new Color(236, 235, 243));
 
-        fieldAuthorID.setEditable(false);
-        fieldAuthorID.setBackground(new Color(236, 235, 243));
-        fieldAuthorID.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2), "ID Autor", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
-        fieldAuthorID.setForeground(new Color(12, 18, 12));
-        fieldAuthorID.setCaretColor(new Color(194, 1, 20));
-        fieldAuthorID.setSelectionColor(new Color(152, 58, 69));
+        id.setEditable(false);
+        id.setBackground(new Color(236, 235, 243));
+        id.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2), "ID Autor", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
+        id.setForeground(new Color(12, 18, 12));
+        id.setCaretColor(new Color(194, 1, 20));
+        id.setSelectionColor(new Color(152, 58, 69));
 
-        fieldFirstName.setBackground(new Color(236, 235, 243));
-        fieldFirstName.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2), "Nome", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
-        fieldFirstName.setForeground(new Color(12, 18, 12));
-        fieldFirstName.setCaretColor(new Color(194, 1, 20));
-        fieldFirstName.setSelectionColor(new Color(152, 58, 69));
-
-        fieldLastName.setBackground(new Color(236, 235, 243));
-        fieldLastName.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2), "Sobrenome", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
-        fieldLastName.setForeground(new Color(12, 18, 12));
-        fieldLastName.setCaretColor(new Color(194, 1, 20));
-        fieldLastName.setSelectionColor(new Color(152, 58, 69));
+        name.setBackground(new Color(236, 235, 243));
+        name.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2), "Nome", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
+        name.setForeground(new Color(12, 18, 12));
+        name.setCaretColor(new Color(194, 1, 20));
+        name.setSelectionColor(new Color(152, 58, 69));
 
         GroupLayout jPanel3Layout = new GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -276,29 +200,26 @@ public class AuthorView extends JFrame
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addComponent(fieldFirstName)
-                    .addComponent(fieldAuthorID)
-                    .addComponent(fieldLastName, GroupLayout.DEFAULT_SIZE, 401, Short.MAX_VALUE))
+                    .addComponent(name, GroupLayout.DEFAULT_SIZE, 401, Short.MAX_VALUE)
+                    .addComponent(id))
                 .addGap(0, 0, 0))
         );
         jPanel3Layout.setVerticalGroup(jPanel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addComponent(fieldAuthorID, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(id, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(fieldFirstName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(fieldLastName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addComponent(name, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 50, Short.MAX_VALUE))
         );
 
-        buttonShow.setBackground(new Color(236, 235, 243));
-        buttonShow.setForeground(new Color(12, 18, 12));
-        buttonShow.setText("<html>\n<center>\nVer\n<br>\nObras\n</center>\n</html>");
-        buttonShow.setBorder(BorderFactory.createLineBorder(new Color(12, 18, 12), 2));
-        buttonShow.setContentAreaFilled(false);
-        buttonShow.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        buttonShow.setFocusPainted(false);
+        show.setBackground(new Color(236, 235, 243));
+        show.setForeground(new Color(12, 18, 12));
+        show.setText("<html>\n<center>\nVer\n<br>\nObras\n</center>\n</html>");
+        show.setBorder(BorderFactory.createLineBorder(new Color(12, 18, 12), 2));
+        show.setContentAreaFilled(false);
+        show.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        show.setFocusPainted(false);
 
         GroupLayout jPanel2Layout = new GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -312,15 +233,15 @@ public class AuthorView extends JFrame
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jPanel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(buttonShow, GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE)))
+                        .addComponent(show, GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(buttonShow, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(show))
                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jSplitPane1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -376,49 +297,49 @@ public class AuthorView extends JFrame
 
         jPanel4.setBackground(new Color(236, 235, 243));
 
-        buttonNew.setBackground(new Color(236, 235, 243));
-        buttonNew.setForeground(new Color(12, 18, 12));
-        buttonNew.setText("Novo");
-        buttonNew.setBorder(BorderFactory.createLineBorder(new Color(194, 1, 20), 3));
-        buttonNew.setContentAreaFilled(false);
-        buttonNew.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        buttonNew.setFocusPainted(false);
+        add.setBackground(new Color(236, 235, 243));
+        add.setForeground(new Color(12, 18, 12));
+        add.setText("Novo");
+        add.setBorder(BorderFactory.createLineBorder(new Color(194, 1, 20), 3));
+        add.setContentAreaFilled(false);
+        add.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        add.setFocusPainted(false);
 
-        buttonEdit.setBackground(new Color(236, 235, 243));
-        buttonEdit.setForeground(new Color(12, 18, 12));
-        buttonEdit.setText("Editar");
-        buttonEdit.setBorder(BorderFactory.createLineBorder(new Color(194, 1, 20), 3));
-        buttonEdit.setContentAreaFilled(false);
-        buttonEdit.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        buttonEdit.setFocusPainted(false);
+        update.setBackground(new Color(236, 235, 243));
+        update.setForeground(new Color(12, 18, 12));
+        update.setText("Editar");
+        update.setBorder(BorderFactory.createLineBorder(new Color(194, 1, 20), 3));
+        update.setContentAreaFilled(false);
+        update.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        update.setFocusPainted(false);
 
-        buttonDel.setBackground(new Color(236, 235, 243));
-        buttonDel.setForeground(new Color(12, 18, 12));
-        buttonDel.setText("Excluir");
-        buttonDel.setBorder(BorderFactory.createLineBorder(new Color(194, 1, 20), 3));
-        buttonDel.setContentAreaFilled(false);
-        buttonDel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        buttonDel.setFocusPainted(false);
+        delete.setBackground(new Color(236, 235, 243));
+        delete.setForeground(new Color(12, 18, 12));
+        delete.setText("Excluir");
+        delete.setBorder(BorderFactory.createLineBorder(new Color(194, 1, 20), 3));
+        delete.setContentAreaFilled(false);
+        delete.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        delete.setFocusPainted(false);
 
         GroupLayout jPanel4Layout = new GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(buttonNew, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+                .addComponent(add, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(buttonEdit, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+                .addComponent(update, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(buttonDel, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+                .addComponent(delete, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0))
         );
         jPanel4Layout.setVerticalGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addComponent(buttonDel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(buttonEdit, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(buttonNew, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(delete, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(update, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(add, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(0, 0, 0))
         );
 
@@ -482,16 +403,11 @@ public class AuthorView extends JFrame
         pack();
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private JButton buttonCancel;
-    private JButton buttonClose;
-    private JButton buttonDel;
-    private JButton buttonEdit;
-    private JButton buttonNew;
-    private JButton buttonShow;
-    private JButton buttonWildCard;
-    private JFormattedTextField fieldAuthorID;
-    private JFormattedTextField fieldFirstName;
-    private JFormattedTextField fieldLastName;
+    private JButton add;
+    private JButton cancel;
+    private JButton close;
+    private JButton delete;
+    private JFormattedTextField id;
     private JLabel jLabel2;
     private JLabel jLabel3;
     private JPanel jPanel1;
@@ -503,6 +419,10 @@ public class AuthorView extends JFrame
     private JPanel jPanel8;
     private JScrollPane jScrollPane1;
     private JSplitPane jSplitPane1;
+    private JFormattedTextField name;
+    private JButton show;
+    private JButton submit;
     private JTable table;
+    private JButton update;
     // End of variables declaration//GEN-END:variables
 }

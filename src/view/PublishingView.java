@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.*;
-import java.awt.event.*;
 import java.text.ParseException;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -10,6 +9,7 @@ import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
 
 import controller.PublishingsController;
+import view.listeners.PublishingListener;
 
 /**
  *
@@ -17,173 +17,92 @@ import controller.PublishingsController;
 public class PublishingView extends JFrame
 {
 
-    private final PublishingsController controller;
-
     public PublishingView(PublishingsController controller)
     {
         super("Editoras");
 
-        this.controller = controller;
-
         this.initComponents();
-        this.initListeners();
-        this.controller.loadTable();
-        this.setPanelState(false);
+
+        new PublishingListener(this, controller);
 
         super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         super.setLocationRelativeTo(null);
         super.setVisible(true);
     }
-
-    private void initListeners()
+    
+    public JTextField getNameField()
     {
-        this.buttonClose.addActionListener((ActionEvent e) ->
-        {
-            super.dispose();
-        });
-
-        this.buttonNew.addActionListener((ActionEvent e) ->
-        {
-            this.controller.newPub();
-        });
-
-        this.buttonEdit.addActionListener((ActionEvent event) ->
-        {
-            this.controller.edit();
-        });
-
-        this.buttonCancel.addActionListener((ActionEvent event) ->
-        {
-            this.controller.cancel();
-        });
-
-        this.buttonDel.addActionListener((ActionEvent event) ->
-        {
-            this.controller.del();
-        });
-
-        this.buttonSave.addActionListener((ActionEvent event) ->
-        {
-            this.controller.save();
-        });
+        return this.name;
+    }
+    
+    public JTextField getIdField()
+    {
+        return this.pubID;
     }
 
-    public void setPanelState(boolean state)
+    public JFormattedTextField getUfField()
     {
-        this.fieldPublishingID.setEnabled(state);
-        this.fieldName        .setEnabled(state);
-
-        this.fieldUF          .setEnabled(state);
-        this.fieldCity        .setEnabled(state);
-        this.fieldDistrict    .setEnabled(state);
-        this.fieldCEP         .setEnabled(state);
-        this.fieldStreet      .setEnabled(state);
-        this.fieldNumber      .setEnabled(state);
-        this.fieldCompl       .setEnabled(state);
-
-        this.buttonSave       .setEnabled(state);
-        this.buttonCancel     .setEnabled(state);
+        return this.uf;
+    }
+    
+    public JFormattedTextField getCityField()
+    {
+        return this.city;
     }
 
-    public void setButtonsCRUD(boolean state)
+    public JFormattedTextField getDistrictField()
     {
-        this.buttonNew .setEnabled(state);
-        this.buttonEdit.setEnabled(state);
-        this.buttonDel .setEnabled(state);
+        return this.district;
+    }
+    
+    public JFormattedTextField getStreetField()
+    {
+        return this.street;
     }
 
-    public void editFields()
+    public JFormattedTextField getNumberField()
     {
-        String[] args = new String[9];
-
-        for ( int i = 0; i < args.length; ++i )
-        {
-            args[i] = table.getValueAt(this.table.getSelectedRow(), i).toString();
-        }
-
-        setTextFields(args);
+        return this.number;
+    }
+    
+    public JFormattedTextField getCepField()
+    {
+        return this.cep;
     }
 
-    public void clearFields()
+    public JTextArea getComplField()
     {
-        String[] args = new String[9];
-
-        for ( String arg : args )
-        {
-            arg = "";
-        }
-        
-        setTextFields(args);
+        return this.complement;
+    }
+    
+    public JButton getAddButton()
+    {
+        return this.add;
     }
 
-    public void setTextFields(String[] args)
+    public JButton getUpdateButton()
     {
-        this.fieldPublishingID.setText(args[0]);
-        this.fieldName        .setText(args[1]);
-        this.fieldUF          .setText(args[2]);
-        this.fieldCity        .setText(args[3]);
-        this.fieldDistrict    .setText(args[4]);
-        this.fieldCEP         .setText(args[5]);
-        this.fieldStreet      .setText(args[6]);
-        this.fieldNumber      .setText(args[7]);
-        this.fieldCompl       .setText(args[8]);
+        return this.update;
+    }
+    
+    public JButton getDeleteButton()
+    {
+        return this.delete;
+    }
+    
+    public JButton getCloseButton()
+    {
+        return this.close;
     }
 
-    public boolean foo()
+    public JButton getSubmitButton()
     {
-        String[] args = getTextFields();
-
-        if ( args[0].isEmpty() ) args[0] = "0";
-
-        for ( String arg : args )
-        {
-            if ( arg.isEmpty() ) return false;
-        }
-        
-        this.getJSON();
-
-        return true;
+        return this.submit;
     }
-
-    public String[] getTextFields()
+    
+    public JButton getCancelButton()
     {
-        String[] args = new String[9];
-
-        args[0] = this.fieldPublishingID.getText();
-        args[1] = this.fieldName        .getText();
-        args[2] = this.fieldUF          .getText();
-        args[3] = this.fieldCity        .getText();
-        args[4] = this.fieldDistrict    .getText();
-        args[5] = this.fieldCEP         .getText();
-        args[6] = this.fieldStreet      .getText();
-        args[7] = this.fieldNumber      .getText();
-        args[8] = this.fieldCompl       .getText();
-
-        return args;
-    }
-
-    public Object getJSON()
-    {
-        String id = this.fieldPublishingID.getText();
-
-        if ( id.isEmpty() ) id = "0";
-
-//        json.put("companyID",     id);
-//        json.put("companyName",   this.fieldName  .getText());
-//        json.put("addressCity",   this.fieldCity  .getText());
-//        json.put("addressDistrict", this.fieldDistrict.getText());
-//        json.put("addressStreet", this.fieldStreet.getText());
-//        json.put("addressNumber", this.fieldNumber.getText());
-//        json.put("addressCompl",  this.fieldCompl .getText());
-//        json.put("addressCEP",    this.fieldCEP   .getText());
-//        json.put("addressUF",     this.fieldUF    .getText());
-
-        return null;
-    }
-
-    public JButton getSaveButton()
-    {
-        return this.buttonSave;
+        return this.cancel;
     }
 
     public JTable getTable()
@@ -203,32 +122,32 @@ public class PublishingView extends JFrame
 
         jPanel5 = new JPanel();
         jPanel4 = new JPanel();
-        buttonNew = new JButton();
-        buttonEdit = new JButton();
-        buttonDel = new JButton();
+        add = new JButton();
+        update = new JButton();
+        delete = new JButton();
         jScrollPane1 = new JScrollPane();
         table = new JTable();
         jPanel7 = new JPanel();
         jPanel6 = new JPanel();
-        buttonClose = new JButton();
+        close = new JButton();
         jPanel10 = new JPanel();
         jLabel3 = new JLabel();
         jLabel4 = new JLabel();
         jPanel11 = new JPanel();
-        fieldName = new JTextField();
-        fieldPublishingID = new JTextField();
+        name = new JTextField();
+        pubID = new JTextField();
         jPanel2 = new JPanel();
-        fieldCity = new JFormattedTextField();
-        fieldDistrict = new JFormattedTextField();
-        fieldStreet = new JFormattedTextField();
+        city = new JFormattedTextField();
+        district = new JFormattedTextField();
+        street = new JFormattedTextField();
         jScrollPane2 = new JScrollPane();
-        fieldCompl = new JTextArea();
+        complement = new JTextArea();
         jPanel3 = new JPanel();
-        fieldUF = new JFormattedTextField();
-        fieldNumber = new JFormattedTextField();
-        fieldCEP = new JFormattedTextField();
-        buttonSave = new JButton();
-        buttonCancel = new JButton();
+        uf = new JFormattedTextField();
+        number = new JFormattedTextField();
+        cep = new JFormattedTextField();
+        submit = new JButton();
+        cancel = new JButton();
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -236,46 +155,46 @@ public class PublishingView extends JFrame
 
         jPanel4.setBackground(new Color(236, 235, 243));
 
-        buttonNew.setForeground(new Color(12, 18, 12));
-        buttonNew.setText("Novo");
-        buttonNew.setBorder(BorderFactory.createLineBorder(new Color(194, 1, 20), 3));
-        buttonNew.setContentAreaFilled(false);
-        buttonNew.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        buttonNew.setFocusPainted(false);
+        add.setForeground(new Color(12, 18, 12));
+        add.setText("Novo");
+        add.setBorder(BorderFactory.createLineBorder(new Color(194, 1, 20), 3));
+        add.setContentAreaFilled(false);
+        add.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        add.setFocusPainted(false);
 
-        buttonEdit.setForeground(new Color(12, 18, 12));
-        buttonEdit.setText("Editar");
-        buttonEdit.setBorder(BorderFactory.createLineBorder(new Color(194, 1, 20), 3));
-        buttonEdit.setContentAreaFilled(false);
-        buttonEdit.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        buttonEdit.setFocusPainted(false);
+        update.setForeground(new Color(12, 18, 12));
+        update.setText("Editar");
+        update.setBorder(BorderFactory.createLineBorder(new Color(194, 1, 20), 3));
+        update.setContentAreaFilled(false);
+        update.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        update.setFocusPainted(false);
 
-        buttonDel.setForeground(new Color(12, 18, 12));
-        buttonDel.setText("Excluir");
-        buttonDel.setBorder(BorderFactory.createLineBorder(new Color(194, 1, 20), 3));
-        buttonDel.setContentAreaFilled(false);
-        buttonDel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        buttonDel.setFocusPainted(false);
+        delete.setForeground(new Color(12, 18, 12));
+        delete.setText("Excluir");
+        delete.setBorder(BorderFactory.createLineBorder(new Color(194, 1, 20), 3));
+        delete.setContentAreaFilled(false);
+        delete.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        delete.setFocusPainted(false);
 
         GroupLayout jPanel4Layout = new GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(buttonNew, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+                .addComponent(add, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(buttonEdit, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+                .addComponent(update, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(buttonDel, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+                .addComponent(delete, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0))
         );
         jPanel4Layout.setVerticalGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addComponent(buttonDel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(buttonEdit, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(buttonNew, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(delete, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(update, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(add, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(0, 0, 0))
         );
 
@@ -338,31 +257,31 @@ public class PublishingView extends JFrame
         jPanel6.setBackground(new Color(12, 18, 12));
         jPanel6.setPreferredSize(new Dimension(118, 35));
 
-        buttonClose.setFont(new Font("Dialog", 1, 14)); // NOI18N
-        buttonClose.setForeground(new Color(236, 235, 243));
-        buttonClose.setText("Fechar");
-        buttonClose.setBorder(BorderFactory.createLineBorder(new Color(194, 1, 20), 3));
-        buttonClose.setContentAreaFilled(false);
-        buttonClose.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        buttonClose.setFocusPainted(false);
+        close.setFont(new Font("Dialog", 1, 14)); // NOI18N
+        close.setForeground(new Color(236, 235, 243));
+        close.setText("Close");
+        close.setBorder(BorderFactory.createLineBorder(new Color(194, 1, 20), 3));
+        close.setContentAreaFilled(false);
+        close.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        close.setFocusPainted(false);
 
         GroupLayout jPanel6Layout = new GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(buttonClose, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE)
+                .addComponent(close, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0))
         );
         jPanel6Layout.setVerticalGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addComponent(buttonClose, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
+            .addComponent(close, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
         );
 
         jPanel10.setBackground(new Color(194, 1, 20));
 
-        jLabel3.setIcon(new ImageIcon(getClass().getResource("/lib/img/bookstore.png"))); // NOI18N
+        jLabel3.setIcon(new ImageIcon("/var/www/miscellaneous/java/BookStore/lib/img/bookstore.png")); // NOI18N
 
-        jLabel4.setIcon(new ImageIcon(getClass().getResource("/lib/img/bookstore.png"))); // NOI18N
+        jLabel4.setIcon(new ImageIcon("/var/www/miscellaneous/java/BookStore/lib/img/bookstore.png")); // NOI18N
 
         GroupLayout jPanel10Layout = new GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
@@ -386,54 +305,54 @@ public class PublishingView extends JFrame
         jPanel11.setBackground(new Color(236, 235, 243));
         jPanel11.setBorder(BorderFactory.createLineBorder(new Color(12, 18, 12), 3));
 
-        fieldName.setBackground(new Color(236, 235, 243));
-        fieldName.setForeground(new Color(12, 18, 12));
-        fieldName.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(12, 18, 12), 2), "Editora", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
-        fieldName.setCaretColor(new Color(194, 1, 20));
-        fieldName.setSelectedTextColor(new Color(236, 235, 243));
-        fieldName.setSelectionColor(new Color(152, 58, 69));
+        name.setBackground(new Color(236, 235, 243));
+        name.setForeground(new Color(12, 18, 12));
+        name.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(12, 18, 12), 2), "Editora", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
+        name.setCaretColor(new Color(194, 1, 20));
+        name.setSelectedTextColor(new Color(236, 235, 243));
+        name.setSelectionColor(new Color(152, 58, 69));
 
-        fieldPublishingID.setEditable(false);
-        fieldPublishingID.setBackground(new Color(236, 235, 243));
-        fieldPublishingID.setForeground(new Color(12, 18, 12));
-        fieldPublishingID.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(12, 18, 12), 2), "ID", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
-        fieldPublishingID.setCaretColor(new Color(194, 1, 20));
-        fieldPublishingID.setSelectedTextColor(new Color(236, 235, 243));
-        fieldPublishingID.setSelectionColor(new Color(152, 58, 69));
+        pubID.setEditable(false);
+        pubID.setBackground(new Color(236, 235, 243));
+        pubID.setForeground(new Color(12, 18, 12));
+        pubID.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(12, 18, 12), 2), "ID", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
+        pubID.setCaretColor(new Color(194, 1, 20));
+        pubID.setSelectedTextColor(new Color(236, 235, 243));
+        pubID.setSelectionColor(new Color(152, 58, 69));
 
         jPanel2.setBackground(new Color(236, 235, 243));
 
-        fieldCity.setBackground(new Color(236, 235, 243));
-        fieldCity.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2), "Cidade", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
-        fieldCity.setForeground(new Color(12, 18, 12));
-        fieldCity.setCaretColor(new Color(194, 1, 20));
-        fieldCity.setSelectedTextColor(new Color(236, 235, 243));
-        fieldCity.setSelectionColor(new Color(152, 58, 69));
+        city.setBackground(new Color(236, 235, 243));
+        city.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2), "Cidade", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
+        city.setForeground(new Color(12, 18, 12));
+        city.setCaretColor(new Color(194, 1, 20));
+        city.setSelectedTextColor(new Color(236, 235, 243));
+        city.setSelectionColor(new Color(152, 58, 69));
 
-        fieldDistrict.setBackground(new Color(236, 235, 243));
-        fieldDistrict.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2), "Bairro", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
-        fieldDistrict.setForeground(new Color(12, 18, 12));
-        fieldDistrict.setCaretColor(new Color(194, 1, 20));
-        fieldDistrict.setSelectedTextColor(new Color(236, 235, 243));
-        fieldDistrict.setSelectionColor(new Color(152, 58, 69));
+        district.setBackground(new Color(236, 235, 243));
+        district.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2), "Bairro", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
+        district.setForeground(new Color(12, 18, 12));
+        district.setCaretColor(new Color(194, 1, 20));
+        district.setSelectedTextColor(new Color(236, 235, 243));
+        district.setSelectionColor(new Color(152, 58, 69));
 
-        fieldStreet.setBackground(new Color(236, 235, 243));
-        fieldStreet.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2), "Rua", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
-        fieldStreet.setForeground(new Color(12, 18, 12));
-        fieldStreet.setCaretColor(new Color(194, 1, 20));
-        fieldStreet.setSelectedTextColor(new Color(236, 235, 243));
-        fieldStreet.setSelectionColor(new Color(152, 58, 69));
+        street.setBackground(new Color(236, 235, 243));
+        street.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2), "Rua", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
+        street.setForeground(new Color(12, 18, 12));
+        street.setCaretColor(new Color(194, 1, 20));
+        street.setSelectedTextColor(new Color(236, 235, 243));
+        street.setSelectionColor(new Color(152, 58, 69));
 
-        fieldCompl.setBackground(new Color(236, 235, 243));
-        fieldCompl.setColumns(20);
-        fieldCompl.setForeground(new Color(12, 18, 12));
-        fieldCompl.setRows(5);
-        fieldCompl.setTabSize(4);
-        fieldCompl.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2), "Complemento", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
-        fieldCompl.setCaretColor(new Color(194, 1, 20));
-        fieldCompl.setSelectedTextColor(new Color(236, 235, 243));
-        fieldCompl.setSelectionColor(new Color(152, 58, 69));
-        jScrollPane2.setViewportView(fieldCompl);
+        complement.setBackground(new Color(236, 235, 243));
+        complement.setColumns(20);
+        complement.setForeground(new Color(12, 18, 12));
+        complement.setRows(5);
+        complement.setTabSize(4);
+        complement.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2), "Complemento", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
+        complement.setCaretColor(new Color(194, 1, 20));
+        complement.setSelectedTextColor(new Color(236, 235, 243));
+        complement.setSelectionColor(new Color(152, 58, 69));
+        jScrollPane2.setViewportView(complement);
 
         GroupLayout jPanel2Layout = new GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -441,20 +360,20 @@ public class PublishingView extends JFrame
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addComponent(fieldStreet, GroupLayout.Alignment.TRAILING)
-                    .addComponent(fieldDistrict)
-                    .addComponent(fieldCity, GroupLayout.Alignment.TRAILING)
+                    .addComponent(street, GroupLayout.Alignment.TRAILING)
+                    .addComponent(district)
+                    .addComponent(city, GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane2, GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(fieldCity, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(city, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(fieldDistrict, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(district, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(fieldStreet, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(street, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -462,58 +381,58 @@ public class PublishingView extends JFrame
 
         jPanel3.setBackground(new Color(236, 235, 243));
 
-        fieldUF.setBackground(new Color(236, 235, 243));
-        fieldUF.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2), "UF/Estado", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
-        fieldUF.setForeground(new Color(12, 18, 12));
+        uf.setBackground(new Color(236, 235, 243));
+        uf.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2), "UF/Estado", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
+        uf.setForeground(new Color(12, 18, 12));
         try
         {
-            fieldUF.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("UU")));
+            uf.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("UU")));
         } catch (ParseException ex)
         {
             ex.printStackTrace();
         }
-        fieldUF.setCaretColor(new Color(194, 1, 20));
-        fieldUF.setSelectedTextColor(new Color(236, 235, 243));
-        fieldUF.setSelectionColor(new Color(152, 58, 69));
+        uf.setCaretColor(new Color(194, 1, 20));
+        uf.setSelectedTextColor(new Color(236, 235, 243));
+        uf.setSelectionColor(new Color(152, 58, 69));
 
-        fieldNumber.setBackground(new Color(236, 235, 243));
-        fieldNumber.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2), "Número", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
-        fieldNumber.setForeground(new Color(12, 18, 12));
-        fieldNumber.setCaretColor(new Color(194, 1, 20));
-        fieldNumber.setSelectedTextColor(new Color(236, 235, 243));
-        fieldNumber.setSelectionColor(new Color(152, 58, 69));
+        number.setBackground(new Color(236, 235, 243));
+        number.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2), "Número", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
+        number.setForeground(new Color(12, 18, 12));
+        number.setCaretColor(new Color(194, 1, 20));
+        number.setSelectedTextColor(new Color(236, 235, 243));
+        number.setSelectionColor(new Color(152, 58, 69));
 
-        fieldCEP.setBackground(new Color(236, 235, 243));
-        fieldCEP.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2), "CEP", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
-        fieldCEP.setForeground(new Color(12, 18, 12));
+        cep.setBackground(new Color(236, 235, 243));
+        cep.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2), "CEP", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Liberation Sans", 0, 15), new Color(12, 18, 12))); // NOI18N
+        cep.setForeground(new Color(12, 18, 12));
         try
         {
-            fieldCEP.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("#####-###")));
+            cep.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("#####-###")));
         } catch (ParseException ex)
         {
             ex.printStackTrace();
         }
-        fieldCEP.setCaretColor(new Color(194, 1, 20));
-        fieldCEP.setSelectedTextColor(new Color(236, 235, 243));
-        fieldCEP.setSelectionColor(new Color(152, 58, 69));
+        cep.setCaretColor(new Color(194, 1, 20));
+        cep.setSelectedTextColor(new Color(236, 235, 243));
+        cep.setSelectionColor(new Color(152, 58, 69));
 
-        buttonSave.setBackground(new Color(236, 235, 243));
-        buttonSave.setFont(new Font("Dialog", 1, 14)); // NOI18N
-        buttonSave.setForeground(new Color(12, 18, 12));
-        buttonSave.setText("Salvar");
-        buttonSave.setBorder(BorderFactory.createLineBorder(new Color(194, 1, 20), 3));
-        buttonSave.setContentAreaFilled(false);
-        buttonSave.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        buttonSave.setFocusPainted(false);
+        submit.setBackground(new Color(236, 235, 243));
+        submit.setFont(new Font("Dialog", 1, 14)); // NOI18N
+        submit.setForeground(new Color(12, 18, 12));
+        submit.setText("Submit");
+        submit.setBorder(BorderFactory.createLineBorder(new Color(194, 1, 20), 3));
+        submit.setContentAreaFilled(false);
+        submit.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        submit.setFocusPainted(false);
 
-        buttonCancel.setBackground(new Color(236, 235, 243));
-        buttonCancel.setFont(new Font("Dialog", 1, 14)); // NOI18N
-        buttonCancel.setForeground(new Color(12, 18, 12));
-        buttonCancel.setText("Cancelar");
-        buttonCancel.setBorder(BorderFactory.createLineBorder(new Color(194, 1, 20), 3));
-        buttonCancel.setContentAreaFilled(false);
-        buttonCancel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        buttonCancel.setFocusPainted(false);
+        cancel.setBackground(new Color(236, 235, 243));
+        cancel.setFont(new Font("Dialog", 1, 14)); // NOI18N
+        cancel.setForeground(new Color(12, 18, 12));
+        cancel.setText("Cancel");
+        cancel.setBorder(BorderFactory.createLineBorder(new Color(194, 1, 20), 3));
+        cancel.setContentAreaFilled(false);
+        cancel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        cancel.setFocusPainted(false);
 
         GroupLayout jPanel3Layout = new GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -521,24 +440,24 @@ public class PublishingView extends JFrame
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addComponent(fieldNumber)
-                    .addComponent(fieldCEP)
-                    .addComponent(fieldUF, GroupLayout.Alignment.TRAILING)
-                    .addComponent(buttonSave, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(buttonCancel, GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)))
+                    .addComponent(number)
+                    .addComponent(cep)
+                    .addComponent(uf, GroupLayout.Alignment.TRAILING)
+                    .addComponent(submit, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cancel, GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)))
         );
         jPanel3Layout.setVerticalGroup(jPanel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(fieldUF, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(uf, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(fieldNumber, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(number, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(fieldCEP, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(cep, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(buttonSave, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
+                .addComponent(submit, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(buttonCancel, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
+                .addComponent(cancel, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -553,17 +472,17 @@ public class PublishingView extends JFrame
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel11Layout.createSequentialGroup()
-                        .addComponent(fieldName, GroupLayout.PREFERRED_SIZE, 280, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(name, GroupLayout.PREFERRED_SIZE, 280, GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(fieldPublishingID, GroupLayout.PREFERRED_SIZE, 280, GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(pubID, GroupLayout.PREFERRED_SIZE, 280, GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel11Layout.setVerticalGroup(jPanel11Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(GroupLayout.Alignment.TRAILING, jPanel11Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel11Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(fieldName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(fieldPublishingID, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                    .addComponent(name, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(pubID, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel11Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -622,21 +541,14 @@ public class PublishingView extends JFrame
         pack();
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private JButton buttonCancel;
-    private JButton buttonClose;
-    private JButton buttonDel;
-    private JButton buttonEdit;
-    private JButton buttonNew;
-    private JButton buttonSave;
-    private JFormattedTextField fieldCEP;
-    private JFormattedTextField fieldCity;
-    private JTextArea fieldCompl;
-    private JFormattedTextField fieldDistrict;
-    private JTextField fieldName;
-    private JFormattedTextField fieldNumber;
-    private JTextField fieldPublishingID;
-    private JFormattedTextField fieldStreet;
-    private JFormattedTextField fieldUF;
+    private JButton add;
+    private JButton cancel;
+    private JFormattedTextField cep;
+    private JFormattedTextField city;
+    private JButton close;
+    private JTextArea complement;
+    private JButton delete;
+    private JFormattedTextField district;
     private JLabel jLabel3;
     private JLabel jLabel4;
     private JPanel jPanel10;
@@ -649,6 +561,13 @@ public class PublishingView extends JFrame
     private JPanel jPanel7;
     private JScrollPane jScrollPane1;
     private JScrollPane jScrollPane2;
+    private JTextField name;
+    private JFormattedTextField number;
+    private JTextField pubID;
+    private JFormattedTextField street;
+    private JButton submit;
     private JTable table;
+    private JFormattedTextField uf;
+    private JButton update;
     // End of variables declaration//GEN-END:variables
 }

@@ -1,11 +1,11 @@
 package view;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import controller.AuthorWorksController;
+import view.listeners.AuthorWorksListener;
 
 /**
  *
@@ -13,17 +13,13 @@ import controller.AuthorWorksController;
 public class AuthorWorksView extends JFrame
 {
 
-    private final AuthorWorksController controller;
-
     public AuthorWorksView(AuthorWorksController controller)
     {
         super("Obras");
-
-        this.controller = controller;
-
+        
         this.initComponents();
-        this.initListeners();
-        this.controller.loadTable();
+        
+        new AuthorWorksListener(this, controller);
 
         super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         super.setResizable(false);
@@ -31,12 +27,9 @@ public class AuthorWorksView extends JFrame
         super.setVisible(true);
     }
 
-    private void initListeners()
+    public JButton getOkButton()
     {
-        this.buttonOkay.addActionListener((ActionEvent e) ->
-        {
-            super.dispose();
-        });
+        return this.ok;
     }
 
     public JTable getTable()
@@ -59,7 +52,7 @@ public class AuthorWorksView extends JFrame
         jPanel2 = new JPanel();
         jScrollPane1 = new JScrollPane();
         table = new JTable();
-        buttonOkay = new JButton();
+        ok = new JButton();
         jPanel3 = new JPanel();
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -133,14 +126,14 @@ public class AuthorWorksView extends JFrame
             table.getColumnModel().getColumn(1).setPreferredWidth(300);
         }
 
-        buttonOkay.setBackground(new Color(236, 235, 243));
-        buttonOkay.setFont(new Font("Dialog", 1, 14)); // NOI18N
-        buttonOkay.setForeground(new Color(12, 18, 12));
-        buttonOkay.setText("Okay");
-        buttonOkay.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2));
-        buttonOkay.setContentAreaFilled(false);
-        buttonOkay.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        buttonOkay.setFocusPainted(false);
+        ok.setBackground(new Color(236, 235, 243));
+        ok.setFont(new Font("Dialog", 1, 14)); // NOI18N
+        ok.setForeground(new Color(12, 18, 12));
+        ok.setText("Ok");
+        ok.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2));
+        ok.setContentAreaFilled(false);
+        ok.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        ok.setFocusPainted(false);
 
         GroupLayout jPanel2Layout = new GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -151,7 +144,7 @@ public class AuthorWorksView extends JFrame
                     .addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 753, Short.MAX_VALUE)
                     .addGroup(GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(buttonOkay, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(ok, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -159,7 +152,7 @@ public class AuthorWorksView extends JFrame
                 .addContainerGap()
                 .addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 312, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(buttonOkay, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
+                .addComponent(ok, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 6, Short.MAX_VALUE))
         );
 
@@ -201,12 +194,12 @@ public class AuthorWorksView extends JFrame
         pack();
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private JButton buttonOkay;
     private JPanel jPanel1;
     private JPanel jPanel2;
     private JPanel jPanel3;
     private JPanel jPanel4;
     private JScrollPane jScrollPane1;
+    private JButton ok;
     private JTable table;
     // End of variables declaration//GEN-END:variables
 }

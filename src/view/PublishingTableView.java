@@ -1,11 +1,11 @@
 package view;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import controller.PublishingTablesController;
+import view.listeners.PubTableListener;
 
 /**
  *
@@ -13,33 +13,31 @@ import controller.PublishingTablesController;
 public class PublishingTableView extends JFrame
 {
 
-    private final PublishingTablesController controller;
+    // private final BookView parent;
 
-    public PublishingTableView(PublishingTablesController controller)
+    public PublishingTableView(PublishingTablesController controller, BookView parent)
     {
         super("Editoras cadastradas");
 
-        this.controller = controller;
+        // this.parent = parent;
+        
         this.initComponents();
-        this.initListeners();
-        this.controller.loadTable();
+        
+        new PubTableListener(this, controller);
 
         super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         super.setResizable(false);
-        super.setLocationRelativeTo(null);
+        super.setLocationRelativeTo(parent);
     }
 
-    private void initListeners()
+    public JButton getOkButton()
     {
-        this.buttonOkay.addActionListener((ActionEvent e) ->
-        {
-            this.controller.okay();
-        });
-
-        this.buttonCancel.addActionListener((ActionEvent e) ->
-        {
-            super.dispose();
-        });
+        return this.ok;
+    }
+    
+    public JButton getCancelButton()
+    {
+        return this.cancel;
     }
 
     public JTable getTable()
@@ -61,8 +59,8 @@ public class PublishingTableView extends JFrame
         jPanel2 = new JPanel();
         jScrollPane1 = new JScrollPane();
         table = new JTable();
-        buttonCancel = new JButton();
-        buttonOkay = new JButton();
+        cancel = new JButton();
+        ok = new JButton();
         jPanel3 = new JPanel();
         jPanel4 = new JPanel();
 
@@ -126,23 +124,23 @@ public class PublishingTableView extends JFrame
             table.getColumnModel().getColumn(0).setPreferredWidth(350);
         }
 
-        buttonCancel.setBackground(new Color(236, 235, 243));
-        buttonCancel.setFont(new Font("Dialog", 1, 14)); // NOI18N
-        buttonCancel.setForeground(new Color(12, 18, 12));
-        buttonCancel.setText("Cancelar");
-        buttonCancel.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2));
-        buttonCancel.setContentAreaFilled(false);
-        buttonCancel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        buttonCancel.setFocusPainted(false);
+        cancel.setBackground(new Color(236, 235, 243));
+        cancel.setFont(new Font("Dialog", 1, 14)); // NOI18N
+        cancel.setForeground(new Color(12, 18, 12));
+        cancel.setText("Cancel");
+        cancel.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2));
+        cancel.setContentAreaFilled(false);
+        cancel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        cancel.setFocusPainted(false);
 
-        buttonOkay.setBackground(new Color(236, 235, 243));
-        buttonOkay.setFont(new Font("Dialog", 1, 14)); // NOI18N
-        buttonOkay.setForeground(new Color(12, 18, 12));
-        buttonOkay.setText("Okay");
-        buttonOkay.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2));
-        buttonOkay.setContentAreaFilled(false);
-        buttonOkay.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        buttonOkay.setFocusPainted(false);
+        ok.setBackground(new Color(236, 235, 243));
+        ok.setFont(new Font("Dialog", 1, 14)); // NOI18N
+        ok.setForeground(new Color(12, 18, 12));
+        ok.setText("Ok");
+        ok.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2));
+        ok.setContentAreaFilled(false);
+        ok.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        ok.setFocusPainted(false);
 
         GroupLayout jPanel2Layout = new GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -153,9 +151,9 @@ public class PublishingTableView extends JFrame
                     .addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(0, 142, Short.MAX_VALUE)
-                        .addComponent(buttonOkay, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(ok, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(buttonCancel, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(cancel, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -164,8 +162,8 @@ public class PublishingTableView extends JFrame
                 .addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 312, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(buttonOkay, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(buttonCancel, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE))
+                    .addComponent(ok, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cancel, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 6, Short.MAX_VALUE))
         );
 
@@ -215,13 +213,13 @@ public class PublishingTableView extends JFrame
         pack();
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private JButton buttonCancel;
-    private JButton buttonOkay;
+    private JButton cancel;
     private JPanel jPanel1;
     private JPanel jPanel2;
     private JPanel jPanel3;
     private JPanel jPanel4;
     private JScrollPane jScrollPane1;
+    private JButton ok;
     private JTable table;
     // End of variables declaration//GEN-END:variables
 }
