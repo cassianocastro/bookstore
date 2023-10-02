@@ -10,9 +10,6 @@ public class App
 
     public void start()
     {
-        java.awt.EventQueue.invokeLater(() ->
-        {
-            new IndexController().createIndexView();
-        });
+        java.awt.EventQueue.invokeLater(() -> new IndexController());
     }
 }
