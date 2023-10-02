@@ -23,6 +23,7 @@ public class Book extends Product
             String title, Gender gender, String finishing, BigDecimal sellValue, BigDecimal buyValue)
     {
         super(id, code, sellValue, buyValue);
+
         this.publishing = publishing;
         this.author     = author;
         this.release    = release;

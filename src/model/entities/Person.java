@@ -2,6 +2,7 @@ package model.entities;
 
 import java.io.Serializable;
 import java.util.Calendar;
+
 import model.utils.Name;
 
 /**
@@ -17,6 +18,7 @@ abstract public class Person extends Entity implements Serializable
     public Person(int id, Name name, Calendar date, Address address)
     {
         super(id);
+
         this.name    = name;
         this.date    = date;
         this.address = address;

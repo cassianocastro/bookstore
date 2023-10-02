@@ -13,7 +13,7 @@ public class Author extends Entity
     public Author(int id, Name name)
     {
         super(id);
-        
+
         this.name = name;
     }
 

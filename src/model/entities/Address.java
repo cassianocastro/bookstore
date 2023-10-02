@@ -17,6 +17,7 @@ public class Address extends Entity
     public Address(int id, String uf, String city, String district, String street, int number, String compl, String cep)
     {
         super(id);
+
         this.uf         = uf;
         this.city       = city;
         this.district   = district;
