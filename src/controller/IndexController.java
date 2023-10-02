@@ -1,6 +1,8 @@
 package controller;
 
+import java.sql.Connection;
 import java.sql.SQLException;
+
 import model.factories.ConnectionSingleton;
 import view.IndexView;
 
@@ -10,37 +12,39 @@ import view.IndexView;
 public class IndexController
 {
 
-    public void createIndexView()
+    private final IndexView view;
+    
+    public IndexController()
     {
-        new IndexView(this);
+        this.view = new IndexView(this);
     }
 
-    public void createBooksView()
+    public void showBooksView()
     {
         new BooksController();
     }
 
-    public void createPublishingsView()
+    public void showPublishingsView()
     {
         new PublishingsController();
     }
 
-    public void createAuthorsView()
+    public void showAuthorsView()
     {
         new AuthorsController();
     }
 
-    public void createConfigView()
+    public void showConfigView()
     {
         new ConfigsController();
     }
 
-    public void createEmployeesView()
+    public void showEmployeesView()
     {
         new EmployeesController();
     }
 
-    public void createClientsView()
+    public void showClientsView()
     {
         new ClientsController();
     }
@@ -57,7 +61,8 @@ public class IndexController
 //
 //            this.view.setButtonsEnabled(true);
 //            // this.view.labelResponse.setText("Conexão estabelecida.");
-//        } catch (IOException | ClassNotFoundException | SQLException e)
+//        }
+//        catch (IOException | ClassNotFoundException | SQLException e)
 //        {
 //            System.out.println(e.getMessage());
 //        }
@@ -66,14 +71,15 @@ public class IndexController
     }
 
     public void closeConnection()
-    {
-        try
+    {   
+        try (Connection connection = ConnectionSingleton.getInstance())
         {
-            if ( ConnectionSingleton.getInstance() != null )
+            if ( connection != null )
             {
-                ConnectionSingleton.getInstance().close();
+                connection.close();
             }
-        } catch (SQLException e)
+        }
+        catch (SQLException e)
         {
             System.out.println(e.getMessage());
         }

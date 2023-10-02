@@ -23,18 +23,18 @@ public class ConfigsController
 
     public void saveConfiguration()
     {
-        DBConfig config = this.view.getConfig();
+//        DBConfig config = this.view.getConfig();
         
-        try
-        {
-            new ConfigRepository().write(config);
-            
-            // labelResponse.setText("Configurações salvas.");
-        }
-        catch (IOException e)
-        {
-            System.out.println(e.getMessage());
-        }
+//        try
+//        {
+//            new ConfigRepository().write(config);
+//            
+//            labelResponse.setText("Configurações salvas.");
+//        }
+//        catch (IOException e)
+//        {
+//            System.out.println(e.getMessage());
+//        }
     }
 
     private void loadConfiguration()
@@ -43,7 +43,7 @@ public class ConfigsController
         {
             DBConfig config = new ConfigRepository().read();
             
-            this.view.setConfig(config);
+            // this.view.setConfig(config);
         }
         catch (IOException | ClassNotFoundException e)
         {
