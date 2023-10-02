@@ -5,7 +5,7 @@ import model.utils.DBConfig;
 /**
  *
  */
-public class ConfigsFactory
+public class ConfigFactory
 {
 
     public DBConfig create(String host, String port, String driver, String dbname, String user, String pass)
